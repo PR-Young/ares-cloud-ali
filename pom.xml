@@ -5,7 +5,7 @@
     <groupId>com.ares</groupId>
     <artifactId>ares</artifactId>
     <version>1.0.0</version>
-    <name>ares</name>
+    <name>ares-cloud</name>
     <description>Ares project for Spring Cloud</description>
     <packaging>pom</packaging>
 
@@ -37,7 +37,6 @@
     </properties>
 
     <modules>
-        <module>ares-api</module>
         <module>ares-common</module>
         <module>ares-modules</module>
         <module>ares-auth</module>
