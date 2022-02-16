@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ares.flowable.persistence.dao.ISysFormDataDao">
+    <resultMap id="SysFormData" type="com.ares.flowable.persistence.model.SysFormData">
+        <id column="Id" jdbcType="VARCHAR" property="id"/>
+        <result column="ProInstId" jdbcType="VARCHAR" property="proInstId"/>
+        <result column="FormData" jdbcType="VARCHAR" property="formData"/>
+        <result column="Creator" jdbcType="VARCHAR" property="creator"/>
+        <result column="CreateTime" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="Modifier" jdbcType="VARCHAR" property="modifier"/>
+        <result column="ModifyTime" jdbcType="TIMESTAMP" property="modifyTime"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        `Id`
+        ,`ProInstId`,`FormData`, `Creator`,`CreateTime`,`Modifier`, `ModifyTime`
+    </sql>
+
+    <insert id="insert" parameterType="com.ares.flowable.persistence.model.SysFormData">
+        insert into `sys_form_data` (
+        <include refid="Base_Column_List"/>
+        )
+        values (
+        #{id,jdbcType=VARCHAR},
+        #{proInstId,jdbcType=VARCHAR},
+        #{formData,jdbcType=VARCHAR},
+        #{creator,jdbcType=VARCHAR},
+        #{createTime,jdbcType=TIMESTAMP},
+        #{modifier,jdbcType=VARCHAR},
+        #{modifyTime,jdbcType=TIMESTAMP}
+        )
+    </insert>
+
+    <update id="update" parameterType="com.ares.flowable.persistence.model.SysFormData">
+        update `sys_form_data`
+        <set>
+            <if test="proInstId!= null">
+                `ProInstId`=#{proInstId,jdbcType=VARCHAR},
+            </if>
+            <if test="formData!= null">
+                `FormData`=#{formData,jdbcType=VARCHAR},
+            </if>
+            <if test="creator != null">
+                `Creator` = #{creator,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createTime != null">
+                `CreateTime` = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifier != null">
+                `Modifier` = #{modifier,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifyTime != null">
+                `ModifyTime` = #{modifyTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where `Id` = #{id,jdbcType=VARCHAR}
+    </update>
+
+    <delete id="deleteByIds" parameterType="java.util.List">
+        delete from `sys_form_data`
+        where `Id` in
+        <foreach collection="list" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="getById" parameterType="java.lang.String" resultMap="SysFormData">
+        select
+        <include refid="Base_Column_List"/>
+        from `sys_form_data`
+        where `Id` = #{id,jdbcType=VARCHAR}
+    </select>
+
+    <select id="list" parameterType="java.util.Map" resultMap="SysFormData">
+        select
+        <include refid="Base_Column_List"/>
+        from `sys_form_data`
+        where 1=1
+        <if test="search != null">
+
+        </if>
+        <if test="sort != null">
+            order by ${sort}
+        </if>
+        <if test="sort == null">
+            order by `CreateTime` desc
+        </if>
+    </select>
+
+    <select id="selectList" parameterType="com.ares.flowable.persistence.model.SysFormData" resultMap="SysFormData">
+        select
+        <include refid="Base_Column_List"/>
+        from `sys_form_data`
+        where 1=1
+        <if test="beginTime != null and beginTime != ''"><!-- 开始时间检索 -->
+            AND date_format(`CreateTime`,'%y%m%d') &gt;= date_format(#{beginTime},'%y%m%d')
+        </if>
+        <if test="endTime != null and endTime != ''"><!-- 结束时间检索 -->
+            AND date_format(`CreateTime`,'%y%m%d') &lt;= date_format(#{endTime},'%y%m%d')
+        </if>
+    </select>
+
+    <select id="getFormDataByProInstId" parameterType="java.lang.String" resultMap="SysFormData">
+        select
+        <include refid="Base_Column_List"/>
+        from `sys_form_data`
+        where
+        `ProInstId`=#{proInstId}
+    </select>
+</mapper>

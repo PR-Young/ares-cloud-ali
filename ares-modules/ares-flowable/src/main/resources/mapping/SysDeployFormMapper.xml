@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ares.flowable.persistence.dao.ISysDeployFormDao">
+    <resultMap id="SysDeployForm" type="com.ares.flowable.persistence.model.SysDeployForm">
+        <id column="Id" jdbcType="VARCHAR" property="id"/>
+        <result column="FormId" jdbcType="VARCHAR" property="formId"/>
+        <result column="DeployId" jdbcType="VARCHAR" property="deployId"/>
+        <result column="Creator" jdbcType="VARCHAR" property="creator"/>
+        <result column="CreateTime" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="Modifier" jdbcType="VARCHAR" property="modifier"/>
+        <result column="ModifyTime" jdbcType="TIMESTAMP" property="modifyTime"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        `Id`
+        ,`FormId`,`DeployId`, `Creator`,`CreateTime`,`Modifier`, `ModifyTime`
+    </sql>
+
+    <insert id="insert" parameterType="com.ares.flowable.persistence.model.SysDeployForm">
+        insert into `sys_deploy_form` (
+        <include refid="Base_Column_List"/>
+        )
+        values (
+        #{id,jdbcType=VARCHAR},
+        #{formId,jdbcType=VARCHAR},
+        #{deployId,jdbcType=VARCHAR},
+        #{creator,jdbcType=VARCHAR},
+        #{createTime,jdbcType=TIMESTAMP},
+        #{modifier,jdbcType=VARCHAR},
+        #{modifyTime,jdbcType=TIMESTAMP}
+        )
+    </insert>
+
+    <update id="update" parameterType="com.ares.flowable.persistence.model.SysDeployForm">
+        update `sys_deploy_form`
+        <set>
+            <if test="formId!= null">
+                `FormId`=#{formId,jdbcType=VARCHAR},
+            </if>
+            <if test="deployId!= null">
+                `DeployId`=#{deployId,jdbcType=VARCHAR},
+            </if>
+            <if test="creator != null">
+                `Creator` = #{creator,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createTime != null">
+                `CreateTime` = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifier != null">
+                `Modifier` = #{modifier,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifyTime != null">
+                `ModifyTime` = #{modifyTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where `Id` = #{id,jdbcType=VARCHAR}
+    </update>
+
+    <delete id="deleteByIds" parameterType="java.util.List">
+        delete from `sys_deploy_form`
+        where `Id` in
+        <foreach collection="list" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="getById" parameterType="java.lang.String" resultMap="SysDeployForm">
+        select
+        <include refid="Base_Column_List"/>
+        from `sys_deploy_form`
+        where `Id` = #{id,jdbcType=VARCHAR}
+    </select>
+
+    <select id="list" parameterType="java.util.Map" resultMap="SysDeployForm">
+        select
+        <include refid="Base_Column_List"/>
+        from `sys_deploy_form`
+        where 1=1
+        <if test="search != null">
+
+        </if>
+        <if test="sort != null">
+            order by ${sort}
+        </if>
+        <if test="sort == null">
+            order by `CreateTime` desc
+        </if>
+    </select>
+
+    <select id="selectList" parameterType="com.ares.flowable.persistence.model.SysDeployForm" resultMap="SysDeployForm">
+        select
+        <include refid="Base_Column_List"/>
+        from `sys_deploy_form`
+        where 1=1
+        <if test="beginTime != null and beginTime != ''"><!-- 开始时间检索 -->
+            AND date_format(`CreateTime`,'%y%m%d') &gt;= date_format(#{beginTime},'%y%m%d')
+        </if>
+        <if test="endTime != null and endTime != ''"><!-- 结束时间检索 -->
+            AND date_format(`CreateTime`,'%y%m%d') &lt;= date_format(#{endTime},'%y%m%d')
+        </if>
+    </select>
+
+    <select id="selectSysDeployFormList" parameterType="com.ares.flowable.persistence.model.SysDeployForm"
+            resultMap="SysDeployForm">
+        select
+        <include refid="Base_Column_List"/>
+        from `sys_deploy_form`
+        <where>
+            <if test="formId != null ">and FormId = #{formId}</if>
+            <if test="deployId != null  and deployId != ''">and DeployId = #{deployId}</if>
+        </where>
+    </select>
+
+    <select id="selectSysDeployFormById" parameterType="String" resultMap="SysDeployForm">
+        select
+        <include refid="Base_Column_List"/>
+        from `sys_deploy_form`
+        where id = #{id}
+    </select>
+
+    <select id="selectSysDeployFormByDeployId" resultType="com.ares.flowable.persistence.model.SysForm">
+        select t1.FormContent as formContent, t1.FormName as formName, t1.Id as id
+        from sys_form t1
+        left join sys_deploy_form t2 on t1.Id = t2.FormId
+        where t2.DeployId = #{deployId} limit 1
+    </select>
+
+</mapper>

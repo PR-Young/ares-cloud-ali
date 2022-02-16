@@ -1,0 +1,30 @@
+
+ ┏━┓       ┏━┓                    AAA               RRRRRRRRRRRRRRRRR   EEEEEEEEEEEEEEEEEEEEEE   SSSSSSSSSSSSSSS
+ ┏━┛┻━━━━━━━━┛┻━┓                A:::A              R::::::::::::::::R  E::::::::::::::::::::E SS:::::::::::::::S
+ ┃              ┃ 　            A:::::A             R::::::RRRRRR:::::R E::::::::::::::::::::ES:::::SSSSSS::::::S
+ ┃      ━━      ┃              A:::::::A            RR:::::R     R:::::REE::::::EEEEEEEEE::::ES:::::S     SSSSSSS
+ ┃   ┳━┛  ┗━┳   ┃             A:::::::::A            R::::R     R:::::R  E:::::E       EEEEEES:::::S
+ ┃　　　　　　　 ┃            A:::::A:::::A           R::::R     R:::::R  E:::::E             S:::::S
+ ┃      ┻       ┃           A:::::A A:::::A          R::::RRRRRR:::::R   E::::::EEEEEEEEEE    S::::SSSS
+ ┃　　　　　　　 ┃          A:::::A   A:::::A         R:::::::::::::RR    E:::::::::::::::E     SS::::::SSSSS
+ ┗━━━┓      ┏━━━┛         A:::::A     A:::::A        R::::RRRRRR:::::R   E:::::::::::::::E       SSS::::::::SS
+ ┃       ┃ 神兽保佑       A:::::AAAAAAAAA:::::A       R::::R     R:::::R  E::::::EEEEEEEEEE          SSSSSS::::S
+ ┃       ┃ 代码无BUG     A:::::::::::::::::::::A      R::::R     R:::::R  E:::::E                         S:::::S
+ ┃       ┗━━━━━━┓       A:::::AAAAAAAAAAAAA:::::A     R::::R     R:::::R  E:::::E       EEEEEE            S:::::S
+ ┃              ┣━┓    A:::::A             A:::::A   RR:::::R     R:::::REE::::::EEEEEEEE:::::ESSSSSSS     S:::::S
+ ┃              ┏━┛   A:::::A               A:::::A  R::::::R     R:::::RE::::::::::::::::::::ES::::::SSSSSS:::::S
+ ┗━┓━┓┏━━━┳━┓ ┏━┛    A:::::A                 A:::::A R::::::R     R:::::RE::::::::::::::::::::ES:::::::::::::::SS
+ ┃ ┫ ┫  ┃ ┫ ┫       AAAAAAA                   AAAAAAARRRRRRRR     RRRRRRREEEEEEEEEEEEEEEEEEEEEE SSSSSSSSSSSSSSS
+ ┗━┻━┛　┗━┻━┛
+
+             _____    ______    _____      _____    _____             _____    _____
+     /\     |  __ \  |  ____|  / ____|    / ____|  |_____|    /\     |  __ \  |_____|
+    /  \    | |__) | | |__    | (___      | (___     | |     /  \    | |__) |   | |
+   / /\ \   |  _  /  |  __|    \___ \      \___ \    | |    / /\ \   |  _  /    | |
+  / ____ \  | | \ \  | |____   ____) |     ____) |   | |   / ____ \  | | \ \    | |
+ /_/    \_\ |_|  \_\ |______| |_____/     |_____/    |_|  /_/    \_\ |_|  \_\   |_|
+
+::: application name: ${ares.base.name}  :::
+::: application version: ${ares.base.version} :::
+::: copyright: ${ares.base.copyright} :::
+::: spring-boot: ${spring-boot.formatted-version} :::

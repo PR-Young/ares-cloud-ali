@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ares.system.dao.IIndexDao">
+    <select id="getJobNumber" resultType="int">
+        SELECT
+        count(1)
+        FROM
+        sys_quartz_job
+    </select>
+
+    <select id="getLogNumber" resultType="int">
+        SELECT
+        count(1)
+        FROM
+        sys_log
+    </select>
+</mapper>

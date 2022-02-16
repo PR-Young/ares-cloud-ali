@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ares.system.dao.ISysNoticeDao">
+    <resultMap id="SysNotice" type="com.ares.core.model.system.SysNotice">
+        <id column="Id" jdbcType="VARCHAR" property="id"/>
+        <result column="Deadline" jdbcType="TIMESTAMP" property="deadline"/>
+        <result column="NoticeContent" jdbcType="VARCHAR" property="noticeContent"/>
+        <result column="NoticeStatus" jdbcType="VARCHAR" property="noticeStatus"/>
+        <result column="NoticeTitle" jdbcType="VARCHAR" property="noticeTitle"/>
+        <result column="NoticeType" jdbcType="VARCHAR" property="noticeType"/>
+        <result column="Remark" jdbcType="VARCHAR" property="remark"/>
+        <result column="Creator" jdbcType="VARCHAR" property="creator"/>
+        <result column="CreateTime" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="Modifier" jdbcType="VARCHAR" property="modifier"/>
+        <result column="ModifyTime" jdbcType="TIMESTAMP" property="modifyTime"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        `Id`,`Deadline`,`NoticeContent`,`NoticeStatus`,`NoticeTitle`,`NoticeType`,`Remark`,
+        `Creator`,`CreateTime`,`Modifier`, `ModifyTime`
+    </sql>
+
+    <insert id="insert" parameterType="com.ares.core.model.system.SysNotice">
+        insert into `sys_notice` (
+        <include refid="Base_Column_List"/>
+        )
+        values (
+        #{id,jdbcType=VARCHAR},
+        #{deadline,jdbcType=TIMESTAMP},
+        #{noticeContent,jdbcType=VARCHAR},
+        #{noticeStatus,jdbcType=VARCHAR},
+        #{noticeTitle,jdbcType=VARCHAR},
+        #{noticeType,jdbcType=VARCHAR},
+        #{remark,jdbcType=VARCHAR},
+        #{creator,jdbcType=VARCHAR},
+        #{createTime,jdbcType=TIMESTAMP},
+        #{modifier,jdbcType=VARCHAR},
+        #{modifyTime,jdbcType=TIMESTAMP}
+        )
+    </insert>
+
+    <update id="update" parameterType="com.ares.core.model.system.SysNotice">
+        update `sys_notice`
+        <set>
+            <if test="deadline!= null">
+                `Deadline`=#{deadline,jdbcType=TIMESTAMP},
+            </if>
+            <if test="noticeContent!= null">
+                `NoticeContent`=#{noticeContent,jdbcType=VARCHAR},
+            </if>
+            <if test="noticeStatus!= null">
+                `NoticeStatus`=#{noticeStatus,jdbcType=VARCHAR},
+            </if>
+            <if test="noticeTitle!= null">
+                `NoticeTitle`=#{noticeTitle,jdbcType=VARCHAR},
+            </if>
+            <if test="noticeType!= null">
+                `NoticeType`=#{noticeType,jdbcType=VARCHAR},
+            </if>
+            <if test="remark!= null">
+                `Remark`=#{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="creator != null">
+                `Creator` = #{creator,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createTime != null">
+                `CreateTime` = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifier != null">
+                `Modifier` = #{modifier,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifyTime != null">
+                `ModifyTime` = #{modifyTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where `Id` = #{id,jdbcType=VARCHAR}
+    </update>
+
+    <delete id="deleteByIds" parameterType="java.util.List">
+        delete from `sys_notice`
+        where `Id` in
+        <foreach collection="list" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="getById" parameterType="java.lang.String" resultMap="SysNotice">
+        select
+        <include refid="Base_Column_List"/>
+        from `sys_notice`
+        where `Id` = #{id,jdbcType=VARCHAR}
+    </select>
+
+    <select id="list" parameterType="java.util.Map" resultMap="SysNotice">
+        select
+        <include refid="Base_Column_List"/>
+        from `sys_notice`
+        where 1=1
+        <if test="search != null">
+
+        </if>
+        <if test="sort != null">
+            order by ${sort}
+        </if>
+        <if test="sort == null">
+            order by `CreateTime` desc
+        </if>
+    </select>
+
+    <select id="selectList" parameterType="com.ares.core.model.system.SysNotice" resultMap="SysNotice">
+        select
+        <include refid="Base_Column_List"/>
+        from `sys_notice`
+        where 1=1
+        <if test="noticeTitle != null">
+            and `NoticeTitle` like concat('%', #{noticeTitle}, '%')
+        </if>
+        <if test="noticeType != null">
+            and `NoticeType` = #{noticeType}
+        </if>
+        <if test="beginTime != null and beginTime != ''"><!-- 开始时间检索 -->
+            AND date_format(`CreateTime`,'%y%m%d') &gt;= date_format(#{beginTime},'%y%m%d')
+        </if>
+        <if test="endTime != null and endTime != ''"><!-- 结束时间检索 -->
+            AND date_format(`Create_time`,'%y%m%d') &lt;= date_format(#{endTime},'%y%m%d')
+        </if>
+    </select>
+
+    <select id="noticeNum" resultType="integer">
+        select count(1)
+        from `sys_notice`
+        where `NoticeStatus` = 0
+        and `Id` not in (
+        select `NoticeId`
+        from `sys_notice_read`
+        WHERE `UserId` = #{userId}
+        )
+        AND `Deadline` > CURRENT_TIMESTAMP
+    </select>
+
+    <select id="getNotices" resultMap="SysNotice">
+        SELECT
+        notice.`Id`,
+        notice.`NoticeContent`,
+        notice.`NoticeTitle`,
+        notice.`NoticeType`,
+        notice.`Remark`,
+        notice.`CreateTime`,
+        user.`UserName` AS `Creator`
+        FROM
+        `sys_notice` notice
+        LEFT JOIN `sys_user` user ON notice.`Creator` = USER.`Id`
+        WHERE
+        notice.`NoticeStatus` = 0
+        AND notice.`Deadline` > CURRENT_TIMESTAMP
+        order by notice.`CreateTime` desc
+    </select>
+
+</mapper>

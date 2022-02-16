@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ares.system.dao.ISysNoticeReadDao">
+    <resultMap id="SysNoticeRead" type="com.ares.core.model.system.SysNoticeRead">
+        <id column="Id" jdbcType="VARCHAR" property="id"/>
+        <result column="NoticeId" jdbcType="VARCHAR" property="noticeId"/>
+        <result column="UserId" jdbcType="VARCHAR" property="userId"/>
+        <result column="Creator" jdbcType="VARCHAR" property="creator"/>
+        <result column="CreateTime" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="Modifier" jdbcType="VARCHAR" property="modifier"/>
+        <result column="ModifyTime" jdbcType="TIMESTAMP" property="modifyTime"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        `Id`,`NoticeId`,`UserId`, `Creator`,`CreateTime`,`Modifier`, `ModifyTime`
+    </sql>
+
+    <insert id="insert" parameterType="com.ares.core.model.system.SysNoticeRead">
+        insert into `sys_notice_read` (
+        <include refid="Base_Column_List"/>
+        )
+        values (
+        #{id,jdbcType=VARCHAR},
+        #{noticeId,jdbcType=VARCHAR},
+        #{userId,jdbcType=VARCHAR},
+        #{creator,jdbcType=VARCHAR},
+        #{createTime,jdbcType=TIMESTAMP},
+        #{modifier,jdbcType=VARCHAR},
+        #{modifyTime,jdbcType=TIMESTAMP}
+        )
+    </insert>
+    <insert id="batchInsert">
+        insert into `sys_notice_read` (
+        <include refid="Base_Column_List"/>
+        )
+        values
+        <foreach collection="list" item="item" open="" separator="," close="">
+            (
+            #{item.id,jdbcType=VARCHAR},
+            #{item.noticeId,jdbcType=VARCHAR},
+            #{item.userId,jdbcType=VARCHAR},
+            #{item.creator,jdbcType=VARCHAR},
+            #{item.createTime,jdbcType=TIMESTAMP},
+            #{item.modifier,jdbcType=VARCHAR},
+            #{item.modifyTime,jdbcType=TIMESTAMP}
+            )
+        </foreach>
+    </insert>
+
+    <update id="update" parameterType="com.ares.core.model.system.SysNoticeRead">
+        update `sys_notice_read`
+        <set>
+            <if test="noticeId!= null">
+                `NoticeId`=#{noticeId,jdbcType=VARCHAR},
+            </if>
+            <if test="userId!= null">
+                `UserId`=#{userId,jdbcType=VARCHAR},
+            </if>
+            <if test="creator != null">
+                `Creator` = #{creator,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createTime != null">
+                `CreateTime` = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifier != null">
+                `Modifier` = #{modifier,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifyTime != null">
+                `ModifyTime` = #{modifyTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where `Id` = #{id,jdbcType=VARCHAR}
+    </update>
+
+    <delete id="deleteByIds" parameterType="java.util.List">
+        delete from `sys_notice_read`
+        where `Id` in
+        <foreach collection="list" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="getById" parameterType="java.lang.String" resultMap="SysNoticeRead">
+        select
+        <include refid="Base_Column_List"/>
+        from `sys_notice_read`
+        where `Id` = #{id,jdbcType=VARCHAR}
+    </select>
+
+    <select id="list" parameterType="java.util.Map" resultMap="SysNoticeRead">
+        select
+        <include refid="Base_Column_List"/>
+        from `sys_notice_read`
+        where 1=1
+        <if test="search != null">
+
+        </if>
+        <if test="sort != null">
+            order by ${sort}
+        </if>
+        <if test="sort == null">
+            order by `CreateTime` desc
+        </if>
+    </select>
+
+    <select id="selectList" parameterType="com.ares.core.model.system.SysNoticeRead"
+            resultMap="SysNoticeRead">
+        select
+        <include refid="Base_Column_List"/>
+        from `sys_notice_read`
+        where 1=1
+        <if test="beginTime != null and beginTime != ''"><!-- 开始时间检索 -->
+            AND date_format(`CreateTime`,'%y%m%d') &gt;= date_format(#{beginTime},'%y%m%d')
+        </if>
+        <if test="endTime != null and endTime != ''"><!-- 结束时间检索 -->
+            AND date_format(`CreateTime`,'%y%m%d') &lt;= date_format(#{endTime},'%y%m%d')
+        </if>
+    </select>
+
+    <select id="getByUser" resultType="java.lang.String">
+        select `NoticeId`
+        from `sys_notice_read`
+        where `UserId` = #{userId}
+    </select>
+
+
+</mapper>
