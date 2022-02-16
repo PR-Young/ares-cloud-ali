@@ -203,11 +203,6 @@
                 <artifactId>ares-common-message</artifactId>
                 <version>${ares.version}</version>
             </dependency>
-            <dependency>
-                <groupId>com.ares</groupId>
-                <artifactId>ares-system-api</artifactId>
-                <version>${ares.version}</version>
-            </dependency>
         </dependencies>
     </dependencyManagement>
 
