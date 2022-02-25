@@ -18,6 +18,7 @@
         <module>ares-common-log</module>
         <module>ares-common-datasource</module>
         <module>ares-common-message</module>
+        <module>ares-common-user</module>
     </modules>
     <dependencies>
         <dependency>

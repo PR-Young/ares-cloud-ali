@@ -2,10 +2,10 @@ package com.ares.security.common;
 
 import com.ares.core.model.system.SysRole;
 import com.ares.core.model.system.SysUser;
-import com.ares.core.service.SysRoleService;
-import com.ares.core.service.SysUserService;
 import com.ares.log.common.Log;
 import com.ares.security.jwt.JwtUserDetails;
+import com.ares.user.service.SysRoleService;
+import com.ares.user.service.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

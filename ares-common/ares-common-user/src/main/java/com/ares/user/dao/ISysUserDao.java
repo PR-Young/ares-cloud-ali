@@ -1,6 +1,7 @@
-package com.ares.core.dao;
+package com.ares.user.dao;
 
 
+import com.ares.core.dao.IBaseDao;
 import com.ares.core.model.system.SysUser;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;

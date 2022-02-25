@@ -52,6 +52,10 @@
         </dependency>
         <dependency>
             <groupId>com.ares</groupId>
+            <artifactId>ares-common-user</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.ares</groupId>
             <artifactId>ares-common-security</artifactId>
         </dependency>
         <dependency>

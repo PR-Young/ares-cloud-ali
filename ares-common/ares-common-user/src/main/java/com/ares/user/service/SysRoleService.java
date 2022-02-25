@@ -1,9 +1,10 @@
-package com.ares.core.service;
+package com.ares.user.service;
 
-import com.ares.core.dao.ISysRoleDao;
 import com.ares.core.model.system.SysRole;
+import com.ares.core.service.BaseService;
 import com.ares.core.utils.SnowflakeIdWorker;
 import com.ares.core.utils.StringUtils;
+import com.ares.user.dao.ISysRoleDao;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
