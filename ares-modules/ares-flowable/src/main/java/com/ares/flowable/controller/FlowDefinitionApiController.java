@@ -1,13 +1,14 @@
 package com.ares.flowable.controller;
 
+import com.ares.api.client.ISysRoleService;
+import com.ares.api.client.ISysUserService;
 import com.ares.core.controller.BaseController;
 import com.ares.core.model.base.AjaxResult;
+import com.ares.core.model.base.JsonResult;
 import com.ares.core.model.system.SysRole;
 import com.ares.core.model.system.SysUser;
 import com.ares.flowable.persistence.model.dto.FlowSaveXmlVo;
 import com.ares.flowable.persistence.service.FlowDefinitionService;
-import com.ares.user.service.SysRoleService;
-import com.ares.user.service.SysUserService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
@@ -31,11 +32,11 @@ import java.util.Map;
 @RequestMapping("/flowable/definition")
 public class FlowDefinitionApiController extends BaseController {
     private FlowDefinitionService flowDefinitionService;
-    private SysUserService userService;
-    private SysRoleService sysRoleService;
+    private ISysUserService userService;
+    private ISysRoleService sysRoleService;
 
     @Autowired
-    public FlowDefinitionApiController(FlowDefinitionService flowDefinitionService, SysUserService userService, SysRoleService sysRoleService) {
+    public FlowDefinitionApiController(FlowDefinitionService flowDefinitionService, ISysUserService userService, ISysRoleService sysRoleService) {
         this.flowDefinitionService = flowDefinitionService;
         this.userService = userService;
         this.sysRoleService = sysRoleService;
@@ -160,14 +161,16 @@ public class FlowDefinitionApiController extends BaseController {
     @ApiOperation(value = "指定流程办理人员列表")
     @GetMapping("/userList")
     public AjaxResult userList(SysUser user) {
-        List<SysUser> list = userService.selectUserList(user);
+        JsonResult<List<SysUser>> users = userService.selectUserList(new SysUser());
+        List<SysUser> list =  users.getData();
         return AjaxResult.successData(list);
     }
 
     @ApiOperation(value = "指定流程办理组列表")
     @GetMapping("/roleList")
     public AjaxResult roleList(SysRole role) {
-        List<SysRole> list = sysRoleService.selectRoleList(role);
+        JsonResult<List<SysRole>> roles = sysRoleService.selectRoleList(role);
+        List<SysRole> list = roles.getData();
         return AjaxResult.successData(list);
     }
 

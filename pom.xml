@@ -205,7 +205,7 @@
             </dependency>
             <dependency>
                 <groupId>com.ares</groupId>
-                <artifactId>ares-common-user</artifactId>
+                <artifactId>ares-common-api</artifactId>
                 <version>${ares.version}</version>
             </dependency>
         </dependencies>

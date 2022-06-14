@@ -1,7 +1,10 @@
 package com.ares.security.common;
 
+import com.ares.api.client.ISysUserService;
 import com.ares.core.exception.UserException;
+import com.ares.core.model.base.AjaxResult;
 import com.ares.core.model.base.Constants;
+import com.ares.core.model.base.JsonResult;
 import com.ares.core.model.exception.ErrorCode;
 import com.ares.core.model.system.SysUser;
 import com.ares.core.utils.SpringUtils;
@@ -9,7 +12,6 @@ import com.ares.redis.utils.RedisUtil;
 import com.ares.security.jwt.JwtAuthenticationToken;
 import com.ares.security.jwt.JwtTokenUtils;
 import com.ares.security.jwt.JwtUserDetails;
-import com.ares.user.service.SysUserService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -130,8 +132,10 @@ public class SecurityUtils {
         if (null == userName) {
             throw new UserException(ErrorCode.NOUSER.getCode(), "用户不存在！");
         }
-        SysUserService userService = SpringUtils.getBean(SysUserService.class);
-        SysUser user = userService.getUserByName(userName);
+
+        ISysUserService userService = SpringUtils.getBean(ISysUserService.class);
+        JsonResult<SysUser> result = userService.getUserByName(userName);
+        SysUser user =  result.getData();
         return user;
     }
 

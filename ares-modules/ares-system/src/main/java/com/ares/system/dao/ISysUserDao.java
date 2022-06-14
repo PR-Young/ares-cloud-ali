@@ -1,4 +1,4 @@
-package com.ares.user.dao;
+package com.ares.system.dao;
 
 
 import com.ares.core.dao.IBaseDao;

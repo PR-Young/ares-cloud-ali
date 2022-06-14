@@ -3,13 +3,14 @@ package com.ares.system.controller;
 
 import com.ares.core.controller.BaseController;
 import com.ares.core.model.base.AjaxResult;
+import com.ares.core.model.base.JsonResult;
 import com.ares.core.model.page.TableDataInfo;
 import com.ares.core.model.system.SysRole;
 import com.ares.core.model.system.SysUser;
 import com.ares.core.utils.StringUtils;
 import com.ares.security.common.SecurityUtils;
-import com.ares.user.service.SysRoleService;
-import com.ares.user.service.SysUserService;
+import com.ares.system.service.SysRoleService;
+import com.ares.system.service.SysUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -100,5 +101,30 @@ public class SysRoleApiController extends BaseController {
         result.put("allUser", userService.selectUserList(new SysUser()));
         result.put("checkedKeys", userService.getUserByRole(roleId));
         return result;
+    }
+
+    @GetMapping("getRoleByUserId/{userId}")
+    public JsonResult<List<SysRole>> getRoleByUserId(@PathVariable("userId") String userId){
+        return JsonResult.success(roleService.getRoleByUserId(userId));
+    }
+
+    @GetMapping("getPermsByRoleId/{roleId}")
+    public JsonResult<List<String>> getPermsByRoleId(@PathVariable("roleId") String roleId){
+        return JsonResult.success(roleService.getPermsByRoleId(roleId));
+    }
+
+    @GetMapping("getRoleById/{roleId}")
+    public JsonResult<SysRole> getById(@PathVariable("roleId") String roleId){
+        return JsonResult.success(roleService.getById(roleId));
+    }
+
+    @GetMapping("getAllRole")
+    public JsonResult<List<SysRole>> getAll(){
+        return JsonResult.success(roleService.getAll());
+    }
+
+    @RequestMapping("selectRoleList")
+    public JsonResult<List<SysRole>> selectRoleList(SysRole role){
+        return JsonResult.success(roleService.selectRoleList(role));
     }
 }

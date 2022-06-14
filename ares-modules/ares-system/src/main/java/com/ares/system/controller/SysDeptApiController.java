@@ -2,6 +2,7 @@ package com.ares.system.controller;
 
 import com.ares.core.controller.BaseController;
 import com.ares.core.model.base.AjaxResult;
+import com.ares.core.model.base.JsonResult;
 import com.ares.core.model.page.TableDataInfo;
 import com.ares.core.model.system.SysDept;
 import com.ares.core.utils.StringUtils;
@@ -76,5 +77,10 @@ public class SysDeptApiController extends BaseController {
     @ApiOperation(value = "部门树列表", response = Object.class)
     public Object tree(HttpServletRequest request, HttpServletResponse response) {
         return AjaxResult.successData(sysDeptService.buildDeptTree());
+    }
+
+    @GetMapping("/getByDeptId/{id}")
+    public JsonResult<SysDept> getByDeptId(@PathVariable(value = "id") String id){
+        return JsonResult.success(sysDeptService.getByDeptId(id));
     }
 }

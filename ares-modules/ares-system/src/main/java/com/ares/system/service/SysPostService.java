@@ -4,7 +4,7 @@ import com.ares.core.model.system.SysPost;
 import com.ares.core.service.BaseService;
 import com.ares.core.utils.SnowflakeIdWorker;
 
-import com.ares.user.dao.ISysPostDao;
+import com.ares.system.dao.ISysPostDao;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;

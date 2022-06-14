@@ -2,11 +2,16 @@ package com.ares.flowable.persistence.service;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.ares.api.client.ISysRoleService;
+import com.ares.api.client.ISysUserService;
+import com.ares.api.client.fallback.SysUserServiceImpl;
 import com.ares.core.model.base.AjaxResult;
 import com.ares.core.model.base.BaseModel;
+import com.ares.core.model.base.JsonResult;
+import com.ares.core.model.system.SysDept;
 import com.ares.core.model.system.SysRole;
 import com.ares.core.model.system.SysUser;
-import com.ares.flowable.client.ISysDeptService;
+import com.ares.api.client.ISysDeptService;
 import com.ares.flowable.common.constant.ProcessConstants;
 import com.ares.flowable.common.enums.FlowComment;
 import com.ares.flowable.common.exception.CustomException;
@@ -22,8 +27,6 @@ import com.ares.flowable.persistence.model.dto.FlowTaskDto;
 import com.ares.flowable.persistence.model.dto.FlowViewerDto;
 import com.ares.flowable.persistence.model.vo.FlowTaskVo;
 import com.ares.security.common.SecurityUtils;
-import com.ares.user.service.SysRoleService;
-import com.ares.user.service.SysUserService;
 import com.github.pagehelper.Page;
 import com.google.common.collect.Lists;
 import org.apache.commons.collections4.CollectionUtils;
@@ -67,14 +70,14 @@ import java.util.stream.Collectors;
  **/
 @Service
 public class FlowTaskService extends FlowServiceFactory {
-    private SysUserService userService;
-    private SysRoleService roleService;
+    private ISysUserService userService;
+    private ISysRoleService roleService;
     private SysDeployFormService deployFormService;
     private SysFormDataService formDataService;
 
     @Autowired
-    public FlowTaskService(SysUserService userService,
-                           SysRoleService roleService,
+    public FlowTaskService(ISysUserService userService,
+                           ISysRoleService roleService,
                            SysDeployFormService deployFormService,
                            SysFormDataService formDataService) {
         this.userService = userService;
@@ -566,7 +569,8 @@ public class FlowTaskService extends FlowServiceFactory {
     public Page<FlowTaskDto> todoList(Integer pageNum, Integer pageSize) {
         Page<FlowTaskDto> page = new Page<>();
         String userId = SecurityUtils.getUser().getId();
-        List<SysRole> roles = roleService.getRoleByUserId(userId);
+        JsonResult<List<SysRole>> roleResult = roleService.getRoleByUserId(userId);
+        List<SysRole> roles = roleResult.getData();
         List<String> roleIds = roles.stream().map(BaseModel::getId).collect(Collectors.toList());
         List<String> ids = new ArrayList<>();
         ids.add(userId);
@@ -599,11 +603,12 @@ public class FlowTaskService extends FlowServiceFactory {
             HistoricProcessInstance historicProcessInstance = historyService.createHistoricProcessInstanceQuery()
                     .processInstanceId(task.getProcessInstanceId())
                     .singleResult();
-            SysUser startUser = userService.getById(historicProcessInstance.getStartUserId());
-
+            JsonResult<SysUser> userResult = userService.getById(historicProcessInstance.getStartUserId());
+            SysUser startUser = userResult.getData();
+            JsonResult<SysDept> deptResult = deptService.getByDeptId(startUser.getDeptId());
             flowTask.setStartUserId(startUser.getId());
             flowTask.setStartUserName(startUser.getUserName());
-            flowTask.setStartDeptName(deptService.getByDeptId(startUser.getDeptId()).getDeptName());
+            flowTask.setStartDeptName(deptResult.getData().getDeptName());
             flowList.add(flowTask);
         }
 
@@ -658,11 +663,13 @@ public class FlowTaskService extends FlowServiceFactory {
             HistoricProcessInstance historicProcessInstance = historyService.createHistoricProcessInstanceQuery()
                     .processInstanceId(histTask.getProcessInstanceId())
                     .singleResult();
-            SysUser startUser = userService.getById(historicProcessInstance.getStartUserId());
-
+            userService.getById(historicProcessInstance.getStartUserId());
+            JsonResult<SysUser> userResult = userService.getById(historicProcessInstance.getStartUserId());
+            SysUser startUser = userResult.getData();
+            JsonResult<SysDept> deptResult = deptService.getByDeptId(startUser.getDeptId());
             flowTask.setStartUserId(startUser.getId());
             flowTask.setStartUserName(startUser.getUserName());
-            flowTask.setStartDeptName(deptService.getByDeptId(startUser.getDeptId()).getDeptName());
+            flowTask.setStartDeptName(deptResult.getData().getDeptName());
             hisTaskList.add(flowTask);
         }
         page.setTotal(hisTaskList.size());
@@ -698,10 +705,12 @@ public class FlowTaskService extends FlowServiceFactory {
                     flowTask.setCreateTime(histIns.getStartTime());
                     flowTask.setFinishTime(histIns.getEndTime());
                     if (StringUtils.isNotBlank(histIns.getAssignee())) {
-                        SysUser sysUser = userService.getById(histIns.getAssignee());
+                        JsonResult<SysUser> userResult = userService.getById(histIns.getAssignee());
+                        SysUser sysUser = userResult.getData();
+                        JsonResult<SysDept> deptResult = deptService.getByDeptId(sysUser.getDeptId());
                         flowTask.setAssigneeId(sysUser.getId());
                         flowTask.setAssigneeName(sysUser.getUserName());
-                        flowTask.setDeptName(deptService.getByDeptId(sysUser.getDeptId()).getDeptName());
+                        flowTask.setDeptName(deptResult.getData().getDeptName());
                     }
                     // 展示审批人员
                     List<HistoricIdentityLink> linksForTask = historyService.getHistoricIdentityLinksForTask(histIns.getTaskId());
@@ -709,11 +718,13 @@ public class FlowTaskService extends FlowServiceFactory {
                     for (HistoricIdentityLink identityLink : linksForTask) {
                         if ("candidate".equals(identityLink.getType())) {
                             if (StringUtils.isNotBlank(identityLink.getUserId())) {
-                                SysUser sysUser = userService.getById(identityLink.getUserId());
+                                JsonResult<SysUser> userResult = userService.getById(identityLink.getUserId());
+                                SysUser sysUser = userResult.getData();
                                 stringBuilder.append(sysUser.getUserName()).append(",");
                             }
                             if (StringUtils.isNotBlank(identityLink.getGroupId())) {
-                                SysRole sysRole = roleService.getById(identityLink.getGroupId());
+                                JsonResult<SysRole> roleResult = roleService.getById(identityLink.getGroupId());
+                                SysRole sysRole = roleResult.getData();
                                 stringBuilder.append(sysRole.getRoleName()).append(",");
                             }
                         }
@@ -891,7 +902,8 @@ public class FlowTaskService extends FlowServiceFactory {
                     MultiInstanceLoopCharacteristics multiInstance = userTask.getLoopCharacteristics();
                     // 会签节点
                     if (Objects.nonNull(multiInstance)) {
-                        List<SysUser> list = userService.selectUserList(new SysUser());
+                        JsonResult<List<SysUser>> users = userService.selectUserList(new SysUser());
+                        List<SysUser> list =  users.getData();
 
                         flowNextDto.setVars(ProcessConstants.PROCESS_MULTI_INSTANCE_USER);
                         flowNextDto.setType(ProcessConstants.PROCESS_MULTI_INSTANCE);
@@ -905,7 +917,8 @@ public class FlowTaskService extends FlowServiceFactory {
                         if (ProcessConstants.DATA_TYPE.equals(dataType)) {
                             // 指定单个人员
                             if (ProcessConstants.USER_TYPE_ASSIGNEE.equals(userType)) {
-                                List<SysUser> list = userService.selectUserList(new SysUser());
+                                JsonResult<List<SysUser>> users = userService.selectUserList(new SysUser());
+                                List<SysUser> list =  users.getData();
 
                                 flowNextDto.setVars(ProcessConstants.PROCESS_APPROVAL);
                                 flowNextDto.setType(ProcessConstants.USER_TYPE_ASSIGNEE);
@@ -913,7 +926,8 @@ public class FlowTaskService extends FlowServiceFactory {
                             }
                             // 候选人员(多个)
                             if (ProcessConstants.USER_TYPE_USERS.equals(userType)) {
-                                List<SysUser> list = userService.selectUserList(new SysUser());
+                                JsonResult<List<SysUser>> users = userService.selectUserList(new SysUser());
+                                List<SysUser> list =  users.getData();
 
                                 flowNextDto.setVars(ProcessConstants.PROCESS_APPROVAL);
                                 flowNextDto.setType(ProcessConstants.USER_TYPE_USERS);
@@ -921,7 +935,8 @@ public class FlowTaskService extends FlowServiceFactory {
                             }
                             // 候选组
                             if (ProcessConstants.USER_TYPE_GROUPS.equals(userType)) {
-                                List<SysRole> sysRoles = roleService.getAll();
+                                JsonResult<List<SysRole>> result = roleService.getAll();
+                                List<SysRole> sysRoles = result.getData();
 
                                 flowNextDto.setVars(ProcessConstants.PROCESS_APPROVAL);
                                 flowNextDto.setType(ProcessConstants.USER_TYPE_GROUPS);

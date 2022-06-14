@@ -28,15 +28,15 @@
         </dependency>
         <dependency>
             <groupId>com.ares</groupId>
-            <artifactId>ares-common-user</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.ares</groupId>
             <artifactId>ares-common-redis</artifactId>
         </dependency>
         <dependency>
             <groupId>com.ares</groupId>
             <artifactId>ares-common-log</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.ares</groupId>
+            <artifactId>ares-common-api</artifactId>
         </dependency>
         <dependency>
             <groupId>io.jsonwebtoken</groupId>

@@ -1,4 +1,4 @@
-package com.ares.user.service;
+package com.ares.system.service;
 
 import com.alibaba.excel.context.AnalysisContext;
 import com.alibaba.excel.event.AnalysisEventListener;
@@ -12,9 +12,10 @@ import com.ares.core.utils.MD5Util;
 import com.ares.core.utils.SnowflakeIdWorker;
 import com.ares.core.utils.SpringUtils;
 import com.ares.core.utils.StringUtils;
-import com.ares.user.dao.ISysPostDao;
-import com.ares.user.dao.ISysRoleDao;
-import com.ares.user.dao.ISysUserDao;
+
+import com.ares.system.dao.ISysPostDao;
+import com.ares.system.dao.ISysRoleDao;
+import com.ares.system.dao.ISysUserDao;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;

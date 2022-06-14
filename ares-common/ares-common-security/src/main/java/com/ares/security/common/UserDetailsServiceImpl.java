@@ -1,11 +1,12 @@
 package com.ares.security.common;
 
+import com.ares.api.client.ISysRoleService;
+import com.ares.api.client.ISysUserService;
+import com.ares.core.model.base.JsonResult;
 import com.ares.core.model.system.SysRole;
 import com.ares.core.model.system.SysUser;
 import com.ares.log.common.Log;
 import com.ares.security.jwt.JwtUserDetails;
-import com.ares.user.service.SysRoleService;
-import com.ares.user.service.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -25,30 +26,31 @@ import java.util.stream.Collectors;
  **/
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
-    private SysUserService userService;
-    private SysRoleService roleService;
-
     @Autowired
-    public UserDetailsServiceImpl(SysUserService userService,
-                                  SysRoleService roleService) {
-        this.userService = userService;
-        this.roleService = roleService;
-    }
+    private ISysUserService userService;
+    @Autowired
+    private ISysRoleService roleService;
+
 
     @Log
     @Override
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
-        SysUser user = userService.getUserByName(userName);
+        JsonResult<SysUser> userResult = userService.getUserByName(userName);
+        SysUser user = userResult.getData();
         if (null == user) {
             throw new UsernameNotFoundException("该用户不存在");
         }
-        List<SysRole> roleList = roleService.getRoleByUserId(user.getId());
+        JsonResult<List<SysRole>> roleResult = roleService.getRoleByUserId(user.getId());
+        List<SysRole> roleList = roleResult.getData();
+
         List<String> perms = new ArrayList<>();
         for (SysRole role : roleList) {
             if ("gly".equalsIgnoreCase(role.getRoleName())) {
-                perms = roleService.getPermsByRoleId(null);
+                JsonResult<List<String>> permsResult = roleService.getPermsByRoleId(null);
+                perms = permsResult.getData();
             } else {
-                perms = roleService.getPermsByRoleId(role.getId());
+                JsonResult<List<String>> permsResult = roleService.getPermsByRoleId(role.getId());
+                perms = permsResult.getData();
             }
         }
         List<GrantedAuthority> grantedAuthorities = perms.stream().map(GrantedAuthorityImpl::new).collect(Collectors.toList());

@@ -5,14 +5,15 @@ import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.event.AnalysisEventListener;
 import com.ares.core.controller.BaseController;
 import com.ares.core.model.base.AjaxResult;
+import com.ares.core.model.base.JsonResult;
 import com.ares.core.model.page.TableDataInfo;
 import com.ares.core.model.system.SysUser;
 import com.ares.core.utils.ExcelUtils;
 import com.ares.core.utils.StringUtils;
 import com.ares.security.common.SecurityUtils;
 import com.ares.system.service.SysPostService;
-import com.ares.user.service.SysRoleService;
-import com.ares.user.service.SysUserService;
+import com.ares.system.service.SysRoleService;
+import com.ares.system.service.SysUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -150,5 +151,21 @@ public class SysUserApiController extends BaseController {
         AnalysisEventListener listener = userService.new UserDataListener(needUpdate, deptId);
         EasyExcel.read(inputStream, SysUser.class, listener).sheet().doRead();
         return AjaxResult.success("导入成功");
+    }
+
+    @GetMapping("getUserByName/{name}")
+    public JsonResult<SysUser> getUserByName(@PathVariable("name") String name){
+        return JsonResult.success(userService.getUserByName(name));
+    }
+
+    @RequestMapping("userList")
+    public JsonResult<List<SysUser>> userList(SysUser user) {
+        List<SysUser> userList = userService.selectUserList(user);
+        return JsonResult.success(userList);
+    }
+
+    @GetMapping("getUserById/{id}")
+    public JsonResult<SysUser> getById(@PathVariable("id") String id){
+        return JsonResult.success(userService.getById(id));
     }
 }

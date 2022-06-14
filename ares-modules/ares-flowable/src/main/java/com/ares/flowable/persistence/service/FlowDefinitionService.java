@@ -2,6 +2,7 @@ package com.ares.flowable.persistence.service;
 
 
 import cn.hutool.json.JSONUtil;
+import com.ares.api.client.ISysUserService;
 import com.ares.core.model.base.AjaxResult;
 import com.ares.core.model.system.SysUser;
 import com.ares.flowable.common.constant.ProcessConstants;
@@ -11,7 +12,6 @@ import com.ares.flowable.persistence.model.SysForm;
 import com.ares.flowable.persistence.model.SysFormData;
 import com.ares.flowable.persistence.model.dto.FlowProcDefDto;
 import com.ares.security.common.SecurityUtils;
-import com.ares.user.service.SysUserService;
 import com.github.pagehelper.Page;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
@@ -35,12 +35,12 @@ import java.util.*;
 @Slf4j
 public class FlowDefinitionService extends FlowServiceFactory {
     private SysDeployFormService sysDeployFormService;
-    private SysUserService sysUserService;
+    private ISysUserService sysUserService;
     private SysFormDataService formDataService;
 
     @Autowired
     public FlowDefinitionService(SysDeployFormService deployFormService,
-                                 SysUserService sysUserService,
+                                 ISysUserService sysUserService,
                                  SysFormDataService formDataService) {
         this.sysDeployFormService = deployFormService;
         this.sysUserService = sysUserService;

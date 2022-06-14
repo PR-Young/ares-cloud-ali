@@ -13,7 +13,7 @@ import com.ares.system.service.SysDeptService;
 import com.ares.system.service.SysPostService;
 import com.ares.system.service.SysPropertiesService;
 import com.ares.system.service.UploadService;
-import com.ares.user.service.SysUserService;
+import com.ares.system.service.SysUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;

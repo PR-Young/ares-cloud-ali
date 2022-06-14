@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>ares-common-user</artifactId>
+    <artifactId>ares-common-api</artifactId>
 
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
@@ -17,6 +17,10 @@
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+        </dependency>
         <dependency>
             <groupId>com.ares</groupId>
             <artifactId>ares-common-core</artifactId>
