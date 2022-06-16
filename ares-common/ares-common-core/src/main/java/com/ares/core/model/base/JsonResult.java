@@ -25,7 +25,20 @@ public class JsonResult<T> implements Serializable {
         return result;
     }
 
-    public static  <T> JsonResult<T> success(T data) {
+    public static <T> JsonResult<T> success(T data) {
         return jsonResult(data, ResultCode.SUCCESS.getCode(), null);
     }
+
+    public static <T> JsonResult<T> success(T data, int code, String msg) {
+        return jsonResult(data, code, msg);
+    }
+
+    public static <T> JsonResult<T> error(T data, String msg) {
+        return jsonResult(data, ResultCode.FAILED.getCode(), msg);
+    }
+
+    public static <T> JsonResult<T> error(T data, int code, String msg) {
+        return jsonResult(data, code, msg);
+    }
+
 }

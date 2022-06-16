@@ -1,9 +1,8 @@
 package com.ares.api.client.fallback;
 
+import com.ares.api.client.ISysDeptService;
 import com.ares.core.model.base.JsonResult;
 import com.ares.core.model.system.SysDept;
-import com.ares.api.client.ISysDeptService;
-import org.springframework.stereotype.Component;
 
 /**
  * @description:
@@ -14,6 +13,6 @@ import org.springframework.stereotype.Component;
 public class SysDeptServiceImpl implements ISysDeptService {
     @Override
     public JsonResult<SysDept> getByDeptId(String id) {
-        return null;
+        return JsonResult.error(null, 1000, "error");
     }
 }

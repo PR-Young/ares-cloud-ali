@@ -1,10 +1,8 @@
 package com.ares.api.client.fallback;
 
 import com.ares.api.client.ISysRoleService;
-import com.ares.core.model.base.AjaxResult;
 import com.ares.core.model.base.JsonResult;
 import com.ares.core.model.system.SysRole;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 
@@ -18,26 +16,26 @@ public class SysRoleServiceImpl implements ISysRoleService {
 
     @Override
     public JsonResult<List<SysRole>> getRoleByUserId(String userId) {
-        return null;
+        return JsonResult.error(null, 1000, "error");
     }
 
     @Override
     public JsonResult<List<String>> getPermsByRoleId(String roleId) {
-        return null;
+        return JsonResult.error(null, 1000, "error");
     }
 
     @Override
     public JsonResult<SysRole> getById(String roleId) {
-        return null;
+        return JsonResult.error(null, 1000, "error");
     }
 
     @Override
     public JsonResult<List<SysRole>> getAll() {
-        return null;
+        return JsonResult.error(null, 1000, "error");
     }
 
     @Override
     public JsonResult<List<SysRole>> selectRoleList(SysRole role) {
-        return null;
+        return JsonResult.error(null, 1000, "error");
     }
 }

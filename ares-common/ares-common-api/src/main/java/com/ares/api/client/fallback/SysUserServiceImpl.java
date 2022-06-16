@@ -1,10 +1,8 @@
 package com.ares.api.client.fallback;
 
 import com.ares.api.client.ISysUserService;
-import com.ares.core.model.base.AjaxResult;
 import com.ares.core.model.base.JsonResult;
 import com.ares.core.model.system.SysUser;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 
@@ -17,16 +15,16 @@ import java.util.List;
 public class SysUserServiceImpl implements ISysUserService {
     @Override
     public JsonResult<SysUser> getUserByName(String name) {
-        return null;
+        return JsonResult.error(null, 1000, "error");
     }
 
     @Override
     public JsonResult<SysUser> getById(String userId) {
-        return null;
+        return JsonResult.error(null, 1000, "error");
     }
 
     @Override
     public JsonResult<List<SysUser>> selectUserList(SysUser sysUser) {
-        return null;
+        return JsonResult.error(null, 1000, "error");
     }
 }
