@@ -72,7 +72,7 @@
           </el-form-item>
         </el-form>
 
-        <el-row class="mb8">
+        <el-row gutter="10" class="mb8">
           <el-col :span="1.5">
             <el-button
               type="primary"
@@ -173,10 +173,20 @@
               <span>{{ parseTime(scope.row.createTime) }}</span>
             </template>
           </el-table-column>
+          <el-table-column label="状态" align="center">
+            <template slot-scope="scope">
+              <el-switch
+                v-model="scope.row.status"
+                :active-value="1"
+                :inactive-value="0"
+                @change="handleStatusChange(scope.row)"
+              ></el-switch>
+            </template>
+          </el-table-column>
           <el-table-column
             label="操作"
             align="center"
-            width="180"
+            width="300"
             class-name="small-padding fixed-width"
             fixed="right"
           >
@@ -204,6 +214,13 @@
                 icon="el-icon-key"
                 @click="handleResetPwd(scope.row)"
                 >重置</el-button
+              >
+              <el-button
+                size="mini"
+                type="text"
+                icon="el-icon-bottom"
+                @click="handleKickUser(scope.row)"
+                >下线</el-button
               >
             </template>
           </el-table-column>
@@ -370,9 +387,7 @@
       <el-form ref="form" :model="deptForm" label-width="80px">
         <el-row>
           <el-input v-model="deptForm.id" type="hidden" />
-
           <el-input v-model="deptForm.parentDeptId" type="hidden" />
-
           <el-col :span="24">
             <el-form-item label="上级部门" prop="parentDeptName">
               <el-input v-model="deptForm.parentDeptName" disabled />
@@ -412,6 +427,7 @@ import {
   resetUserPwd,
   changeUserStatus,
   importTemplate,
+  kickUser,
 } from "@/api/system/user";
 import { getToken } from "@/utils/auth";
 import {
@@ -665,6 +681,31 @@ export default {
         })
         .catch(() => {});
     },
+    handleStatusChange(row) {
+      let text = row.status === 1 ? "启用" : "停用";
+      this.$confirm('确认要"' + text + '""' + row.userName + '"吗?', "警告", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(function () {
+          updateUser(row).then((response) => {
+            if (response.code === 200) {
+              this.msgSuccess("修改成功");
+              this.open = false;
+              this.getList();
+            } else {
+              this.msgError(response.msg);
+            }
+          });
+        })
+        .then(() => {
+          this.msgSuccess(text + "成功");
+        })
+        .catch(function () {
+          row.status = row.status === 1 ? 1 : 0;
+        });
+    },
     /** 提交按钮 */
     submitForm: function () {
       this.$refs["form"].validate((valid) => {
@@ -862,6 +903,22 @@ export default {
     },
     refreshTree() {
       this.getTreeselect();
+    },
+    handleKickUser(row) {
+      const userName = row.userName;
+      this.$confirm('是否让用户"' + userName + '"下线?', "警告", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(function () {
+          return kickUser(row.account);
+        })
+        .then(() => {
+          this.getList();
+          this.msgSuccess("下线成功");
+        })
+        .catch(function () {});
     },
   },
 };

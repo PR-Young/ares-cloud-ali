@@ -1,8 +1,27 @@
+/*
+ *
+ *  *  ******************************************************************************
+ *  *  * Copyright (c) 2021 - 9999, ARES
+ *  *  *
+ *  *  * Licensed under the Apache License, Version 2.0 (the "License");
+ *  *  * you may not use this file except in compliance with the License.
+ *  *  * You may obtain a copy of the License at
+ *  *  *
+ *  *  *        http://www.apache.org/licenses/LICENSE-2.0
+ *  *  *
+ *  *  * Unless required by applicable law or agreed to in writing, software
+ *  *  * distributed under the License is distributed on an "AS IS" BASIS,
+ *  *  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  *  * See the License for the specific language governing permissions and
+ *  *  * limitations under the License.
+ *  *  *****************************************************************************
+ *
+ */
+
 package com.ares.security.common;
 
 import com.ares.api.client.ISysUserService;
 import com.ares.core.exception.UserException;
-import com.ares.core.model.base.AjaxResult;
 import com.ares.core.model.base.Constants;
 import com.ares.core.model.base.JsonResult;
 import com.ares.core.model.exception.ErrorCode;
@@ -129,10 +148,12 @@ public class SecurityUtils {
 
     public static SysUser getUser() throws UserException {
         String userName = getUsername();
+        if("anonymousUser".equals(userName)){
+            return null;
+        }
         if (null == userName) {
             throw new UserException(ErrorCode.NOUSER.getCode(), "用户不存在！");
         }
-
         ISysUserService userService = SpringUtils.getBean(ISysUserService.class);
         JsonResult<SysUser> result = userService.getUserByName(userName);
         SysUser user =  result.getData();

@@ -64,7 +64,7 @@
     <select id="getPermsByRoleId" parameterType="java.lang.String" resultType="java.lang.String">
         select menu.Perms
         from sys_menu menu
-        <if test="roleId != null">
+        <if test="roleId != '1'">
             left join sys_permission permission on menu.Id = permission.MenuId
             where permission.RoleId = #{roleId,jdbcType=VARCHAR}
         </if>

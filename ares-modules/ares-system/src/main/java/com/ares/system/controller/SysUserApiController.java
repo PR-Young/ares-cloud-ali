@@ -1,3 +1,23 @@
+/*
+ *
+ *  *  ******************************************************************************
+ *  *  * Copyright (c) 2021 - 9999, ARES
+ *  *  *
+ *  *  * Licensed under the Apache License, Version 2.0 (the "License");
+ *  *  * you may not use this file except in compliance with the License.
+ *  *  * You may obtain a copy of the License at
+ *  *  *
+ *  *  *        http://www.apache.org/licenses/LICENSE-2.0
+ *  *  *
+ *  *  * Unless required by applicable law or agreed to in writing, software
+ *  *  * distributed under the License is distributed on an "AS IS" BASIS,
+ *  *  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  *  * See the License for the specific language governing permissions and
+ *  *  * limitations under the License.
+ *  *  *****************************************************************************
+ *
+ */
+
 package com.ares.system.controller;
 
 
@@ -5,11 +25,13 @@ import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.event.AnalysisEventListener;
 import com.ares.core.controller.BaseController;
 import com.ares.core.model.base.AjaxResult;
+import com.ares.core.model.base.Constants;
 import com.ares.core.model.base.JsonResult;
 import com.ares.core.model.page.TableDataInfo;
 import com.ares.core.model.system.SysUser;
 import com.ares.core.utils.ExcelUtils;
 import com.ares.core.utils.StringUtils;
+import com.ares.redis.utils.RedisUtil;
 import com.ares.security.common.SecurityUtils;
 import com.ares.system.service.SysPostService;
 import com.ares.system.service.SysRoleService;
@@ -151,6 +173,14 @@ public class SysUserApiController extends BaseController {
         AnalysisEventListener listener = userService.new UserDataListener(needUpdate, deptId);
         EasyExcel.read(inputStream, SysUser.class, listener).sheet().doRead();
         return AjaxResult.success("导入成功");
+    }
+	
+	@RequestMapping("kick")
+    @ApiOperation(value = "下线", response = Object.class)
+    public Object kickUser(@RequestParam("username") String userName) {
+        SysUser user = userService.getUserByName(userName);
+        RedisUtil.del(Constants.LOGIN_INFO + userName);
+        return AjaxResult.success();
     }
 
     @GetMapping("getUserByName/{name}")

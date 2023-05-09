@@ -1,5 +1,26 @@
+/*
+ *
+ *  *  ******************************************************************************
+ *  *  * Copyright (c) 2021 - 9999, ARES
+ *  *  *
+ *  *  * Licensed under the Apache License, Version 2.0 (the "License");
+ *  *  * you may not use this file except in compliance with the License.
+ *  *  * You may obtain a copy of the License at
+ *  *  *
+ *  *  *        http://www.apache.org/licenses/LICENSE-2.0
+ *  *  *
+ *  *  * Unless required by applicable law or agreed to in writing, software
+ *  *  * distributed under the License is distributed on an "AS IS" BASIS,
+ *  *  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  *  * See the License for the specific language governing permissions and
+ *  *  * limitations under the License.
+ *  *  *****************************************************************************
+ *
+ */
+
 package com.ares.security.common;
 
+import com.ares.core.config.base.BaseConfig;
 import com.ares.security.jwt.JwtAuthenticationFilter;
 import com.ares.security.jwt.JwtAuthenticationProvider;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,14 +50,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private UserDetailsService userDetailsService;
     private LogoutSuccessHandlerImpl logoutSuccessHandler;
     private AuthenticationEntryPointImpl authenticationEntryPoint;
+    private BaseConfig config;
 
     @Autowired
     public WebSecurityConfig(UserDetailsServiceImpl userDetailsService,
                              LogoutSuccessHandlerImpl logoutSuccessHandler,
-                             AuthenticationEntryPointImpl authenticationEntryPoint) {
+                             AuthenticationEntryPointImpl authenticationEntryPoint,
+                             BaseConfig config) {
         this.userDetailsService = userDetailsService;
         this.logoutSuccessHandler = logoutSuccessHandler;
         this.authenticationEntryPoint = authenticationEntryPoint;
+        this.config = config;
     }
 
     @Override
@@ -47,24 +71,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
+        String[] whiteUrl = config.getWhiteUrl().split(",");
         http.csrf().disable()
                 .exceptionHandling().authenticationEntryPoint(authenticationEntryPoint).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.OPTIONS, "*/**").permitAll()
                 .antMatchers(HttpMethod.GET, "*/**").permitAll()
-                .antMatchers("/login").permitAll()
-                .antMatchers("/kaptcha").permitAll()
-                .antMatchers("/system/user/profile/**").permitAll()
-                .antMatchers("/swagger-ui.html").permitAll()
-                .antMatchers("/swagger-resources/**").permitAll()
-                .antMatchers("/*/api-docs").permitAll()
-                .antMatchers("/webjars/**").permitAll()
-                .antMatchers("/druid/**").permitAll()
-                .antMatchers("/actuator/**").permitAll()
-                .antMatchers("/doc.html").permitAll()
-                .antMatchers("/model/**", "/editor/**").permitAll()
-                .antMatchers("/blog/**").permitAll()
+                .antMatchers(whiteUrl).permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .headers().frameOptions().disable();

@@ -1,3 +1,23 @@
+/*
+ *
+ *  *  ******************************************************************************
+ *  *  * Copyright (c) 2021 - 9999, ARES
+ *  *  *
+ *  *  * Licensed under the Apache License, Version 2.0 (the "License");
+ *  *  * you may not use this file except in compliance with the License.
+ *  *  * You may obtain a copy of the License at
+ *  *  *
+ *  *  *        http://www.apache.org/licenses/LICENSE-2.0
+ *  *  *
+ *  *  * Unless required by applicable law or agreed to in writing, software
+ *  *  * distributed under the License is distributed on an "AS IS" BASIS,
+ *  *  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  *  * See the License for the specific language governing permissions and
+ *  *  * limitations under the License.
+ *  *  *****************************************************************************
+ *
+ */
+
 package com.ares.api.client;
 
 import com.ares.api.client.fallback.SysRoleServiceImpl;
@@ -24,7 +44,7 @@ public interface ISysRoleService {
      * @param userId
      * @return
      */
-    @GetMapping("/system/role/getRoleByUserId/{userId}")
+    @GetMapping("/system/system/role/getRoleByUserId/{userId}")
     JsonResult<List<SysRole>> getRoleByUserId(@PathVariable("userId") String userId);
 
     /**
@@ -33,7 +53,7 @@ public interface ISysRoleService {
      * @param roleId
      * @return
      */
-    @GetMapping("/system/role/getPermsByRoleId/{roleId}")
+    @GetMapping("/system/system/role/getPermsByRoleId/{roleId}")
     JsonResult<List<String>> getPermsByRoleId(@PathVariable("roleId") String roleId);
 
     /**
@@ -42,7 +62,7 @@ public interface ISysRoleService {
      * @param roleId
      * @return
      */
-    @GetMapping("/system/role/getRoleById/{roleId}")
+    @GetMapping("/system/system/role/getRoleById/{roleId}")
     JsonResult<SysRole> getById(@PathVariable("roleId") String roleId);
 
     /**
@@ -50,7 +70,7 @@ public interface ISysRoleService {
      *
      * @return
      */
-    @GetMapping("/system/role/getAllRole")
+    @GetMapping("/system/system/role/getAllRole")
     JsonResult<List<SysRole>> getAll();
 
     /**
@@ -59,6 +79,6 @@ public interface ISysRoleService {
      * @param role
      * @return
      */
-    @RequestMapping("/system/role/selectRoleList")
+    @RequestMapping("/system/system/role/selectRoleList")
     JsonResult<List<SysRole>> selectRoleList(SysRole role);
 }

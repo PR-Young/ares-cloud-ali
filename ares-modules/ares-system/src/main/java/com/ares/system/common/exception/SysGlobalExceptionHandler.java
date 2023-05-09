@@ -1,3 +1,23 @@
+/*
+ *
+ *  *  ******************************************************************************
+ *  *  * Copyright (c) 2021 - 9999, ARES
+ *  *  *
+ *  *  * Licensed under the Apache License, Version 2.0 (the "License");
+ *  *  * you may not use this file except in compliance with the License.
+ *  *  * You may obtain a copy of the License at
+ *  *  *
+ *  *  *        http://www.apache.org/licenses/LICENSE-2.0
+ *  *  *
+ *  *  * Unless required by applicable law or agreed to in writing, software
+ *  *  * distributed under the License is distributed on an "AS IS" BASIS,
+ *  *  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  *  * See the License for the specific language governing permissions and
+ *  *  * limitations under the License.
+ *  *  *****************************************************************************
+ *
+ */
+
 package com.ares.system.common.exception;
 
 
@@ -33,10 +53,10 @@ public class SysGlobalExceptionHandler {
 
     @ExceptionHandler(value = UserException.class)
     public Object handleUserException(HttpServletRequest request, HttpServletResponse response, UserException e) {
-        String code = e.getCode();
-        if (code.equals(ErrorCode.NOUSER.getCode())) {
+        int code = e.getCode();
+        if (code== ErrorCode.NOUSER.getCode()) {
             return AjaxResult.error(ResultCode.FAILED.getCode(), "用户不存在");
-        } else if (code.equals(ErrorCode.NOAUTH.getCode())) {
+        } else if (code == ErrorCode.NOAUTH.getCode()) {
             return AjaxResult.unAuth();
         }
         return AjaxResult.unLogin();
@@ -49,11 +69,6 @@ public class SysGlobalExceptionHandler {
 
     @ExceptionHandler(value = PersistenceException.class)
     public Object handlePersistenceException(HttpServletRequest request, HttpServletResponse response, PersistenceException e) {
-        return AjaxResult.error(ResultCode.FAILED.getCode(), e.getMessage());
-    }
-
-    @ExceptionHandler(value = Exception.class)
-    public Object handleException(HttpServletRequest request, HttpServletResponse response, Exception e) {
         return AjaxResult.error(ResultCode.FAILED.getCode(), e.getMessage());
     }
 

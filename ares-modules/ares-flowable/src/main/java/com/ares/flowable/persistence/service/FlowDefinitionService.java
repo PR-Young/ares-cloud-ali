@@ -1,7 +1,29 @@
+/*
+ *
+ *  *  ******************************************************************************
+ *  *  * Copyright (c) 2021 - 9999, ARES
+ *  *  *
+ *  *  * Licensed under the Apache License, Version 2.0 (the "License");
+ *  *  * you may not use this file except in compliance with the License.
+ *  *  * You may obtain a copy of the License at
+ *  *  *
+ *  *  *        http://www.apache.org/licenses/LICENSE-2.0
+ *  *  *
+ *  *  * Unless required by applicable law or agreed to in writing, software
+ *  *  * distributed under the License is distributed on an "AS IS" BASIS,
+ *  *  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  *  * See the License for the specific language governing permissions and
+ *  *  * limitations under the License.
+ *  *  *****************************************************************************
+ *
+ */
+
 package com.ares.flowable.persistence.service;
 
 
 import cn.hutool.json.JSONUtil;
+import com.ares.api.client.ISysDeptService;
+import com.ares.api.client.ISysPostService;
 import com.ares.api.client.ISysUserService;
 import com.ares.core.model.base.AjaxResult;
 import com.ares.core.model.system.SysUser;
@@ -36,14 +58,20 @@ import java.util.*;
 public class FlowDefinitionService extends FlowServiceFactory {
     private SysDeployFormService sysDeployFormService;
     private ISysUserService sysUserService;
+    private ISysDeptService sysDeptService;
+    private ISysPostService postService;
     private SysFormDataService formDataService;
 
     @Autowired
     public FlowDefinitionService(SysDeployFormService deployFormService,
                                  ISysUserService sysUserService,
+                                 ISysDeptService sysDeptService,
+                                 ISysPostService postService,
                                  SysFormDataService formDataService) {
         this.sysDeployFormService = deployFormService;
         this.sysUserService = sysUserService;
+        this.sysDeptService = sysDeptService;
+        this.postService = postService;
         this.formDataService = formDataService;
     }
 
@@ -164,7 +192,7 @@ public class FlowDefinitionService extends FlowServiceFactory {
             // 设置流程发起人Id到流程中
             SysUser sysUser = SecurityUtils.getUser();
             identityService.setAuthenticatedUserId(sysUser.getId());
-            variables.put(ProcessConstants.PROCESS_INITIATOR, "");
+            variables.put(ProcessConstants.PROCESS_INITIATOR, sysUser.getId());
             ProcessInstance processInstance = runtimeService.startProcessInstanceById(procDefId, variables);
 
             //保存表单数据
@@ -175,12 +203,12 @@ public class FlowDefinitionService extends FlowServiceFactory {
             formDataService.insert(formData);
 
             // 给第一步申请人节点设置任务执行人和意见 todo:第一个节点不设置为申请人节点有点问题？
-            Task task = taskService.createTaskQuery().processInstanceId(processInstance.getProcessInstanceId()).singleResult();
-            if (Objects.nonNull(task)) {
-                taskService.addComment(task.getId(), processInstance.getProcessInstanceId(), FlowComment.NORMAL.getType(), sysUser.getUserName() + "发起流程申请");
-                //taskService.setAssignee(task.getId(), sysUser.getUserId().toString());
-                taskService.complete(task.getId(), variables);
-            }
+            //Task task = taskService.createTaskQuery().processInstanceId(processInstance.getProcessInstanceId()).singleResult();
+            //if (Objects.nonNull(task)) {
+            //   // taskService.addComment(task.getId(), processInstance.getProcessInstanceId(), FlowComment.NORMAL.getType(), sysUser.getUserName() + "发起流程申请");
+            //    taskService.setOwner(task.getId(), sysUser.getId());
+            //    //taskService.complete(task.getId(), variables);
+            //}
             return AjaxResult.success("流程启动成功");
         } catch (Exception e) {
             e.printStackTrace();

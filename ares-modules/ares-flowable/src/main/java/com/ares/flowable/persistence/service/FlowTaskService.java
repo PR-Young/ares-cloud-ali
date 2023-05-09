@@ -1,3 +1,23 @@
+/*
+ *
+ *  *  ******************************************************************************
+ *  *  * Copyright (c) 2021 - 9999, ARES
+ *  *  *
+ *  *  * Licensed under the Apache License, Version 2.0 (the "License");
+ *  *  * you may not use this file except in compliance with the License.
+ *  *  * You may obtain a copy of the License at
+ *  *  *
+ *  *  *        http://www.apache.org/licenses/LICENSE-2.0
+ *  *  *
+ *  *  * Unless required by applicable law or agreed to in writing, software
+ *  *  * distributed under the License is distributed on an "AS IS" BASIS,
+ *  *  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  *  * See the License for the specific language governing permissions and
+ *  *  * limitations under the License.
+ *  *  *****************************************************************************
+ *
+ */
+
 package com.ares.flowable.persistence.service;
 
 import com.alibaba.fastjson.JSONArray;
@@ -73,21 +93,21 @@ public class FlowTaskService extends FlowServiceFactory {
     private ISysUserService userService;
     private ISysRoleService roleService;
     private SysDeployFormService deployFormService;
+    private ISysDeptService deptService;
     private SysFormDataService formDataService;
 
     @Autowired
     public FlowTaskService(ISysUserService userService,
                            ISysRoleService roleService,
+                           ISysDeptService deptService,
                            SysDeployFormService deployFormService,
                            SysFormDataService formDataService) {
         this.userService = userService;
         this.roleService = roleService;
         this.deployFormService = deployFormService;
+        this.deptService = deptService;
         this.formDataService = formDataService;
     }
-
-    @Autowired
-    ISysDeptService deptService;
 
     /**
      * 完成任务
@@ -110,6 +130,23 @@ public class FlowTaskService extends FlowServiceFactory {
             taskService.complete(taskVo.getTaskId(), taskVo.getValues());
         }
         return AjaxResult.success();
+    }
+
+    /**
+     * 驳回任务
+     *
+     * @param taskVo 请求实体参数
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public void taskRejectNew(FlowTaskVo taskVo) {
+        Task task = taskService.createTaskQuery().taskId(taskVo.getTaskId()).singleResult();
+        if (task.isSuspended()) {
+            throw new CustomException("任务处于挂起状态");
+        }
+
+        taskService.addComment(taskVo.getTaskId(), taskVo.getInstanceId(), FlowComment.NORMAL.getType(), taskVo.getComment());
+        taskService.complete(taskVo.getTaskId(), taskVo.getValues());
+
     }
 
     /**
@@ -569,18 +606,33 @@ public class FlowTaskService extends FlowServiceFactory {
     public Page<FlowTaskDto> todoList(Integer pageNum, Integer pageSize) {
         Page<FlowTaskDto> page = new Page<>();
         String userId = SecurityUtils.getUser().getId();
-        JsonResult<List<SysRole>> roleResult = roleService.getRoleByUserId(userId);
-        List<SysRole> roles = roleResult.getData();
-        List<String> roleIds = roles.stream().map(BaseModel::getId).collect(Collectors.toList());
+        JsonResult<List<SysRole>> roles = roleService.getRoleByUserId(userId);
+        List<SysRole> roleList = roles.getData();
+        List<String> roleIds = roleList.stream().map(BaseModel::getId).collect(Collectors.toList());
         List<String> ids = new ArrayList<>();
         ids.add(userId);
         ids.addAll(roleIds);
         TaskQuery taskQuery = taskService.createTaskQuery()
-                .taskAssigneeIds(ids).active()
+                .taskAssigneeIds(ids)
+                .active()
                 .includeProcessVariables()
                 .orderByTaskCreateTime().desc();
-        page.setTotal(taskQuery.count());
-        List<Task> taskList = taskQuery.listPage(pageNum - 1, pageSize);
+        TaskQuery taskQuery1 = taskService.createTaskQuery()
+                .taskCandidateGroupIn(ids)
+                .active()
+                .includeProcessVariables()
+                .orderByTaskCreateTime().desc();
+        List<Task> taskList = new ArrayList<>();
+        List<Task> tasks = taskQuery.list();
+        List<Task> tasks1 = taskQuery1.list();
+        taskList.addAll(tasks);
+        taskList.addAll(tasks1);
+        page.setTotal(taskList.size());
+        if (taskList.size() < pageNum * pageSize) {
+            taskList = taskList.subList((pageNum - 1) * pageSize, taskList.size());
+        } else {
+            taskList = taskList.subList((pageNum - 1) * pageSize, (pageNum - 1) * pageSize + pageSize);
+        }
         List<FlowTaskDto> flowList = new ArrayList<>();
         for (Task task : taskList) {
             FlowTaskDto flowTask = new FlowTaskDto();
@@ -903,7 +955,7 @@ public class FlowTaskService extends FlowServiceFactory {
                     // 会签节点
                     if (Objects.nonNull(multiInstance)) {
                         JsonResult<List<SysUser>> users = userService.selectUserList(new SysUser());
-                        List<SysUser> list =  users.getData();
+                        List<SysUser> list = users.getData();
 
                         flowNextDto.setVars(ProcessConstants.PROCESS_MULTI_INSTANCE_USER);
                         flowNextDto.setType(ProcessConstants.PROCESS_MULTI_INSTANCE);
@@ -918,7 +970,7 @@ public class FlowTaskService extends FlowServiceFactory {
                             // 指定单个人员
                             if (ProcessConstants.USER_TYPE_ASSIGNEE.equals(userType)) {
                                 JsonResult<List<SysUser>> users = userService.selectUserList(new SysUser());
-                                List<SysUser> list =  users.getData();
+                                List<SysUser> list = users.getData();
 
                                 flowNextDto.setVars(ProcessConstants.PROCESS_APPROVAL);
                                 flowNextDto.setType(ProcessConstants.USER_TYPE_ASSIGNEE);
@@ -927,7 +979,7 @@ public class FlowTaskService extends FlowServiceFactory {
                             // 候选人员(多个)
                             if (ProcessConstants.USER_TYPE_USERS.equals(userType)) {
                                 JsonResult<List<SysUser>> users = userService.selectUserList(new SysUser());
-                                List<SysUser> list =  users.getData();
+                                List<SysUser> list = users.getData();
 
                                 flowNextDto.setVars(ProcessConstants.PROCESS_APPROVAL);
                                 flowNextDto.setType(ProcessConstants.USER_TYPE_USERS);

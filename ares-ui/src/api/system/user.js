@@ -134,3 +134,11 @@ export function getAvatar(path) {
     method: 'get',
   })
 }
+
+export function kickUser(username) {
+  return request({
+    url: '/ares/system/system/user/kick',
+    method: 'post',
+    params: { username }
+  })
+}

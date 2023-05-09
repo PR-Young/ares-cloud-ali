@@ -74,11 +74,6 @@
         </el-button>
       </el-form-item>
     </el-form>
-    <!--  底部  -->
-    <div class="el-login-footer">
-      <span></span>
-      <router-link to="/blog">返回</router-link>
-    </div>
   </div>
 </template>
 
@@ -173,7 +168,7 @@ export default {
             .dispatch("Login", this.loginForm)
             .then(() => {
               // this.$router.push({ path: this.redirect || "/" });
-              this.$router.push({ path: "/home/index" });
+              this.$router.push({ path: "/index" });
             })
             .catch(() => {
               this.loading = false;

@@ -78,12 +78,13 @@ export default {
     Search,
   },
   created() {
-    setInterval(() => {
-      store.dispatch("GetNoticeNumber");
-    }, 60 * 1000);
+    // setInterval(() => {
+    //   store.dispatch("GetNoticeNumber");
+    // }, 60 * 1000);
+    this.connectWebsocket()
   },
   destroyed() {
-    clearInterval();
+    //clearInterval();
   },
   computed: {
     ...mapGetters(["sidebar", "avatar", "device", "notice_num"]),
@@ -117,6 +118,44 @@ export default {
         });
       });
     },
+    connectWebsocket() {
+      let userAccount = this.$store.getters.userAccount
+      let websocket;
+      if (typeof WebSocket === "undefined") {
+        console.log("您的浏览器不支持WebSocket");
+        return;
+      } else {
+        let protocol = "ws";
+        let url = "";
+        if (window.location.protocol == "https:") {
+          protocol = "wss";
+        }
+      
+        url = `${protocol}://localhost:8080/ares/ws/`+userAccount;
+
+        // 打开一个websocket
+        websocket = new WebSocket(url);
+        // 建立连接
+        websocket.onopen = () => {
+          // 发送数据
+          //websocket.send("发送数据");
+          console.log("websocket发送数据中");
+        };
+        // 客户端接收服务端返回的数据
+        websocket.onmessage = evt => {
+          this.$store.dispatch("updateNoticeNumber",evt.data)
+          console.log("websocket返回的数据:", evt);
+        };
+        // 发生错误时
+        websocket.onerror = evt => {
+          console.log("websocket错误:", evt);
+        };
+        // 关闭连接
+        websocket.onclose = evt => {
+          console.log("websocket关闭:", evt);
+        };
+      }
+    }
   },
 };
 </script>
