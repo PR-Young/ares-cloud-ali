@@ -18,33 +18,28 @@
  *
  */
 
-package com.ares.api.client.fallback;
+package com.ares.system.provider;
 
-import com.ares.api.client.ISysUserService;
-import com.ares.core.model.base.JsonResult;
-import com.ares.core.model.system.SysUser;
+import com.ares.api.client.ISysDeptService;
+import com.ares.core.model.system.SysDept;
+import com.ares.system.service.SysDeptService;
+import org.apache.dubbo.config.annotation.DubboService;
 
-import java.util.List;
+import javax.annotation.Resource;
 
 /**
  * @description:
  * @author: Young
- * @date: 2022/6/14
- * @see: com.ares.api.client.fallback.SysUserServiceImpl.java
+ * @date: 2023/5/19
+ * @see: com.ares.system.provider.SysDeptProvider.java
  **/
-public class SysUserServiceImpl implements ISysUserService {
-    @Override
-    public JsonResult<SysUser> getUserByName(String name) {
-        return JsonResult.error(null, 1000, "error");
-    }
+@DubboService
+public class SysDeptProvider implements ISysDeptService {
 
+    @Resource
+    SysDeptService deptService;
     @Override
-    public JsonResult<SysUser> getById(String userId) {
-        return JsonResult.error(null, 1000, "error");
-    }
-
-    @Override
-    public JsonResult<List<SysUser>> selectUserList(SysUser sysUser) {
-        return JsonResult.error(null, 1000, "error");
+    public SysDept getByDeptId(String id) {
+        return deptService.getByDeptId(id);
     }
 }

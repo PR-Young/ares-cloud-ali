@@ -20,13 +20,12 @@
 
 package com.ares;
 
+import org.apache.dubbo.config.spring.context.annotation.EnableDubbo;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
-import org.springframework.cloud.openfeign.EnableFeignClients;
-import org.springframework.scheduling.annotation.EnableAsync;
 
 /**
  * @author young
@@ -34,8 +33,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @MapperScan("com.ares.system")
 @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
 @EnableDiscoveryClient
-@EnableAsync
-@EnableFeignClients(basePackages = "com.ares.api.client")
+@EnableDubbo(scanBasePackages = {"com.ares.system.provider", "com.ares.api"})
 public class AresSystemApplication {
 
     public static void main(String[] args) {
@@ -43,7 +41,7 @@ public class AresSystemApplication {
         print();
     }
 
-    private static void print(){
+    private static void print() {
         System.out.println("         ______                                     __    __ ");
         System.out.println("		/      \\                                   /  |  /  |");
         System.out.println("       /$$$$$$  |  ______   _____  ____    ______  $$ | _$$ |_     _____");

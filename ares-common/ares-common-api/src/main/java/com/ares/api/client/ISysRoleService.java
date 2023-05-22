@@ -20,13 +20,7 @@
 
 package com.ares.api.client;
 
-import com.ares.api.client.fallback.SysRoleServiceImpl;
-import com.ares.core.model.base.JsonResult;
 import com.ares.core.model.system.SysRole;
-import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 
@@ -36,7 +30,6 @@ import java.util.List;
  * @date: 2022/6/14
  * @see: com.ares.api.client.ISysRoleService.java
  **/
-@FeignClient(name = "ares-system", fallback = SysRoleServiceImpl.class)
 public interface ISysRoleService {
     /**
      * 根据userId获取角色
@@ -44,8 +37,7 @@ public interface ISysRoleService {
      * @param userId
      * @return
      */
-    @GetMapping("/system/system/role/getRoleByUserId/{userId}")
-    JsonResult<List<SysRole>> getRoleByUserId(@PathVariable("userId") String userId);
+    List<SysRole> getRoleByUserId(String userId);
 
     /**
      * 根据id获取角色权限
@@ -53,8 +45,7 @@ public interface ISysRoleService {
      * @param roleId
      * @return
      */
-    @GetMapping("/system/system/role/getPermsByRoleId/{roleId}")
-    JsonResult<List<String>> getPermsByRoleId(@PathVariable("roleId") String roleId);
+    List<String> getPermsByRoleId(String roleId);
 
     /**
      * 根据id获取角色
@@ -62,16 +53,14 @@ public interface ISysRoleService {
      * @param roleId
      * @return
      */
-    @GetMapping("/system/system/role/getRoleById/{roleId}")
-    JsonResult<SysRole> getById(@PathVariable("roleId") String roleId);
+    SysRole getById(String roleId);
 
     /**
      * 获取所有角色
      *
      * @return
      */
-    @GetMapping("/system/system/role/getAllRole")
-    JsonResult<List<SysRole>> getAll();
+    List<SysRole> getAll();
 
     /**
      * 获取角色
@@ -79,6 +68,5 @@ public interface ISysRoleService {
      * @param role
      * @return
      */
-    @RequestMapping("/system/system/role/selectRoleList")
-    JsonResult<List<SysRole>> selectRoleList(SysRole role);
+    List<SysRole> selectRoleList(SysRole role);
 }

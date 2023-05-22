@@ -26,7 +26,6 @@ import com.alibaba.excel.event.AnalysisEventListener;
 import com.ares.core.controller.BaseController;
 import com.ares.core.model.base.AjaxResult;
 import com.ares.core.model.base.Constants;
-import com.ares.core.model.base.JsonResult;
 import com.ares.core.model.page.TableDataInfo;
 import com.ares.core.model.system.SysUser;
 import com.ares.core.utils.ExcelUtils;
@@ -183,19 +182,4 @@ public class SysUserApiController extends BaseController {
         return AjaxResult.success();
     }
 
-    @GetMapping("getUserByName/{name}")
-    public JsonResult<SysUser> getUserByName(@PathVariable("name") String name){
-        return JsonResult.success(userService.getUserByName(name));
-    }
-
-    @RequestMapping("userList")
-    public JsonResult<List<SysUser>> userList(SysUser user) {
-        List<SysUser> userList = userService.selectUserList(user);
-        return JsonResult.success(userList);
-    }
-
-    @GetMapping("getUserById/{id}")
-    public JsonResult<SysUser> getById(@PathVariable("id") String id){
-        return JsonResult.success(userService.getById(id));
-    }
 }

@@ -18,44 +18,50 @@
  *
  */
 
-package com.ares.api.client.fallback;
+package com.ares.system.provider;
 
 import com.ares.api.client.ISysRoleService;
-import com.ares.core.model.base.JsonResult;
 import com.ares.core.model.system.SysRole;
+import com.ares.system.service.SysRoleService;
+import org.apache.dubbo.config.annotation.DubboService;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
  * @description:
  * @author: Young
- * @date: 2022/6/14
- * @see: com.ares.api.client.fallback.SysRoleServiceImpl.java
+ * @date: 2023/5/19
+ * @see: com.ares.system.provider.SysRoleProvider.java
  **/
-public class SysRoleServiceImpl implements ISysRoleService {
+@DubboService
+public class SysRoleProvider implements ISysRoleService {
+
+    @Resource
+    SysRoleService roleService;
 
     @Override
-    public JsonResult<List<SysRole>> getRoleByUserId(String userId) {
-        return JsonResult.error(null, 1000, "error");
+    public List<SysRole> getRoleByUserId(String userId) {
+        return roleService.getRoleByUserId(userId);
     }
 
     @Override
-    public JsonResult<List<String>> getPermsByRoleId(String roleId) {
-        return JsonResult.error(null, 1000, "error");
+    public List<String> getPermsByRoleId(String roleId) {
+        return roleService.getPermsByRoleId(roleId);
     }
 
     @Override
-    public JsonResult<SysRole> getById(String roleId) {
-        return JsonResult.error(null, 1000, "error");
+    public SysRole getById(String roleId) {
+        return roleService.getById(roleId);
     }
 
     @Override
-    public JsonResult<List<SysRole>> getAll() {
-        return JsonResult.error(null, 1000, "error");
+    public List<SysRole> getAll() {
+        return roleService.getAll();
     }
 
     @Override
-    public JsonResult<List<SysRole>> selectRoleList(SysRole role) {
-        return JsonResult.error(null, 1000, "error");
+    public List<SysRole> selectRoleList(SysRole role) {
+        return roleService.selectRoleList(role);
     }
 }

@@ -24,7 +24,6 @@ import com.ares.api.client.ISysRoleService;
 import com.ares.api.client.ISysUserService;
 import com.ares.core.controller.BaseController;
 import com.ares.core.model.base.AjaxResult;
-import com.ares.core.model.base.JsonResult;
 import com.ares.core.model.system.SysRole;
 import com.ares.core.model.system.SysUser;
 import com.ares.flowable.persistence.model.dto.FlowSaveXmlVo;
@@ -181,16 +180,14 @@ public class FlowDefinitionApiController extends BaseController {
     @ApiOperation(value = "指定流程办理人员列表")
     @GetMapping("/userList")
     public AjaxResult userList(SysUser user) {
-        JsonResult<List<SysUser>> users = userService.selectUserList(new SysUser());
-        List<SysUser> list =  users.getData();
+        List<SysUser> list = userService.selectUserList(new SysUser());
         return AjaxResult.successData(list);
     }
 
     @ApiOperation(value = "指定流程办理组列表")
     @GetMapping("/roleList")
     public AjaxResult roleList(SysRole role) {
-        JsonResult<List<SysRole>> roles = sysRoleService.selectRoleList(role);
-        List<SysRole> list = roles.getData();
+        List<SysRole> list = sysRoleService.selectRoleList(role);
         return AjaxResult.successData(list);
     }
 

@@ -18,15 +18,17 @@
  *
  */
 
-package com.ares.api.client.fallback;
+package com.ares.system.provider;
 
 import com.ares.api.client.ISysPostService;
+import org.apache.dubbo.config.annotation.DubboService;
 
 /**
  * @description:
  * @author: Young
- * @date: 2023/4/28
- * @see: com.ares.api.client.fallback.SysPostServiceImpl.java
+ * @date: 2023/5/19
+ * @see: com.ares.system.provider.SysPostProvider.java
  **/
-public class SysPostServiceImpl implements ISysPostService {
+@DubboService
+public class SysPostProvider implements ISysPostService {
 }

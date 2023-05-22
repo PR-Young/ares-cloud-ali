@@ -22,7 +22,6 @@ package com.ares.security.common;
 
 import com.ares.api.client.ISysRoleService;
 import com.ares.api.client.ISysUserService;
-import com.ares.core.model.base.JsonResult;
 import com.ares.core.model.system.SysRole;
 import com.ares.core.model.system.SysUser;
 import com.ares.log.common.Log;
@@ -59,23 +58,19 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Log
     @Override
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
-        JsonResult<SysUser> userResult = userService.getUserByName(userName);
-        SysUser user = userResult.getData();
+        SysUser user = userService.getUserByName(userName);
         if (null == user) {
             throw new UsernameNotFoundException("该用户不存在");
         }
-        JsonResult<List<SysRole>> roleResult = roleService.getRoleByUserId(user.getId());
-        List<SysRole> roleList = roleResult.getData();
+        List<SysRole> roleList = roleService.getRoleByUserId(user.getId());
 
         List<String> perms = new ArrayList<>();
         for (SysRole role : roleList) {
-            //if ("gly".equalsIgnoreCase(role.getRoleName())) {
-            //    JsonResult<List<String>> permsResult = roleService.getPermsByRoleId(null);
-            //    perms = permsResult.getData();
-            //} else {
-            JsonResult<List<String>> permsResult = roleService.getPermsByRoleId(role.getId());
-            perms = permsResult.getData();
-            //}
+            if ("gly".equalsIgnoreCase(role.getRoleName())) {
+                perms = roleService.getPermsByRoleId(null);
+            } else {
+                perms = roleService.getPermsByRoleId(role.getId());
+            }
         }
         List<GrantedAuthority> grantedAuthorities = perms.stream().map(GrantedAuthorityImpl::new).collect(Collectors.toList());
         return new JwtUserDetails(userName, user.getPassword(), grantedAuthorities);

@@ -20,15 +20,12 @@
 
 package com.ares.api.client;
 
-import com.ares.api.client.fallback.SysPostServiceImpl;
-import org.springframework.cloud.openfeign.FeignClient;
-
 /**
  * @description:
  * @author: Young
  * @date: 2023/4/28
  * @see: com.ares.api.client.ISysPostService.java
  **/
-@FeignClient(name = "ares-system", fallback = SysPostServiceImpl.class)
+
 public interface ISysPostService {
 }

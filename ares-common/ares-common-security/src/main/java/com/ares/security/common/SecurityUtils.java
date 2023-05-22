@@ -23,7 +23,6 @@ package com.ares.security.common;
 import com.ares.api.client.ISysUserService;
 import com.ares.core.exception.UserException;
 import com.ares.core.model.base.Constants;
-import com.ares.core.model.base.JsonResult;
 import com.ares.core.model.exception.ErrorCode;
 import com.ares.core.model.system.SysUser;
 import com.ares.core.utils.SpringUtils;
@@ -155,8 +154,7 @@ public class SecurityUtils {
             throw new UserException(ErrorCode.NOUSER.getCode(), "用户不存在！");
         }
         ISysUserService userService = SpringUtils.getBean(ISysUserService.class);
-        JsonResult<SysUser> result = userService.getUserByName(userName);
-        SysUser user =  result.getData();
+        SysUser user = userService.getUserByName(userName);
         return user;
     }
 
