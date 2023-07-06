@@ -36,7 +36,7 @@ ares-cloud
 
 #### 软件架构
 
-1. 前端： vue2+ webpack5 + elementUI
+1. 前端： vue2 + webpack5 + elementUI
 2. 后端： jdk11、mysql、redis、spring-cloud-alibaba、springboot、mybatis、dubbo、nacos
 
 #### ares-ui安装教程
