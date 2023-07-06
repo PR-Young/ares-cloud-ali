@@ -2,23 +2,44 @@
 
 #### 介绍
 
-**ares-cloud学习版本**
+**ares-cloud**
+
+# 目录结构
+
+```
+ares-cloud
+│
+├─ares-common
+│ ├─ares-common-api
+│ ├─ares-common-core
+│ ├─ares-common-datasource
+│ ├─ares-common-log
+│ ├─ares-common-message
+│ ├─ares-common-redis
+│ └─ares-common-security
+├─ares-gateway
+│
+├─ares-modules
+│ ├─ares-flowable
+│ ├─ares-gen
+│ ├─ares-job
+│ └─ares-system
+├─ares-monitor
+│
+├─ares-ui
+│
+├─doc
+│
+└─pom.xml
+
+```
 
 #### 软件架构
 
-1. 前端： vue + elementUI
-2. 后端： jdk11、mysql、redis、springcloud、springboot、mybatis、dubbo、nacos
+1. 前端： vue2+ webpack5 + elementUI
+2. 后端： jdk11、mysql、redis、spring-cloud-alibaba、springboot、mybatis、dubbo、nacos
 
-#### 安装教程
+#### ares-ui安装教程
 
-1. cnpm install or npm sintall
+1. npm install
 2. npm run dev
-
-#### 特技
-
-1. 使用 Readme\_XXX.md 来支持不同的语言，例如 Readme\_en.md, Readme\_zh.md
-2. Gitee 官方博客 [blog.gitee.com](https://blog.gitee.com)
-3. 你可以 [https://gitee.com/explore](https://gitee.com/explore) 这个地址来了解 Gitee 上的优秀开源项目
-4. [GVP](https://gitee.com/gvp) 全称是 Gitee 最有价值开源项目，是综合评定出的优秀开源项目
-5. Gitee 官方提供的使用手册 [https://gitee.com/help](https://gitee.com/help)
-6. Gitee 封面人物是一档用来展示 Gitee 会员风采的栏目 [https://gitee.com/gitee-stars/](https://gitee.com/gitee-stars/)
