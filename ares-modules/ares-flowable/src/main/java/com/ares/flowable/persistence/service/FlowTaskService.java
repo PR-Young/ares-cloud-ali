@@ -49,6 +49,7 @@ import com.github.pagehelper.Page;
 import com.google.common.collect.Lists;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.dubbo.config.annotation.DubboReference;
 import org.flowable.bpmn.model.Process;
 import org.flowable.bpmn.model.*;
 import org.flowable.common.engine.api.FlowableException;
@@ -73,7 +74,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
 import java.io.InputStream;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -89,12 +89,12 @@ import java.util.stream.Collectors;
  **/
 @Service
 public class FlowTaskService extends FlowServiceFactory {
-    @Resource
+    @DubboReference
     private ISysUserService userService;
-    @Resource
+    @DubboReference
     private ISysRoleService roleService;
     private SysDeployFormService deployFormService;
-    @Resource
+    @DubboReference
     private ISysDeptService deptService;
     private SysFormDataService formDataService;
 

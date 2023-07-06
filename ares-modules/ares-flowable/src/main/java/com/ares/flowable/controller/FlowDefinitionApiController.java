@@ -31,11 +31,11 @@ import com.ares.flowable.persistence.service.FlowDefinitionService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.annotation.Resource;
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
@@ -52,9 +52,9 @@ import java.util.Map;
 @RequestMapping("/flowable/definition")
 public class FlowDefinitionApiController extends BaseController {
     private FlowDefinitionService flowDefinitionService;
-    @Resource
+    @DubboReference
     private ISysUserService userService;
-    @Resource
+    @DubboReference
     private ISysRoleService sysRoleService;
 
     @Autowired

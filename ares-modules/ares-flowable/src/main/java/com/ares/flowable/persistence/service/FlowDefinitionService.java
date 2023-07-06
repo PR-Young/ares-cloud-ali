@@ -36,6 +36,7 @@ import com.ares.security.common.SecurityUtils;
 import com.github.pagehelper.Page;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
+import org.apache.dubbo.config.annotation.DubboReference;
 import org.flowable.bpmn.model.BpmnModel;
 import org.flowable.engine.repository.Deployment;
 import org.flowable.engine.repository.ProcessDefinition;
@@ -46,7 +47,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
@@ -56,11 +56,11 @@ import java.util.*;
 @Slf4j
 public class FlowDefinitionService extends FlowServiceFactory {
     private SysDeployFormService sysDeployFormService;
-    @Resource
+    @DubboReference
     private ISysUserService sysUserService;
-    @Resource
+    @DubboReference
     private ISysDeptService sysDeptService;
-    @Resource
+    @DubboReference
     private ISysPostService postService;
     private SysFormDataService formDataService;
 

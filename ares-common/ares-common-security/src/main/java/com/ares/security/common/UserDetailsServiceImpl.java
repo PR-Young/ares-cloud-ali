@@ -26,7 +26,7 @@ import com.ares.core.model.system.SysRole;
 import com.ares.core.model.system.SysUser;
 import com.ares.log.common.Log;
 import com.ares.security.jwt.JwtUserDetails;
-import org.springframework.data.annotation.Reference;
+import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -46,9 +46,9 @@ import java.util.stream.Collectors;
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-    @Reference
+    @DubboReference
     private ISysUserService userService;
-    @Reference
+    @DubboReference
     private ISysRoleService roleService;
     
     @Log
