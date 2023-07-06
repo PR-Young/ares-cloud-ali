@@ -26,7 +26,7 @@ import com.ares.core.model.system.SysRole;
 import com.ares.core.model.system.SysUser;
 import com.ares.log.common.Log;
 import com.ares.security.jwt.JwtUserDetails;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.annotation.Reference;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -46,15 +46,11 @@ import java.util.stream.Collectors;
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
+    @Reference
     private ISysUserService userService;
+    @Reference
     private ISysRoleService roleService;
-
-    @Autowired
-    public UserDetailsServiceImpl(ISysUserService userService, ISysRoleService roleService) {
-        this.userService = userService;
-        this.roleService = roleService;
-    }
-
+    
     @Log
     @Override
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {

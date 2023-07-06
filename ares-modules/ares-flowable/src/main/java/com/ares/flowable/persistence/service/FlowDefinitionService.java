@@ -28,7 +28,6 @@ import com.ares.api.client.ISysUserService;
 import com.ares.core.model.base.AjaxResult;
 import com.ares.core.model.system.SysUser;
 import com.ares.flowable.common.constant.ProcessConstants;
-import com.ares.flowable.common.enums.FlowComment;
 import com.ares.flowable.factory.FlowServiceFactory;
 import com.ares.flowable.persistence.model.SysForm;
 import com.ares.flowable.persistence.model.SysFormData;
@@ -43,11 +42,11 @@ import org.flowable.engine.repository.ProcessDefinition;
 import org.flowable.engine.repository.ProcessDefinitionQuery;
 import org.flowable.engine.runtime.ProcessInstance;
 import org.flowable.image.impl.DefaultProcessDiagramGenerator;
-import org.flowable.task.api.Task;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
@@ -57,21 +56,18 @@ import java.util.*;
 @Slf4j
 public class FlowDefinitionService extends FlowServiceFactory {
     private SysDeployFormService sysDeployFormService;
+    @Resource
     private ISysUserService sysUserService;
+    @Resource
     private ISysDeptService sysDeptService;
+    @Resource
     private ISysPostService postService;
     private SysFormDataService formDataService;
 
     @Autowired
     public FlowDefinitionService(SysDeployFormService deployFormService,
-                                 ISysUserService sysUserService,
-                                 ISysDeptService sysDeptService,
-                                 ISysPostService postService,
                                  SysFormDataService formDataService) {
         this.sysDeployFormService = deployFormService;
-        this.sysUserService = sysUserService;
-        this.sysDeptService = sysDeptService;
-        this.postService = postService;
         this.formDataService = formDataService;
     }
 

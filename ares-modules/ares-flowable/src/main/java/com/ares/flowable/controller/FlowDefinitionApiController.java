@@ -35,6 +35,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.Resource;
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
@@ -51,14 +52,14 @@ import java.util.Map;
 @RequestMapping("/flowable/definition")
 public class FlowDefinitionApiController extends BaseController {
     private FlowDefinitionService flowDefinitionService;
+    @Resource
     private ISysUserService userService;
+    @Resource
     private ISysRoleService sysRoleService;
 
     @Autowired
-    public FlowDefinitionApiController(FlowDefinitionService flowDefinitionService, ISysUserService userService, ISysRoleService sysRoleService) {
+    public FlowDefinitionApiController(FlowDefinitionService flowDefinitionService) {
         this.flowDefinitionService = flowDefinitionService;
-        this.userService = userService;
-        this.sysRoleService = sysRoleService;
     }
 
     @GetMapping(value = "/list")

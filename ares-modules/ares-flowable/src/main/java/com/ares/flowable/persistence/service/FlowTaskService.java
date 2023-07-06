@@ -73,6 +73,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.io.InputStream;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -88,22 +89,20 @@ import java.util.stream.Collectors;
  **/
 @Service
 public class FlowTaskService extends FlowServiceFactory {
+    @Resource
     private ISysUserService userService;
+    @Resource
     private ISysRoleService roleService;
     private SysDeployFormService deployFormService;
+    @Resource
     private ISysDeptService deptService;
     private SysFormDataService formDataService;
 
     @Autowired
-    public FlowTaskService(ISysUserService userService,
-                           ISysRoleService roleService,
-                           ISysDeptService deptService,
+    public FlowTaskService(
                            SysDeployFormService deployFormService,
                            SysFormDataService formDataService) {
-        this.userService = userService;
-        this.roleService = roleService;
         this.deployFormService = deployFormService;
-        this.deptService = deptService;
         this.formDataService = formDataService;
     }
 
