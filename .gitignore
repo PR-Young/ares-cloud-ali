@@ -39,3 +39,4 @@ target/
 .vscode/
 /log.path_IS_UNDEFINED/
 /.idea/
+ares-ui/package-lock.json
