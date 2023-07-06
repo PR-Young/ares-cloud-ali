@@ -180,7 +180,7 @@ public class FlowDefinitionApiController extends BaseController {
     @ApiOperation(value = "指定流程办理人员列表")
     @GetMapping("/userList")
     public AjaxResult userList(SysUser user) {
-        List<SysUser> list = userService.selectUserList(new SysUser());
+        List<SysUser> list = userService.selectUserList(user);
         return AjaxResult.successData(list);
     }
 

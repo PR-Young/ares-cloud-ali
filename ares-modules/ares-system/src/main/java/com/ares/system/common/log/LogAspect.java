@@ -93,10 +93,10 @@ public class LogAspect {
 
     @Async
     public void handleLog(JoinPoint joinPoint, Exception e) {
-        logger.info("用户行为日志记录开始！");
+        logger.debug("用户行为日志记录开始！");
         dateThreadLocal.remove();
         dateThreadLocal.set(new Date());
-        logger.info("开始计时:{}", DateUtils.getTime());
+        logger.debug("开始计时:{}", DateUtils.getTime());
         SysLog sysLog = new SysLog();
         try {
             MethodSignature signature = (MethodSignature) joinPoint.getSignature();
@@ -132,14 +132,14 @@ public class LogAspect {
             }
             long beginTime = dateThreadLocal.get().getTime();
             long endTime = System.currentTimeMillis();
-            logger.info("计时结束:{} 耗时:{}", DateUtils.format(endTime), (endTime - beginTime) / 1000 + "s");
+            logger.debug("计时结束:{} 耗时:{}", DateUtils.format(endTime), (endTime - beginTime) / 1000 + "s");
         } catch (Exception ex) {
             sysLog.setNotes(StringUtils.substring(ex.getMessage(), 0, 2000));
         } finally {
             if (null != sysLog.getUrl()) {
                 ThreadPoolUtils.executorService.execute(new SaveLogThread(sysLog, sysLogService));
             }
-            logger.info("用户行为日志记录结束！");
+            logger.debug("用户行为日志记录结束！");
         }
     }
 
