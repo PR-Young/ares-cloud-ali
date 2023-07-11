@@ -15,6 +15,11 @@ spring:
     # 环境配置
     active: dev
   cloud:
+    sentinel:
+      enabled: true
+      eager: true
+      transport:
+        dashboard: 127.0.0.1:8858
     nacos:
       discovery:
         # 服务注册地址
