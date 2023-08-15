@@ -45,7 +45,7 @@ public interface ISysUserService {
      * @param id
      * @return
      */
-    SysUser getById(String id);
+    SysUser getById(Long id);
 
     /**
      * 获取用户

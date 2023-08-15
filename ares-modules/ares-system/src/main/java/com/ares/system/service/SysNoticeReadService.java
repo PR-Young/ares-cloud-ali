@@ -64,12 +64,12 @@ public class SysNoticeReadService implements BaseService<SysNoticeRead> {
     }
 
     @Override
-    public void deleteByIds(List<String> ids) {
+    public void deleteByIds(List<Long> ids) {
         sysNoticeReadDao.deleteByIds(ids);
     }
 
     @Override
-    public SysNoticeRead getById(String id) {
+    public SysNoticeRead getById(Long id) {
         return sysNoticeReadDao.getById(id);
     }
 

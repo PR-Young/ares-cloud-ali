@@ -66,12 +66,12 @@ public class SysPostService implements BaseService<SysPost> {
     }
 
     @Override
-    public void deleteByIds(List<String> ids) {
+    public void deleteByIds(List<Long> ids) {
         sysPostDao.deleteByIds(ids);
     }
 
     @Override
-    public SysPost getById(String id) {
+    public SysPost getById(Long id) {
         return sysPostDao.getById(id);
     }
 

@@ -2,12 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ares.system.dao.ISysRoleDao">
     <resultMap id="SysRole" type="com.ares.core.model.system.SysRole">
-        <id column="Id" jdbcType="VARCHAR" property="id"/>
+        <id column="Id" jdbcType="BIGINT" property="id"/>
         <result column="RoleName" jdbcType="VARCHAR" property="roleName"/>
         <result column="Description" jdbcType="VARCHAR" property="description"/>
-        <result column="Creator" jdbcType="VARCHAR" property="creator"/>
+        <result column="Creator" jdbcType="BIGINT" property="creator"/>
         <result column="CreateTime" jdbcType="TIMESTAMP" property="createTime"/>
-        <result column="Modifier" jdbcType="VARCHAR" property="modifier"/>
+        <result column="Modifier" jdbcType="BIGINT" property="modifier"/>
         <result column="ModifyTime" jdbcType="TIMESTAMP" property="modifyTime"/>
     </resultMap>
     <sql id="Base_Column_List">
@@ -16,9 +16,9 @@
     </sql>
     <insert id="insert" parameterType="com.ares.core.model.system.SysRole">
         insert into `sys_role` (`Id`, `RoleName`, `Description`, `Creator`, `CreateTime`, `Modifier`, `ModifyTime`)
-        values (#{id,jdbcType=VARCHAR}, #{roleName,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR},
-        #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
-        #{modifier,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP})
+        values (#{id,jdbcType=BIGINT}, #{roleName,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR},
+        #{creator,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP},
+        #{modifier,jdbcType=BIGINT}, #{modifyTime,jdbcType=TIMESTAMP})
     </insert>
     <update id="update" parameterType="com.ares.core.model.system.SysRole">
         update `sys_role`
@@ -30,19 +30,19 @@
                 `Description` = #{description,jdbcType=VARCHAR},
             </if>
             <if test="creator != null">
-                `Creator` = #{creator,jdbcType=VARCHAR},
+                `Creator` = #{creator,jdbcType=BIGINT},
             </if>
             <if test="createTime != null">
                 `CreateTime` = #{createTime,jdbcType=TIMESTAMP},
             </if>
             <if test="modifier != null">
-                `Modifier` = #{modifier,jdbcType=VARCHAR},
+                `Modifier` = #{modifier,jdbcType=BIGINT},
             </if>
             <if test="modifyTime != null">
                 `ModifyTime` = #{modifyTime,jdbcType=TIMESTAMP},
             </if>
         </set>
-        where `Id` = #{id,jdbcType=VARCHAR}
+        where `Id` = #{id,jdbcType=BIGINT}
     </update>
     <delete id="deleteByIds" parameterType="java.util.List">
         delete from `sys_role`
@@ -51,7 +51,7 @@
             #{id}
         </foreach>
     </delete>
-    <select id="getRoleByUserId" parameterType="java.lang.String" resultMap="SysRole">
+    <select id="getRoleByUserId" parameterType="java.lang.Long" resultMap="SysRole">
         select role.`Id`,
         role.`RoleName`,
         role.`Description`,
@@ -59,7 +59,7 @@
         role.`ModifyTime`
         from `sys_role` role
         left join `sys_role_user` roleuser on role.Id = roleuser.RoleId
-        where roleuser.UserId = #{userId,jdbcType=VARCHAR}
+        where roleuser.UserId = #{userId,jdbcType=BIGINT}
     </select>
     <select id="getPermsByRoleId" parameterType="java.lang.String" resultType="java.lang.String">
         select menu.Perms
@@ -69,11 +69,11 @@
             where permission.RoleId = #{roleId,jdbcType=VARCHAR}
         </if>
     </select>
-    <select id="getById" parameterType="java.lang.String" resultMap="SysRole">
+    <select id="getById" parameterType="java.lang.Long" resultMap="SysRole">
         select
         <include refid="Base_Column_List"/>
         from `sys_role`
-        where `Id` = #{id,jdbcType=VARCHAR}
+        where `Id` = #{id,jdbcType=BIGINT}
     </select>
     <select id="list" parameterType="java.util.Map" resultMap="SysRole">
         select

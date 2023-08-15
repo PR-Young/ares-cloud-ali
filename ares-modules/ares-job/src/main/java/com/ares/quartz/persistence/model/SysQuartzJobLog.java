@@ -20,7 +20,11 @@
 
 package com.ares.quartz.persistence.model;
 
+import com.ares.core.serializer.LongJsonDeserializer;
+import com.ares.core.serializer.LongJsonSerializer;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -32,7 +36,9 @@ import java.util.Date;
 @ApiModel(value = "SysQuartzJobLog对象", description = "任务日志")
 public class SysQuartzJobLog implements Serializable {
     @ApiModelProperty("主键")
-    private String id;
+    @JsonSerialize(using = LongJsonSerializer.class)
+    @JsonDeserialize(using = LongJsonDeserializer.class)
+    private Long id;
     @ApiModelProperty("任务名称")
     private String jobName;
     @ApiModelProperty("任务分组")

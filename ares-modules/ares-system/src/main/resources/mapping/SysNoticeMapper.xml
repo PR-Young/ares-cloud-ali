@@ -2,16 +2,16 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ares.system.dao.ISysNoticeDao">
     <resultMap id="SysNotice" type="com.ares.core.model.system.SysNotice">
-        <id column="Id" jdbcType="VARCHAR" property="id"/>
+        <id column="Id" jdbcType="BIGINT" property="id"/>
         <result column="Deadline" jdbcType="TIMESTAMP" property="deadline"/>
         <result column="NoticeContent" jdbcType="VARCHAR" property="noticeContent"/>
         <result column="NoticeStatus" jdbcType="VARCHAR" property="noticeStatus"/>
         <result column="NoticeTitle" jdbcType="VARCHAR" property="noticeTitle"/>
         <result column="NoticeType" jdbcType="VARCHAR" property="noticeType"/>
         <result column="Remark" jdbcType="VARCHAR" property="remark"/>
-        <result column="Creator" jdbcType="VARCHAR" property="creator"/>
+        <result column="Creator" jdbcType="BIGINT" property="creator"/>
         <result column="CreateTime" jdbcType="TIMESTAMP" property="createTime"/>
-        <result column="Modifier" jdbcType="VARCHAR" property="modifier"/>
+        <result column="Modifier" jdbcType="BIGINT" property="modifier"/>
         <result column="ModifyTime" jdbcType="TIMESTAMP" property="modifyTime"/>
     </resultMap>
 
@@ -25,16 +25,16 @@
         <include refid="Base_Column_List"/>
         )
         values (
-        #{id,jdbcType=VARCHAR},
+        #{id,jdbcType=BIGINT},
         #{deadline,jdbcType=TIMESTAMP},
         #{noticeContent,jdbcType=VARCHAR},
         #{noticeStatus,jdbcType=VARCHAR},
         #{noticeTitle,jdbcType=VARCHAR},
         #{noticeType,jdbcType=VARCHAR},
         #{remark,jdbcType=VARCHAR},
-        #{creator,jdbcType=VARCHAR},
+        #{creator,jdbcType=BIGINT},
         #{createTime,jdbcType=TIMESTAMP},
-        #{modifier,jdbcType=VARCHAR},
+        #{modifier,jdbcType=BIGINT},
         #{modifyTime,jdbcType=TIMESTAMP}
         )
     </insert>
@@ -73,7 +73,7 @@
                 `ModifyTime` = #{modifyTime,jdbcType=TIMESTAMP},
             </if>
         </set>
-        where `Id` = #{id,jdbcType=VARCHAR}
+        where `Id` = #{id,jdbcType=BIGINT}
     </update>
 
     <delete id="deleteByIds" parameterType="java.util.List">
@@ -84,11 +84,11 @@
         </foreach>
     </delete>
 
-    <select id="getById" parameterType="java.lang.String" resultMap="SysNotice">
+    <select id="getById" parameterType="java.lang.Long" resultMap="SysNotice">
         select
         <include refid="Base_Column_List"/>
         from `sys_notice`
-        where `Id` = #{id,jdbcType=VARCHAR}
+        where `Id` = #{id,jdbcType=BIGINT}
     </select>
 
     <select id="list" parameterType="java.util.Map" resultMap="SysNotice">

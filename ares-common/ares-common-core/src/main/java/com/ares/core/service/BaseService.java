@@ -28,13 +28,12 @@ import java.util.List;
  **/
 public abstract interface BaseService<T> {
 
+    void insert(T obj);
 
-    public void insert(T obj);
+    void update(T obj);
 
-    public void update(T obj);
+    void deleteByIds(List<Long> ids);
 
-    public void deleteByIds(List<String> ids);
-
-    public T getById(String id);
+    T getById(Long id);
 
 }

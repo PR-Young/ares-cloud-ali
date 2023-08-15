@@ -2,12 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ares.flowable.persistence.dao.ISysTaskFormDao">
     <resultMap id="SysTaskForm" type="com.ares.flowable.persistence.model.SysTaskForm">
-        <id column="Id" jdbcType="VARCHAR" property="id"/>
-        <result column="FormId" jdbcType="VARCHAR" property="formId"/>
+        <id column="Id" jdbcType="BIGINT" property="id"/>
+        <result column="FormId" jdbcType="BIGINT" property="formId"/>
         <result column="TaskId" jdbcType="VARCHAR" property="taskId"/>
-        <result column="Creator" jdbcType="VARCHAR" property="creator"/>
+        <result column="Creator" jdbcType="BIGINT" property="creator"/>
         <result column="CreateTime" jdbcType="TIMESTAMP" property="createTime"/>
-        <result column="Modifier" jdbcType="VARCHAR" property="modifier"/>
+        <result column="Modifier" jdbcType="BIGINT" property="modifier"/>
         <result column="ModifyTime" jdbcType="TIMESTAMP" property="modifyTime"/>
     </resultMap>
 
@@ -21,12 +21,12 @@
         <include refid="Base_Column_List"/>
         )
         values (
-        #{id,jdbcType=VARCHAR},
-        #{formId,jdbcType=VARCHAR},
+        #{id,jdbcType=BIGINT},
+        #{formId,jdbcType=BIGINT},
         #{taskId,jdbcType=VARCHAR},
-        #{creator,jdbcType=VARCHAR},
+        #{creator,jdbcType=BIGINT},
         #{createTime,jdbcType=TIMESTAMP},
-        #{modifier,jdbcType=VARCHAR},
+        #{modifier,jdbcType=BIGINT},
         #{modifyTime,jdbcType=TIMESTAMP}
         )
     </insert>
@@ -35,7 +35,7 @@
         update `sys_task_form`
         <set>
             <if test="formId!= null">
-                `FormId`=#{formId,jdbcType=VARCHAR},
+                `FormId`=#{formId,jdbcType=BIGINT},
             </if>
             <if test="taskId!= null">
                 `TaskId`=#{taskId,jdbcType=VARCHAR},
@@ -53,7 +53,7 @@
                 `ModifyTime` = #{modifyTime,jdbcType=TIMESTAMP},
             </if>
         </set>
-        where `Id` = #{id,jdbcType=VARCHAR}
+        where `Id` = #{id,jdbcType=BIGINT}
     </update>
 
     <delete id="deleteByIds" parameterType="java.util.List">
@@ -64,11 +64,11 @@
         </foreach>
     </delete>
 
-    <select id="getById" parameterType="java.lang.String" resultMap="SysTaskForm">
+    <select id="getById" parameterType="java.lang.Long" resultMap="SysTaskForm">
         select
         <include refid="Base_Column_List"/>
         from `sys_task_form`
-        where `Id` = #{id,jdbcType=VARCHAR}
+        where `Id` = #{id,jdbcType=BIGINT}
     </select>
 
     <select id="list" parameterType="java.util.Map" resultMap="SysTaskForm">

@@ -66,7 +66,7 @@ public class SysNoticeApiController extends BaseController {
 
     @GetMapping("{noticeId}")
     @ApiOperation(value = "根据Id获取通知公告", response = Object.class)
-    public Object getInfo(@PathVariable String noticeId) {
+    public Object getInfo(@PathVariable Long noticeId) {
         return AjaxResult.successData(sysNoticeService.getById(noticeId));
     }
 
@@ -88,7 +88,7 @@ public class SysNoticeApiController extends BaseController {
     @PreAuthorize("hasAnyAuthority('notice:delete')")
     @DeleteMapping("{noticeIds}")
     @ApiOperation(value = "删除通知公告", response = Object.class)
-    public Object remove(@PathVariable String[] noticeIds) {
+    public Object remove(@PathVariable Long[] noticeIds) {
         sysNoticeService.deleteByIds(Arrays.asList(noticeIds));
         return AjaxResult.success();
     }

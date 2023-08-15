@@ -22,8 +22,12 @@ package com.ares.core.model.base;
 
 import com.alibaba.excel.annotation.ExcelIgnore;
 import com.alibaba.excel.annotation.ExcelProperty;
+import com.ares.core.serializer.LongJsonDeserializer;
+import com.ares.core.serializer.LongJsonSerializer;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -40,17 +44,23 @@ public class BaseModel implements Serializable {
     private static final long serialVersionUID = 2513447910190608371L;
     @ApiModelProperty("主键")
     @ExcelProperty(value = "序号", index = 0)
-    private String id;
+    @JsonSerialize(using = LongJsonSerializer.class)
+    @JsonDeserialize(using = LongJsonDeserializer.class)
+    private Long id;
     @ApiModelProperty("创建人")
     @ExcelIgnore
-    private String creator;
+    @JsonSerialize(using = LongJsonSerializer.class)
+    @JsonDeserialize(using = LongJsonDeserializer.class)
+    private Long creator;
     @ApiModelProperty("创建时间")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @ExcelIgnore
     private Date createTime;
     @ApiModelProperty("修改人")
     @ExcelIgnore
-    private String modifier;
+    @JsonSerialize(using = LongJsonSerializer.class)
+    @JsonDeserialize(using = LongJsonDeserializer.class)
+    private Long modifier;
     @ApiModelProperty("修改时间")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @ExcelIgnore

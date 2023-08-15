@@ -212,13 +212,13 @@ public class AutoGeneratorService {
                 }
                 break;
             case "insert":
-                sb.append("#{id,jdbcType=VARCHAR},\n");
+                sb.append("#{id,jdbcType=BIGINT},\n");
                 for (Column column : columns) {
                     sb.append("#{").append(column.getName()).append(",jdbcType=").append(column.getJdbcType()).append("},\n");
                 }
-                sb.append("#{creator,jdbcType=VARCHAR},\n")
+                sb.append("#{creator,jdbcType=BIGINT},\n")
                         .append("#{createTime,jdbcType=TIMESTAMP},\n")
-                        .append("#{modifier,jdbcType=VARCHAR},\n")
+                        .append("#{modifier,jdbcType=BIGINT},\n")
                         .append("#{modifyTime,jdbcType=TIMESTAMP}");
                 break;
             case "update":

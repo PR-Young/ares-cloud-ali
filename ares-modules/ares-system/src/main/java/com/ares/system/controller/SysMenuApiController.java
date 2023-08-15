@@ -55,14 +55,14 @@ public class SysMenuApiController {
     @RequestMapping("list")
     @ApiOperation(value = "菜单列表", response = Object.class)
     public Object list(SysMenu menu) throws Exception {
-        String userId = SecurityUtils.getUser().getId();
+        Long userId = SecurityUtils.getUser().getId();
         List<SysMenu> menuList = menuService.selectMenuList(menu, userId);
         return AjaxResult.successData(menuList);
     }
 
     @GetMapping(value = "{menuId}")
     @ApiOperation(value = "根据菜单Id获取菜单", response = Object.class)
-    public Object getInfo(@PathVariable String menuId) {
+    public Object getInfo(@PathVariable Long menuId) {
         return AjaxResult.successData(menuService.getById(menuId));
     }
 
@@ -72,7 +72,7 @@ public class SysMenuApiController {
     @GetMapping("treeselect")
     @ApiOperation(value = "获取菜单下拉树列表", response = Object.class)
     public Object treeselect(SysMenu menu) throws Exception {
-        String userId = SecurityUtils.getUser().getId();
+        Long userId = SecurityUtils.getUser().getId();
         List<SysMenu> menus = menuService.selectMenuList(menu, userId);
         return AjaxResult.successData(menuService.buildMenuTreeSelect(menus));
     }
@@ -94,7 +94,7 @@ public class SysMenuApiController {
     @PreAuthorize("hasAnyAuthority('menu:delete')")
     @DeleteMapping("{menuId}")
     @ApiOperation(value = "删除菜单", response = Object.class)
-    public Object remove(@PathVariable String menuId) {
+    public Object remove(@PathVariable Long menuId) {
         if (menuService.hasChildByMenuId(menuId)) {
             return AjaxResult.error("存在子菜单,不允许删除");
         }
@@ -104,8 +104,8 @@ public class SysMenuApiController {
 
     @GetMapping(value = "roleMenuTreeselect/{roleId}")
     @ApiOperation(value = "根据角色Id获取菜单", response = Object.class)
-    public Object roleMenuTreeselect(@PathVariable("roleId") String roleId) throws Exception {
-        String userId = SecurityUtils.getUser().getId();
+    public Object roleMenuTreeselect(@PathVariable("roleId") Long roleId) throws Exception {
+        Long userId = SecurityUtils.getUser().getId();
         List<SysMenu> menus = menuService.selectMenuList(new SysMenu(), userId);
         AjaxResult result = AjaxResult.success();
         result.put("checkedKeys", menuService.selectMenuByRole(roleId));

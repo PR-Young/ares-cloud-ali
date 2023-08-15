@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ares.system.dao.ISysMenuDao">
     <resultMap id="SysMenu" type="com.ares.core.model.system.SysMenu">
-        <id column="Id" jdbcType="VARCHAR" property="id"/>
+        <id column="Id" jdbcType="BIGINT" property="id"/>
         <result column="Name" jdbcType="VARCHAR" property="name"/>
         <result column="Description" jdbcType="VARCHAR" property="description"/>
         <result column="Url" jdbcType="VARCHAR" property="url"/>
@@ -14,9 +14,9 @@
         <result column="Type" jdbcType="INTEGER" property="type"/>
         <result column="Order" jdbcType="INTEGER" property="order"/>
         <result column="Visible" jdbcType="INTEGER" property="visible"/>
-        <result column="Creator" jdbcType="VARCHAR" property="creator"/>
+        <result column="Creator" jdbcType="BIGINT" property="creator"/>
         <result column="CreateTime" jdbcType="TIMESTAMP" property="createTime"/>
-        <result column="Modifier" jdbcType="VARCHAR" property="modifier"/>
+        <result column="Modifier" jdbcType="BIGINT" property="modifier"/>
         <result column="ModifyTime" jdbcType="TIMESTAMP" property="modifyTime"/>
         <result column="childCount" jdbcType="INTEGER" property="childCount"/>
     </resultMap>
@@ -27,7 +27,7 @@
     <insert id="insert" parameterType="com.ares.core.model.system.SysMenu">
         insert into sys_menu (<include refid="Base_Column_List"/>)
         values (
-        #{id,jdbcType=VARCHAR},
+        #{id,jdbcType=BIGINT},
         #{name,jdbcType=VARCHAR},
         #{description,jdbcType=VARCHAR},
         #{url,jdbcType=VARCHAR},
@@ -39,9 +39,9 @@
         #{icon,jdbcType=VARCHAR},
         #{order,jdbcType=INTEGER},
         #{visible,jdbcType=INTEGER},
-        #{creator,jdbcType=VARCHAR},
+        #{creator,jdbcType=BIGINT},
         #{createTime,jdbcType=TIMESTAMP},
-        #{modifier,jdbcType=VARCHAR},
+        #{modifier,jdbcType=BIGINT},
         #{modifyTime,jdbcType=TIMESTAMP})
     </insert>
     <update id="update" parameterType="com.ares.core.model.system.SysMenu">
@@ -81,19 +81,19 @@
                 `Visible` = #{visible,jdbcType=INTEGER},
             </if>
             <if test="creator != null">
-                `Creator` = #{creator,jdbcType=VARCHAR},
+                `Creator` = #{creator,jdbcType=BIGINT},
             </if>
             <if test="createTime != null">
                 `CreateTime` = #{createTime,jdbcType=TIMESTAMP},
             </if>
             <if test="modifier != null">
-                `Modifier` = #{modifier,jdbcType=VARCHAR},
+                `Modifier` = #{modifier,jdbcType=BIGINT},
             </if>
             <if test="modifyTime != null">
                 `ModifyTime` = #{modifyTime,jdbcType=TIMESTAMP},
             </if>
         </set>
-        where Id = #{id,jdbcType=VARCHAR}
+        where Id = #{id,jdbcType=BIGINT}
     </update>
     <delete id="deleteByIds" parameterType="java.util.List">
         delete from `sys_menu`
@@ -127,11 +127,11 @@
         where 1=1
         order by `Order` asc
     </select>
-    <select id="getById" parameterType="java.lang.String" resultMap="SysMenu">
+    <select id="getById" parameterType="java.lang.Long" resultMap="SysMenu">
         select
         <include refid="Base_Column_List"/>
         from `sys_menu`
-        where `Id` = #{id,jdbcType=VARCHAR}
+        where `Id` = #{id,jdbcType=BIGINT}
     </select>
     <select id="getByPId" parameterType="java.lang.String" resultMap="SysMenu">
         select

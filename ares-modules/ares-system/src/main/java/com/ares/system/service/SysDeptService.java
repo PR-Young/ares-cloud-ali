@@ -67,12 +67,12 @@ public class SysDeptService implements BaseService<SysDept> {
     }
 
     @Override
-    public void deleteByIds(List<String> ids) {
+    public void deleteByIds(List<Long> ids) {
         sysDeptDao.deleteByIds(ids);
     }
 
     @Override
-    public SysDept getById(String id) {
+    public SysDept getById(Long id) {
         return sysDeptDao.getById(id);
     }
 
@@ -81,16 +81,16 @@ public class SysDeptService implements BaseService<SysDept> {
         return lists;
     }
 
-    public SysDept getByDeptId(String id) {
+    public SysDept getByDeptId(Long id) {
         return sysDeptDao.getByDeptId(id);
     }
 
     public List<TreeSelect> buildDeptTree() {
         List<SysDept> deptList = sysDeptDao.getAllDept();
-        return buildTree("0", deptList);
+        return buildTree(0L, deptList);
     }
 
-    public List<TreeSelect> buildTree(String parentId, List<SysDept> deptList) {
+    public List<TreeSelect> buildTree(Long parentId, List<SysDept> deptList) {
         List<TreeSelect> trees = new LinkedList<>();
         for (SysDept sysDept : deptList) {
             TreeSelect tree = new TreeSelect();

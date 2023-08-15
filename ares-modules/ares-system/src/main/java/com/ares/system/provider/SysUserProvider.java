@@ -45,7 +45,7 @@ public class SysUserProvider implements ISysUserService {
     }
 
     @Override
-    public SysUser getById(String id) {
+    public SysUser getById(Long id) {
         return userService.getById(id);
     }
 

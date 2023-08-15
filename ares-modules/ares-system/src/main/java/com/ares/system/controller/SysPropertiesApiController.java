@@ -65,7 +65,7 @@ public class SysPropertiesApiController extends BaseController {
 
     @GetMapping("{sysPropertiesId}")
     @ApiOperation(value = "根据参数Id获取系统参数", response = Object.class)
-    public Object getInfo(@PathVariable String sysPropertiesId) {
+    public Object getInfo(@PathVariable Long sysPropertiesId) {
         return AjaxResult.successData(sysPropertiesService.getById(sysPropertiesId));
     }
 
@@ -86,7 +86,7 @@ public class SysPropertiesApiController extends BaseController {
     @PreAuthorize("hasAnyAuthority('sysProperties:delete')")
     @DeleteMapping("{sysPropertiesIds}")
     @ApiOperation(value = "删除系统参数", response = Object.class)
-    public Object remove(@PathVariable String[] sysPropertiesIds) {
+    public Object remove(@PathVariable Long[] sysPropertiesIds) {
         sysPropertiesService.deleteByIds(Arrays.asList(sysPropertiesIds));
         return AjaxResult.success();
     }

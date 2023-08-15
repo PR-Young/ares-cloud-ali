@@ -36,5 +36,5 @@ public interface ISysDeptService {
      * @param id
      * @return
      */
-    SysDept getByDeptId(String id);
+    SysDept getByDeptId(Long id);
 }

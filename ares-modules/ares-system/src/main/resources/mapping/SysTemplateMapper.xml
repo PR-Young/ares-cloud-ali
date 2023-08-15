@@ -2,14 +2,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ares.system.dao.ISysTemplateDao">
     <resultMap id="SysTemplate" type="com.ares.core.model.system.SysTemplate">
-        <id column="Id" jdbcType="VARCHAR" property="id"/>
+        <id column="Id" jdbcType="BIGINT" property="id"/>
         <result column="Name" jdbcType="VARCHAR" property="name"/>
         <result column="Subject" jdbcType="VARCHAR" property="subject"/>
         <result column="Text" jdbcType="VARCHAR" property="text"/>
         <result column="Html" jdbcType="VARCHAR" property="html"/>
         <result column="Params" jdbcType="VARCHAR" property="param"/>
-        <result column="Creator" jdbcType="VARCHAR" property="creator"/>
-        <result column="Modifier" jdbcType="VARCHAR" property="modifier"/>
+        <result column="Creator" jdbcType="BIGINT" property="creator"/>
+        <result column="Modifier" jdbcType="BIGINT" property="modifier"/>
         <result column="CreateTime" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="ModifyTime" jdbcType="TIMESTAMP" property="modifyTime"/>
     </resultMap>
@@ -21,14 +21,14 @@
     <insert id="insert" parameterType="com.ares.core.model.system.SysTemplate">
         insert into `sys_template` (<include refid="Base_Column_List"/>)
         values (
-        #{id,jdbcType=VARCHAR},
+        #{id,jdbcType=BIGINT},
         #{name,jdbcType=VARCHAR},
         #{subject,jdbcType=VARCHAR},
         #{text,jdbcType=VARCHAR},
         #{html,jdbcType=VARCHAR},
         #{param,jdbcType=VARCHAR},
-        #{creator,jdbcType=VARCHAR},
-        #{modifier,jdbcType=VARCHAR},
+        #{creator,jdbcType=BIGINT},
+        #{modifier,jdbcType=BIGINT},
         #{createTime,jdbcType=TIMESTAMP},
         #{modifyTime,jdbcType=TIMESTAMP}
         )
@@ -53,10 +53,10 @@
                 `Params`=#{param,jdbcType=VARCHAR},
             </if>
             <if test="creator!= null">
-                `Creator`=#{creator,jdbcType=VARCHAR},
+                `Creator`=#{creator,jdbcType=BIGINT},
             </if>
             <if test="modifier!= null">
-                `Modifier`=#{modifier,jdbcType=VARCHAR},
+                `Modifier`=#{modifier,jdbcType=BIGINT},
             </if>
             <if test="createTime != null">
                 `CreateTime` = #{createTime,jdbcType=TIMESTAMP},
@@ -65,7 +65,7 @@
                 `ModifyTime` = #{modifyTime,jdbcType=TIMESTAMP},
             </if>
         </set>
-        where `Id` = #{id,jdbcType=VARCHAR}
+        where `Id` = #{id,jdbcType=BIGINT}
     </update>
 
     <delete id="deleteByIds" parameterType="java.util.List">
@@ -75,11 +75,11 @@
             #{id}
         </foreach>
     </delete>
-    <select id="getById" parameterType="java.lang.String" resultMap="SysTemplate">
+    <select id="getById" parameterType="java.lang.Long" resultMap="SysTemplate">
         select
         <include refid="Base_Column_List"/>
         from `sys_template`
-        where `Id` = #{id,jdbcType=VARCHAR}
+        where `Id` = #{id,jdbcType=BIGINT}
     </select>
 
     <select id="list" parameterType="java.util.Map" resultMap="SysTemplate">

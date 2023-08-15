@@ -34,11 +34,11 @@ public interface IBaseDao<T> {
 
     int update(T obj);
 
-    int deleteByIds(List<String> ids);
+    int deleteByIds(List<Long> ids);
 
     List<T> list(Map<String, Object> params);
 
-    T getById(@Param("id") String id);
+    T getById(@Param("id") Long id);
 
     List<T> selectList(T obj);
 

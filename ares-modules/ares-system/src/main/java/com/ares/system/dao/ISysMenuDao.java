@@ -34,16 +34,16 @@ import java.util.List;
 @Repository
 public interface ISysMenuDao extends IBaseDao<SysMenu> {
 
-    List<SysMenu> getMenuByUserId(String userId);
+    List<SysMenu> getMenuByUserId(Long userId);
 
-    SysMenu getByPId(String pid);
+    SysMenu getByPId(Long pid);
 
-    List<String> getMenuByRole(String roleId);
+    List<String> getMenuByRole(Long roleId);
 
     List<SysMenu> selectListByUser(SysMenu menu);
 
-    int deleteById(String menuId);
+    int deleteById(Long menuId);
 
-    int hasChildByMenuId(String menuId);
+    int hasChildByMenuId(Long menuId);
 
 }

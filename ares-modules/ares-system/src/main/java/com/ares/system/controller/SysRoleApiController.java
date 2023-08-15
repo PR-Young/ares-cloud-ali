@@ -68,7 +68,7 @@ public class SysRoleApiController extends BaseController {
 
     @GetMapping("{roleId}")
     @ApiOperation(value = "根据角色Id获取用户", response = Object.class)
-    public Object getInfo(@PathVariable String roleId) {
+    public Object getInfo(@PathVariable Long roleId) {
         return AjaxResult.successData(roleService.getById(roleId));
     }
 
@@ -76,7 +76,7 @@ public class SysRoleApiController extends BaseController {
     @PostMapping("edit")
     @ApiOperation(value = "新增/修改角色", response = Object.class)
     public Object edit(@Validated @RequestBody SysRole role) throws Exception {
-        String roleId = "";
+        Long roleId = 0L;
         if (StringUtils.isEmpty(role.getId())) {
             if (!roleService.checkRoleName(role.getRoleName())) {
                 return AjaxResult.error("新增角色'" + role.getRoleName() + "'失败，角色名称已存在");
@@ -95,7 +95,7 @@ public class SysRoleApiController extends BaseController {
     @PreAuthorize("hasAnyAuthority('role:delete')")
     @DeleteMapping("{roleIds}")
     @ApiOperation(value = "删除用户", response = Object.class)
-    public Object remove(@PathVariable String[] roleIds) {
+    public Object remove(@PathVariable Long[] roleIds) {
         roleService.deleteByIds(Arrays.asList(roleIds));
         return AjaxResult.success();
     }
@@ -115,7 +115,7 @@ public class SysRoleApiController extends BaseController {
 
     @GetMapping("roleUserselect/{roleId}")
     @ApiOperation(value = "根据角色Id获取用户", response = Object.class)
-    public Object roleUserselect(@PathVariable String roleId) {
+    public Object roleUserselect(@PathVariable Long roleId) {
         AjaxResult result = AjaxResult.success();
         result.put("allUser", userService.selectUserList(new SysUser()));
         result.put("checkedKeys", userService.getUserByRole(roleId));

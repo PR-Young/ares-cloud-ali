@@ -64,12 +64,12 @@ public class SysDictDataService implements BaseService<SysDictData> {
     }
 
     @Override
-    public void deleteByIds(List<String> ids) {
+    public void deleteByIds(List<Long> ids) {
         sysDictDataDao.deleteByIds(ids);
     }
 
     @Override
-    public SysDictData getById(String id) {
+    public SysDictData getById(Long id) {
         return sysDictDataDao.getById(id);
     }
 

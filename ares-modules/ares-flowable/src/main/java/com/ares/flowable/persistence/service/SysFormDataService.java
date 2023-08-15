@@ -65,12 +65,12 @@ public class SysFormDataService implements BaseService<SysFormData> {
     }
 
     @Override
-    public void deleteByIds(List<String> ids) {
+    public void deleteByIds(List<Long> ids) {
         sysFormDataDao.deleteByIds(ids);
     }
 
     @Override
-    public SysFormData getById(String id) {
+    public SysFormData getById(Long id) {
         return sysFormDataDao.getById(id);
     }
 

@@ -84,7 +84,7 @@ public class SysUserApiController extends BaseController {
 
     @GetMapping(value = {"", "{userId}"})
     @ApiOperation(value = "根据用户Id获取用户", response = Object.class)
-    public Object getInfo(@PathVariable(value = "userId", required = false) String userId) {
+    public Object getInfo(@PathVariable(value = "userId", required = false) Long userId) {
         AjaxResult result = new AjaxResult();
         result.put("code", HttpStatus.OK.value());
         result.put("data", userService.getById(userId));
@@ -100,7 +100,7 @@ public class SysUserApiController extends BaseController {
     @PostMapping("edit")
     @ApiOperation(value = "新增/修改用户", response = Object.class)
     public Object edit(@Validated @RequestBody SysUser user) throws Exception {
-        String userId = "";
+        Long userId = 0L;
         if (StringUtils.isEmpty(user.getId())) {
             if (userService.checkAccount(user.getAccount()) != 0) {
                 return AjaxResult.error("新增用户'" + user.getUserName() + "'失败，登录账号已存在");
@@ -121,7 +121,7 @@ public class SysUserApiController extends BaseController {
     @PreAuthorize("hasAnyAuthority('user:delete')")
     @DeleteMapping("{userIds}")
     @ApiOperation(value = "删除用户", response = Object.class)
-    public Object remove(@PathVariable String[] userIds) {
+    public Object remove(@PathVariable Long[] userIds) {
         userService.deleteByIds(Arrays.asList(userIds));
         return AjaxResult.success();
     }
@@ -168,7 +168,7 @@ public class SysUserApiController extends BaseController {
     public Object importData(MultipartFile file, HttpServletRequest request) throws Exception {
         InputStream inputStream = file.getInputStream();
         boolean needUpdate = request.getParameter("updateSupport") == "1" ? true : false;
-        String deptId = request.getParameter("deptId");
+        Long deptId = Long.valueOf(request.getParameter("deptId"));
         AnalysisEventListener listener = userService.new UserDataListener(needUpdate, deptId);
         EasyExcel.read(inputStream, SysUser.class, listener).sheet().doRead();
         return AjaxResult.success("导入成功");

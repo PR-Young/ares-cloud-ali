@@ -79,7 +79,7 @@ public class EntityDataModel {
 
     private String updateValue;
 
-    private String whereIdSql = "where `Id` = #{id,jdbcType=VARCHAR}";
+    private String whereIdSql = "where `Id` = #{id,jdbcType=BIGINT}";
 
     private String specialId = "#{id}";
 

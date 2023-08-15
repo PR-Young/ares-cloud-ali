@@ -30,7 +30,7 @@ import java.util.List;
 @Repository
 public interface ISysNoticeDao extends IBaseDao<SysNotice> {
 
-    int noticeNum(@Param("userId") String userId);
+    int noticeNum(@Param("userId") Long userId);
 
     List<SysNotice> getNotices();
 

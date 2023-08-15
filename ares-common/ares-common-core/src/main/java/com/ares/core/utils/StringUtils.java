@@ -132,6 +132,26 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
     }
 
     /**
+     * * 判断是否为空
+     *
+     * @param num Long
+     * @return true：为空 false：非空
+     */
+    public static boolean isEmpty(Long num) {
+        return isNull(num) || num == 0;
+    }
+
+    /**
+     * * 判断是否为非空
+     *
+     * @param num Long
+     * @return true：非空串 false：空串
+     */
+    public static boolean isNotEmpty(Long num) {
+        return !isEmpty(num);
+    }
+
+    /**
      * * 判断一个对象是否为空
      *
      * @param object Object

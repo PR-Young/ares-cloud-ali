@@ -2,13 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ares.system.dao.ISysDeptDao">
     <resultMap id="SysDept" type="com.ares.core.model.system.SysDept">
-        <id column="Id" jdbcType="VARCHAR" property="id"/>
+        <id column="Id" jdbcType="BIGINT" property="id"/>
         <result column="Code" jdbcType="VARCHAR" property="code"/>
         <result column="DeptName" jdbcType="VARCHAR" property="deptName"/>
         <result column="ParentDeptId" jdbcType="VARCHAR" property="parentDeptId"/>
-        <result column="Creator" jdbcType="VARCHAR" property="creator"/>
+        <result column="Creator" jdbcType="BIGINT" property="creator"/>
         <result column="CreateTime" jdbcType="TIMESTAMP" property="createTime"/>
-        <result column="Modifier" jdbcType="VARCHAR" property="modifier"/>
+        <result column="Modifier" jdbcType="BIGINT" property="modifier"/>
         <result column="ModifyTime" jdbcType="TIMESTAMP" property="modifyTime"/>
         <result column="ChildCount" jdbcType="INTEGER" property="childCount"/>
         <result column="ParentDeptName" jdbcType="VARCHAR" property="parentDeptName"/>
@@ -23,13 +23,13 @@
         <include refid="Base_Column_List"/>
         )
         values (
-        #{id,jdbcType=VARCHAR},
+        #{id,jdbcType=BIGINT},
         #{code,jdbcType=VARCHAR},
         #{deptName,jdbcType=VARCHAR},
         #{parentDeptId,jdbcType=VARCHAR},
-        #{creator,jdbcType=VARCHAR},
+        #{creator,jdbcType=BIGINT},
         #{createTime,jdbcType=TIMESTAMP},
-        #{modifier,jdbcType=VARCHAR},
+        #{modifier,jdbcType=BIGINT},
         #{modifyTime,jdbcType=TIMESTAMP}
         )
     </insert>
@@ -59,7 +59,7 @@
                 `ModifyTime` = #{modifyTime,jdbcType=TIMESTAMP},
             </if>
         </set>
-        where `Id` = #{id,jdbcType=VARCHAR}
+        where `Id` = #{id,jdbcType=BIGINT}
     </update>
 
     <delete id="deleteByIds" parameterType="java.util.List">
@@ -70,11 +70,11 @@
         </foreach>
     </delete>
 
-    <select id="getById" parameterType="java.lang.String" resultMap="SysDept">
+    <select id="getById" parameterType="java.lang.Long" resultMap="SysDept">
         select
         <include refid="Base_Column_List"/>
         from `sys_dept`
-        where `Id` = #{id,jdbcType=VARCHAR}
+        where `Id` = #{id,jdbcType=BIGINT}
     </select>
 
     <select id="list" parameterType="java.util.Map" resultMap="SysDept">
@@ -114,7 +114,7 @@
     <select id="getByDeptId" parameterType="java.lang.String" resultMap="SysDept">
         select dept.*,(select `DeptName` from `sys_dept` where `Id` = dept.ParentDeptId) as ParentDeptName
         from `sys_dept` dept
-        where `Id` = #{id,jdbcType=VARCHAR}
+        where `Id` = #{id,jdbcType=BIGINT}
     </select>
 
 </mapper>

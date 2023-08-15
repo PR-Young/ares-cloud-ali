@@ -39,7 +39,7 @@ public class SysDeptProvider implements ISysDeptService {
     @Resource
     SysDeptService deptService;
     @Override
-    public SysDept getByDeptId(String id) {
+    public SysDept getByDeptId(Long id) {
         return deptService.getByDeptId(id);
     }
 }

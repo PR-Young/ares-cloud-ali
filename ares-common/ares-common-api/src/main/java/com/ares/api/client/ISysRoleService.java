@@ -37,7 +37,7 @@ public interface ISysRoleService {
      * @param userId
      * @return
      */
-    List<SysRole> getRoleByUserId(String userId);
+    List<SysRole> getRoleByUserId(Long userId);
 
     /**
      * 根据id获取角色权限
@@ -45,7 +45,7 @@ public interface ISysRoleService {
      * @param roleId
      * @return
      */
-    List<String> getPermsByRoleId(String roleId);
+    List<String> getPermsByRoleId(Long roleId);
 
     /**
      * 根据id获取角色
@@ -53,7 +53,7 @@ public interface ISysRoleService {
      * @param roleId
      * @return
      */
-    SysRole getById(String roleId);
+    SysRole getById(Long roleId);
 
     /**
      * 获取所有角色

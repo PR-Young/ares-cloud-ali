@@ -58,12 +58,12 @@ public class SysQuartzJobLogService implements BaseService<SysQuartzJobLog> {
     }
 
     @Override
-    public void deleteByIds(List<String> ids) {
+    public void deleteByIds(List<Long> ids) {
         sysQuartzJobLogDao.deleteByIds(ids);
     }
 
     @Override
-    public SysQuartzJobLog getById(String id) {
+    public SysQuartzJobLog getById(Long id) {
         return sysQuartzJobLogDao.getById(id);
     }
 

@@ -39,11 +39,11 @@ public interface ISysUserDao extends IBaseDao<SysUser> {
 
     Integer checkAccount(String account);
 
-    int resetPassword(@Param("password") String password, @Param("id") String id);
+    int resetPassword(@Param("password") String password, @Param("id") Long id);
 
-    List<SysUser> getUserByRole(String roleId);
+    List<SysUser> getUserByRole(Long roleId);
 
-    List<SysUser> allUser(String roleId);
+    List<SysUser> allUser(Long roleId);
 
     int updateUserByAccount(SysUser sysUser);
 

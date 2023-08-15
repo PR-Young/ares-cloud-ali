@@ -65,12 +65,12 @@ public class SysPropertiesService implements BaseService<SysProperties> {
     }
 
     @Override
-    public void deleteByIds(List<String> ids) {
+    public void deleteByIds(List<Long> ids) {
         sysPropertiesDao.deleteByIds(ids);
     }
 
     @Override
-    public SysProperties getById(String id) {
+    public SysProperties getById(Long id) {
         return sysPropertiesDao.getById(id);
     }
 

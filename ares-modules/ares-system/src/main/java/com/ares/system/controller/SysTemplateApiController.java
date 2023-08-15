@@ -65,7 +65,7 @@ public class SysTemplateApiController extends BaseController {
 
     @GetMapping("{sysTemplateId}")
     @ApiOperation(value = "根据模版Id获取模版", response = Object.class)
-    public Object getInfo(@PathVariable String sysTemplateId) {
+    public Object getInfo(@PathVariable Long sysTemplateId) {
         return AjaxResult.successData(sysTemplateService.getById(sysTemplateId));
     }
 
@@ -86,7 +86,7 @@ public class SysTemplateApiController extends BaseController {
     @PreAuthorize("hasAnyAuthority('sysTemplate:delete')")
     @DeleteMapping("{sysTemplateIds}")
     @ApiOperation(value = "删除模版", response = Object.class)
-    public Object remove(@PathVariable String[] sysTemplateIds) {
+    public Object remove(@PathVariable Long[] sysTemplateIds) {
         sysTemplateService.deleteByIds(Arrays.asList(sysTemplateIds));
         return AjaxResult.success();
     }

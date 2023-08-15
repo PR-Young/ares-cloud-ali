@@ -34,19 +34,19 @@ import java.util.Map;
  **/
 @Repository
 public interface ISysRoleDao extends IBaseDao<SysRole> {
-    List<SysRole> getRoleByUserId(String userId);
+    List<SysRole> getRoleByUserId(Long userId);
 
-    List<String> getPermsByRoleId(String roleId);
+    List<String> getPermsByRoleId(Long roleId);
 
     int insertRoleUser(Map<String, Object> map);
 
     int insertPermission(Map<String, Object> map);
 
-    int deleteRoleUser(String roleId);
+    int deleteRoleUser(Long roleId);
 
-    int deletePermission(String roleId);
+    int deletePermission(Long roleId);
 
-    int deleteRoleByUser(String userId);
+    int deleteRoleByUser(Long userId);
 
     int checkRoleName(String roleName);
 

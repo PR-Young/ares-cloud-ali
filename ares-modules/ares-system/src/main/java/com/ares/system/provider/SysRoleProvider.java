@@ -41,17 +41,17 @@ public class SysRoleProvider implements ISysRoleService {
     SysRoleService roleService;
 
     @Override
-    public List<SysRole> getRoleByUserId(String userId) {
+    public List<SysRole> getRoleByUserId(Long userId) {
         return roleService.getRoleByUserId(userId);
     }
 
     @Override
-    public List<String> getPermsByRoleId(String roleId) {
+    public List<String> getPermsByRoleId(Long roleId) {
         return roleService.getPermsByRoleId(roleId);
     }
 
     @Override
-    public SysRole getById(String roleId) {
+    public SysRole getById(Long roleId) {
         return roleService.getById(roleId);
     }
 

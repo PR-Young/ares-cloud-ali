@@ -146,7 +146,7 @@ public class LoginApiController {
     public Object getRouters() throws Exception {
         SysUser user = SecurityUtils.getUser();
         List<SysMenu> menus = menuService.getAll(user.getId());
-        return AjaxResult.successData(HttpStatus.OK.value(), menuService.buildMenus(menus, "0"));
+        return AjaxResult.successData(HttpStatus.OK.value(), menuService.buildMenus(menus, 0L));
     }
 
     @RequestMapping("/kaptcha")

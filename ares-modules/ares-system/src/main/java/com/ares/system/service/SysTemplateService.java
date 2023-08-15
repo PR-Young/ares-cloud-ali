@@ -64,12 +64,12 @@ public class SysTemplateService implements BaseService<SysTemplate> {
     }
 
     @Override
-    public void deleteByIds(List<String> ids) {
+    public void deleteByIds(List<Long> ids) {
         sysTemplateDao.deleteByIds(ids);
     }
 
     @Override
-    public SysTemplate getById(String id) {
+    public SysTemplate getById(Long id) {
         return sysTemplateDao.getById(id);
     }
 

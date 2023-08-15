@@ -2,13 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="${daoPackage}.I${entityName}Dao">
     <resultMap id="${entityName}" type="${entityPackage}.${entityName}">
-        <id column="Id" jdbcType="VARCHAR" property="id"/>
+        <id column="Id" jdbcType="BIGINT" property="id"/>
         <#list columns as column>
             <result column="${column.columnName}" jdbcType="${column.jdbcType}" property="${column.name}"/>
         </#list>
-        <result column="Creator" jdbcType="VARCHAR" property="creator"/>
+        <result column="Creator" jdbcType="BIGINT" property="creator"/>
         <result column="CreateTime" jdbcType="TIMESTAMP" property="createTime"/>
-        <result column="Modifier" jdbcType="VARCHAR" property="modifier"/>
+        <result column="Modifier" jdbcType="BIGINT" property="modifier"/>
         <result column="ModifyTime" jdbcType="TIMESTAMP" property="modifyTime"/>
     </resultMap>
 
@@ -41,7 +41,7 @@
         </foreach>
     </delete>
 
-    <select id="getById" parameterType="java.lang.String" resultMap="${entityName}">
+    <select id="getById" parameterType="java.lang.Long" resultMap="${entityName}">
         select
         <include refid="Base_Column_List"/>
         from `${tableName}`

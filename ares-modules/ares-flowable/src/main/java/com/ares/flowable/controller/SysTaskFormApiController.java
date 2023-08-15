@@ -61,7 +61,7 @@ public class SysTaskFormApiController extends BaseController {
 
     @GetMapping("{sysTaskFormId}")
     @ApiOperation(value = "根据Id获取信息", response = Object.class)
-    public Object getInfo(@PathVariable String sysTaskFormId) {
+    public Object getInfo(@PathVariable Long sysTaskFormId) {
         return AjaxResult.successData(sysTaskFormService.getById(sysTaskFormId));
     }
 
@@ -82,7 +82,7 @@ public class SysTaskFormApiController extends BaseController {
     @PreAuthorize("hasAnyAuthority('sysTaskForm:delete')")
     @DeleteMapping("{sysTaskFormIds}")
     @ApiOperation(value = "删除信息", response = Object.class)
-    public Object remove(@PathVariable String[] sysTaskFormIds) {
+    public Object remove(@PathVariable Long[] sysTaskFormIds) {
         sysTaskFormService.deleteByIds(Arrays.asList(sysTaskFormIds));
         return AjaxResult.success();
     }

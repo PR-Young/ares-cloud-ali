@@ -73,16 +73,16 @@ public class SysRoleService implements BaseService<SysRole> {
     }
 
     @Override
-    public void deleteByIds(List<String> ids) {
+    public void deleteByIds(List<Long> ids) {
         sysRoleDao.deleteByIds(ids);
     }
 
     @Override
-    public SysRole getById(String id) {
+    public SysRole getById(Long id) {
         return sysRoleDao.getById(id);
     }
 
-    public void saveAssign(String users, String menus, String roleId) {
+    public void saveAssign(String users, String menus, Long roleId) {
         if (StringUtils.isNotEmpty(users)) {
             sysRoleDao.deleteRoleUser(roleId);
             String[] userIds = users.split(",");
@@ -107,17 +107,17 @@ public class SysRoleService implements BaseService<SysRole> {
         }
     }
 
-    public List<SysRole> getRoleByUserId(String userId) {
+    public List<SysRole> getRoleByUserId(Long userId) {
         return sysRoleDao.getRoleByUserId(userId);
     }
 
-    public List<String> getPermsByRoleId(String roleId) {
+    public List<String> getPermsByRoleId(Long roleId) {
         return sysRoleDao.getPermsByRoleId(roleId);
     }
 
-    public List<String> getRoleIdsByUser(String userId) {
+    public List<Long> getRoleIdsByUser(Long userId) {
         List<SysRole> roleList = sysRoleDao.getRoleByUserId(userId);
-        List<String> roles = roleList.stream().map(SysRole::getId).collect(Collectors.toList());
+        List<Long> roles = roleList.stream().map(SysRole::getId).collect(Collectors.toList());
         return roles;
     }
 
@@ -126,9 +126,9 @@ public class SysRoleService implements BaseService<SysRole> {
     }
 
     @Transactional
-    public void saveRoleUser(String[] roleIds, String userId) {
+    public void saveRoleUser(Long[] roleIds, Long userId) {
         sysRoleDao.deleteRoleByUser(userId);
-        for (String id : roleIds) {
+        for (Long id : roleIds) {
             Map<String, Object> map = new HashMap<>();
             map.put("id", SnowflakeIdWorker.getUUID());
             map.put("userId", userId);
@@ -147,8 +147,8 @@ public class SysRoleService implements BaseService<SysRole> {
     }
 
     @Transactional
-    public String insertRole(SysRole obj) {
-        String roleId = SnowflakeIdWorker.getUUID();
+    public Long insertRole(SysRole obj) {
+        Long roleId = SnowflakeIdWorker.getUUID();
         obj.setId(roleId);
         obj.setCreateTime(new Date());
         sysRoleDao.insert(obj);

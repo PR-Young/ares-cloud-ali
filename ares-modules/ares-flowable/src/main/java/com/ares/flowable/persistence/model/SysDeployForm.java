@@ -21,6 +21,10 @@
 package com.ares.flowable.persistence.model;
 
 import com.ares.core.model.base.BaseModel;
+import com.ares.core.serializer.LongJsonDeserializer;
+import com.ares.core.serializer.LongJsonSerializer;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -29,7 +33,9 @@ import lombok.Data;
 @ApiModel(value = "SysDeployForm对象", description = "")
 public class SysDeployForm extends BaseModel {
     @ApiModelProperty("")
-    private String formId;
+    @JsonSerialize(using = LongJsonSerializer.class)
+    @JsonDeserialize(using = LongJsonDeserializer.class)
+    private Long formId;
     @ApiModelProperty("")
     private String deployId;
 }

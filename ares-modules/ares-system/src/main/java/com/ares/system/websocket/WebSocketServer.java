@@ -141,7 +141,7 @@ public class WebSocketServer {
         log.info("推送消息到窗口" + id);
         if (isUpdate) {
             SysUserService userService = SpringUtils.getBean(SysUserService.class);
-            String userId = userService.getUserByName(id).getId();
+            Long userId = userService.getUserByName(id).getId();
             SysNoticeService sysNoticeService = SpringUtils.getBean(SysNoticeService.class);
             int noticeNum = sysNoticeService.noticeNum(userId);
             for (WebSocketServer server : websocketMap.values()) {

@@ -122,8 +122,8 @@ public class FlowTaskService extends FlowServiceFactory {
             taskService.resolveTask(taskVo.getTaskId(), taskVo.getValues());
         } else {
             taskService.addComment(taskVo.getTaskId(), taskVo.getInstanceId(), FlowComment.NORMAL.getType(), taskVo.getComment());
-            String userId = SecurityUtils.getUser().getId();
-            taskService.setAssignee(taskVo.getTaskId(), userId);
+            Long userId = SecurityUtils.getUser().getId();
+            taskService.setAssignee(taskVo.getTaskId(), String.valueOf(userId));
             taskService.complete(taskVo.getTaskId(), taskVo.getValues());
         }
         return AjaxResult.success();
@@ -454,9 +454,9 @@ public class FlowTaskService extends FlowServiceFactory {
 
     public Page<FlowTaskDto> myProcess(Integer pageNum, Integer pageSize) {
         Page<FlowTaskDto> page = new Page<>();
-        String userId = SecurityUtils.getUser().getId();
+        Long userId = SecurityUtils.getUser().getId();
         HistoricProcessInstanceQuery historicProcessInstanceQuery = historyService.createHistoricProcessInstanceQuery()
-                .startedBy(userId)
+                .startedBy(String.valueOf(userId))
                 .orderByProcessInstanceStartTime()
                 .desc();
         List<HistoricProcessInstance> historicProcessInstances = historicProcessInstanceQuery.listPage(pageNum - 1, pageSize);
@@ -519,7 +519,7 @@ public class FlowTaskService extends FlowServiceFactory {
             Process process = bpmnModel.getMainProcess();
             List<EndEvent> endNodes = process.findFlowElementsOfType(EndEvent.class, false);
             if (CollectionUtils.isNotEmpty(endNodes)) {
-                Authentication.setAuthenticatedUserId(loginUser.getId());
+                Authentication.setAuthenticatedUserId(String.valueOf(loginUser.getId()));
 //                taskService.addComment(task.getId(), processInstance.getProcessInstanceId(), FlowComment.STOP.getType(),
 //                        StringUtils.isBlank(flowTaskVo.getComment()) ? "取消申请" : flowTaskVo.getComment());
                 String endId = endNodes.get(0).getId();
@@ -602,12 +602,13 @@ public class FlowTaskService extends FlowServiceFactory {
      */
     public Page<FlowTaskDto> todoList(Integer pageNum, Integer pageSize) {
         Page<FlowTaskDto> page = new Page<>();
-        String userId = SecurityUtils.getUser().getId();
+        Long userId = SecurityUtils.getUser().getId();
         List<SysRole> roleList = roleService.getRoleByUserId(userId);
-        List<String> roleIds = roleList.stream().map(BaseModel::getId).collect(Collectors.toList());
+        List<Long> roleIds = roleList.stream().map(BaseModel::getId).collect(Collectors.toList());
         List<String> ids = new ArrayList<>();
-        ids.add(userId);
-        ids.addAll(roleIds);
+        ids.add(String.valueOf(userId));
+        roleIds.forEach(id -> ids.add(String.valueOf(id)));
+
         TaskQuery taskQuery = taskService.createTaskQuery()
                 .taskAssigneeIds(ids)
                 .active()
@@ -651,9 +652,9 @@ public class FlowTaskService extends FlowServiceFactory {
             HistoricProcessInstance historicProcessInstance = historyService.createHistoricProcessInstanceQuery()
                     .processInstanceId(task.getProcessInstanceId())
                     .singleResult();
-            SysUser startUser = userService.getById(historicProcessInstance.getStartUserId());
+            SysUser startUser = userService.getById(Long.valueOf(historicProcessInstance.getStartUserId()));
             SysDept deptResult = deptService.getByDeptId(startUser.getDeptId());
-            flowTask.setStartUserId(startUser.getId());
+            flowTask.setStartUserId(String.valueOf(startUser.getId()));
             flowTask.setStartUserName(startUser.getUserName());
             flowTask.setStartDeptName(deptResult.getDeptName());
             flowList.add(flowTask);
@@ -673,9 +674,9 @@ public class FlowTaskService extends FlowServiceFactory {
      */
     public Page<FlowTaskDto> finishedList(Integer pageNum, Integer pageSize) {
         Page<FlowTaskDto> page = new Page<>();
-        String userId = SecurityUtils.getUser().getId();
+        Long userId = SecurityUtils.getUser().getId();
         List<String> ids = new ArrayList<>();
-        ids.add(userId);
+        ids.add(String.valueOf(userId));
         HistoricTaskInstanceQuery taskInstanceQuery = historyService.createHistoricTaskInstanceQuery()
                 .includeProcessVariables()
                 .finished()
@@ -710,10 +711,10 @@ public class FlowTaskService extends FlowServiceFactory {
             HistoricProcessInstance historicProcessInstance = historyService.createHistoricProcessInstanceQuery()
                     .processInstanceId(histTask.getProcessInstanceId())
                     .singleResult();
-            userService.getById(historicProcessInstance.getStartUserId());
-            SysUser startUser = userService.getById(historicProcessInstance.getStartUserId());
+            userService.getById(Long.valueOf(historicProcessInstance.getStartUserId()));
+            SysUser startUser = userService.getById(Long.valueOf(historicProcessInstance.getStartUserId()));
             SysDept deptResult = deptService.getByDeptId(startUser.getDeptId());
-            flowTask.setStartUserId(startUser.getId());
+            flowTask.setStartUserId(String.valueOf(startUser.getId()));
             flowTask.setStartUserName(startUser.getUserName());
             flowTask.setStartDeptName(deptResult.getDeptName());
             hisTaskList.add(flowTask);
@@ -751,9 +752,9 @@ public class FlowTaskService extends FlowServiceFactory {
                     flowTask.setCreateTime(histIns.getStartTime());
                     flowTask.setFinishTime(histIns.getEndTime());
                     if (StringUtils.isNotBlank(histIns.getAssignee())) {
-                        SysUser sysUser = userService.getById(histIns.getAssignee());
+                        SysUser sysUser = userService.getById(Long.valueOf(histIns.getAssignee()));
                         SysDept deptResult = deptService.getByDeptId(sysUser.getDeptId());
-                        flowTask.setAssigneeId(sysUser.getId());
+                        flowTask.setAssigneeId(String.valueOf(sysUser.getId()));
                         flowTask.setAssigneeName(sysUser.getUserName());
                         flowTask.setDeptName(deptResult.getDeptName());
                     }
@@ -763,11 +764,11 @@ public class FlowTaskService extends FlowServiceFactory {
                     for (HistoricIdentityLink identityLink : linksForTask) {
                         if ("candidate".equals(identityLink.getType())) {
                             if (StringUtils.isNotBlank(identityLink.getUserId())) {
-                                SysUser sysUser = userService.getById(identityLink.getUserId());
+                                SysUser sysUser = userService.getById(Long.valueOf(identityLink.getUserId()));
                                 stringBuilder.append(sysUser.getUserName()).append(",");
                             }
                             if (StringUtils.isNotBlank(identityLink.getGroupId())) {
-                                SysRole sysRole = roleService.getById(identityLink.getGroupId());
+                                SysRole sysRole = roleService.getById(Long.valueOf(identityLink.getGroupId()));
                                 stringBuilder.append(sysRole.getRoleName()).append(",");
                             }
                         }

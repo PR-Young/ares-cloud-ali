@@ -103,8 +103,8 @@ public class SysQuartzJobService implements BaseService<SysQuartzJob> {
     }
 
     @Override
-    public void deleteByIds(List<String> ids) {
-        for (String id : ids) {
+    public void deleteByIds(List<Long> ids) {
+        for (Long id : ids) {
             SysQuartzJob job = getById(id);
             scheduler.delete(scheduler.createTaskName(job.getJobName()), job.getJobGroup());
         }
@@ -112,7 +112,7 @@ public class SysQuartzJobService implements BaseService<SysQuartzJob> {
     }
 
     @Override
-    public SysQuartzJob getById(String id) {
+    public SysQuartzJob getById(Long id) {
         return sysQuartzJobDao.getById(id);
     }
 

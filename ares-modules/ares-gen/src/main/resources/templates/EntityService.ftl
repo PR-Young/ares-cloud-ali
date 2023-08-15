@@ -51,7 +51,7 @@ public class ${entityName}Service implements BaseService<${entityName}>{
     }
 
     @Override
-    public ${entityName} getById(String id) {
+    public ${entityName} getById(Long id) {
         return ${entityName1}Dao.getById(id);
     }
 

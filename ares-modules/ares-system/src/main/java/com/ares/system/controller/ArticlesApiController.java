@@ -24,12 +24,12 @@ package com.ares.system.controller;
 import com.ares.core.controller.BaseController;
 import com.ares.core.model.base.AjaxResult;
 import com.ares.core.model.page.TableDataInfo;
+import com.ares.core.utils.StringUtils;
 import com.ares.security.common.SecurityUtils;
 import com.ares.system.model.Articles;
 import com.ares.system.service.ArticlesService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -62,7 +62,7 @@ public class ArticlesApiController extends BaseController {
 
     @GetMapping("{articlesId}")
     @ApiOperation(value = "根据Id获取信息", response = Object.class)
-    public Object getInfo(@PathVariable String articlesId) {
+    public Object getInfo(@PathVariable Long articlesId) {
         return AjaxResult.successData(articlesService.getById(articlesId));
     }
 
@@ -83,7 +83,7 @@ public class ArticlesApiController extends BaseController {
     @PreAuthorize("hasAnyAuthority('articles:delete')")
     @DeleteMapping("{articlesIds}")
     @ApiOperation(value = "删除信息", response = Object.class)
-    public Object remove(@PathVariable String[] articlesIds) {
+    public Object remove(@PathVariable Long[] articlesIds) {
         articlesService.deleteByIds(Arrays.asList(articlesIds));
         return AjaxResult.success();
     }

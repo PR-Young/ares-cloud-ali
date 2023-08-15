@@ -22,6 +22,10 @@ package com.ares.core.model.system;
 
 
 import com.ares.core.model.base.BaseModel;
+import com.ares.core.serializer.LongJsonDeserializer;
+import com.ares.core.serializer.LongJsonSerializer;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -56,7 +60,9 @@ public class SysMenu extends BaseModel implements Serializable {
 
     @ApiModelProperty(value = "父菜单", required = true)
     @NotEmpty(message = "父菜单不能为空")
-    private String pId;
+    @JsonSerialize(using = LongJsonSerializer.class)
+    @JsonDeserialize(using = LongJsonDeserializer.class)
+    private Long pId;
     @ApiModelProperty("菜单图标")
     private String icon;
 
