@@ -20,6 +20,7 @@
 
 package com.ares.system.service;
 
+import com.ares.core.model.query.SysNoticeReadQuery;
 import com.ares.core.model.system.SysNoticeRead;
 import com.ares.core.service.BaseService;
 import com.ares.core.utils.SnowflakeIdWorker;
@@ -73,7 +74,7 @@ public class SysNoticeReadService implements BaseService<SysNoticeRead> {
         return sysNoticeReadDao.getById(id);
     }
 
-    public List<SysNoticeRead> list(SysNoticeRead obj) {
+    public List<SysNoticeRead> list(SysNoticeReadQuery obj) {
         List<SysNoticeRead> lists = sysNoticeReadDao.selectList(obj);
         return lists;
     }

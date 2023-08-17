@@ -72,7 +72,7 @@ public class SysMenuApiController {
      */
     @GetMapping("treeselect")
     @ApiOperation(value = "获取菜单下拉树列表", response = Object.class)
-    public Object treeselect(SysMenu menu) throws Exception {
+    public Object treeselect(SysMenuQuery menu) throws Exception {
         Long userId = SecurityUtils.getUser().getId();
         List<SysMenu> menus = menuService.selectMenuList(menu, userId);
         return AjaxResult.successData(menuService.buildMenuTreeSelect(menus));
@@ -107,7 +107,7 @@ public class SysMenuApiController {
     @ApiOperation(value = "根据角色Id获取菜单", response = Object.class)
     public Object roleMenuTreeselect(@PathVariable("roleId") Long roleId) throws Exception {
         Long userId = SecurityUtils.getUser().getId();
-        List<SysMenu> menus = menuService.selectMenuList(new SysMenu(), userId);
+        List<SysMenu> menus = menuService.selectMenuList(new SysMenuQuery(), userId);
         AjaxResult result = AjaxResult.success();
         result.put("checkedKeys", menuService.selectMenuByRole(roleId));
         result.put("menus", menuService.buildMenuTreeSelect(menus));
