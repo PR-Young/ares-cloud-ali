@@ -21,6 +21,7 @@
 package com.ares.system.provider;
 
 import com.ares.api.client.ISysRoleService;
+import com.ares.core.model.query.SysRoleQuery;
 import com.ares.core.model.system.SysRole;
 import com.ares.system.service.SysRoleService;
 import org.apache.dubbo.config.annotation.DubboService;
@@ -61,7 +62,7 @@ public class SysRoleProvider implements ISysRoleService {
     }
 
     @Override
-    public List<SysRole> selectRoleList(SysRole role) {
+    public List<SysRole> selectRoleList(SysRoleQuery role) {
         return roleService.selectRoleList(role);
     }
 }

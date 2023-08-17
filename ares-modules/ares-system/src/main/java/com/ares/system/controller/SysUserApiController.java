@@ -27,6 +27,7 @@ import com.ares.core.controller.BaseController;
 import com.ares.core.model.base.AjaxResult;
 import com.ares.core.model.base.Constants;
 import com.ares.core.model.page.TableDataInfo;
+import com.ares.core.model.query.SysUserQuery;
 import com.ares.core.model.system.SysUser;
 import com.ares.core.utils.ExcelUtils;
 import com.ares.core.utils.StringUtils;
@@ -76,7 +77,7 @@ public class SysUserApiController extends BaseController {
     @PreAuthorize("hasAnyAuthority('user:list')")
     @RequestMapping("list")
     @ApiOperation(value = "用户列表", response = TableDataInfo.class)
-    public TableDataInfo list(SysUser user) {
+    public TableDataInfo list(SysUserQuery user) {
         startPage();
         List<SysUser> userList = userService.selectUserList(user);
         return getDataTable(userList);
@@ -138,7 +139,7 @@ public class SysUserApiController extends BaseController {
 
     @RequestMapping("export")
     @ApiOperation(value = "导出用户")
-    public void export(SysUser user, HttpServletResponse response) {
+    public void export(SysUserQuery user, HttpServletResponse response) {
         List<SysUser> userList = userService.selectUserList(user);
         String fileName = "用户信息" + System.currentTimeMillis();
         String sheetName = "用户";

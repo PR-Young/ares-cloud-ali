@@ -21,6 +21,7 @@
 package com.ares.system.service;
 
 
+import com.ares.core.model.query.SysMenuQuery;
 import com.ares.core.model.system.MetaVo;
 import com.ares.core.model.system.RouterVo;
 import com.ares.core.model.system.SysMenu;
@@ -120,7 +121,7 @@ public class SysMenuService implements BaseService<SysMenu> {
         return routerPath;
     }
 
-    public List<SysMenu> selectMenuList(SysMenu menu, Long userId) {
+    public List<SysMenu> selectMenuList(SysMenuQuery menu, Long userId) {
         List<SysMenu> menuList = null;
         if (SysUser.isAdmin(userId)) {
             menuList = sysMenuDao.selectList(menu);

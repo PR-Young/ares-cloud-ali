@@ -22,6 +22,7 @@ package com.ares.system.dao;
 
 
 import com.ares.core.dao.IBaseDao;
+import com.ares.core.model.query.SysMenuQuery;
 import com.ares.core.model.system.SysMenu;
 import org.springframework.stereotype.Repository;
 
@@ -32,7 +33,7 @@ import java.util.List;
  * @author: Young 2020/01/23
  **/
 @Repository
-public interface ISysMenuDao extends IBaseDao<SysMenu> {
+public interface ISysMenuDao extends IBaseDao<SysMenu, SysMenuQuery> {
 
     List<SysMenu> getMenuByUserId(Long userId);
 
@@ -40,7 +41,7 @@ public interface ISysMenuDao extends IBaseDao<SysMenu> {
 
     List<String> getMenuByRole(Long roleId);
 
-    List<SysMenu> selectListByUser(SysMenu menu);
+    List<SysMenu> selectListByUser(SysMenuQuery menu);
 
     int deleteById(Long menuId);
 

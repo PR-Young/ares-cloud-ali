@@ -24,6 +24,7 @@ import com.ares.system.dao.IArticlesDao;
 import com.ares.system.model.Articles;
 import com.ares.core.service.BaseService;
 import com.ares.core.utils.SnowflakeIdWorker;
+import com.ares.system.model.query.ArticlesQuery;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,7 +76,7 @@ public class ArticlesService implements BaseService<Articles> {
         return articlesDao.getById(id);
     }
 
-    public List<Articles> list(Articles obj) {
+    public List<Articles> list(ArticlesQuery obj) {
         List<Articles> lists = articlesDao.selectList(obj);
         return lists;
     }

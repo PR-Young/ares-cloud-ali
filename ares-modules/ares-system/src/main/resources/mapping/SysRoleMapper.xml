@@ -115,7 +115,7 @@
         where UserId = #{userId,jdbcType=VARCHAR}
     </delete>
 
-    <select id="selectList" parameterType="com.ares.core.model.system.SysRole" resultMap="SysRole">
+    <select id="selectList" parameterType="com.ares.core.model.query.SysRoleQuery" resultMap="SysRole">
         select
         <include refid="Base_Column_List"/>
         from `sys_role`

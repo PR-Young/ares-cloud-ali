@@ -87,7 +87,7 @@
         </if>
     </select>
 
-    <select id="selectList" parameterType="com.ares.flowable.persistence.model.SysDeployForm" resultMap="SysDeployForm">
+    <select id="selectList" parameterType="com.ares.flowable.model.query.SysDeployFormQuery" resultMap="SysDeployForm">
         select
         <include refid="Base_Column_List"/>
         from `sys_deploy_form`
@@ -100,7 +100,7 @@
         </if>
     </select>
 
-    <select id="selectSysDeployFormList" parameterType="com.ares.flowable.persistence.model.SysDeployForm"
+    <select id="selectSysDeployFormList" parameterType="com.ares.flowable.model.query.SysDeployFormQuery"
             resultMap="SysDeployForm">
         select
         <include refid="Base_Column_List"/>

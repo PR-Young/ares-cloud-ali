@@ -103,7 +103,7 @@
         where `JobName` = #{jobName,jdbcType=VARCHAR}
     </select>
 
-    <select id="selectList" parameterType="com.ares.quartz.persistence.model.SysQuartzJob" resultMap="SysQuartzJob">
+    <select id="selectList" parameterType="com.ares.quartz.model.query.SysQuartzJobQuery" resultMap="SysQuartzJob">
         select
         <include refid="Base_Column_List"/>
         from `sys_quartz_job`

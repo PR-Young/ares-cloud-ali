@@ -22,10 +22,11 @@ package com.ares.system.dao;
 
 
 import com.ares.core.dao.IBaseDao;
+import com.ares.core.model.query.SysPostQuery;
 import com.ares.core.model.system.SysPost;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ISysPostDao extends IBaseDao<SysPost> {
+public interface ISysPostDao extends IBaseDao<SysPost, SysPostQuery> {
     SysPost getByName(String postName);
 }

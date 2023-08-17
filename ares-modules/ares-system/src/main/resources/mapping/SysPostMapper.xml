@@ -86,7 +86,7 @@
         </if>
     </select>
 
-    <select id="selectList" parameterType="com.ares.core.model.system.SysPost" resultMap="SysPost">
+    <select id="selectList" parameterType="com.ares.core.model.query.SysPostQuery" resultMap="SysPost">
         select
         <include refid="Base_Column_List"/>
         from `sys_post`

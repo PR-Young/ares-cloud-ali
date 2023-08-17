@@ -24,6 +24,7 @@ package com.ares.quartz.controller;
 import com.ares.core.controller.BaseController;
 import com.ares.core.model.base.AjaxResult;
 import com.ares.core.model.page.TableDataInfo;
+import com.ares.quartz.model.query.SysQuartzJobLogQuery;
 import com.ares.quartz.persistence.model.SysQuartzJobLog;
 import com.ares.quartz.persistence.service.SysQuartzJobLogService;
 import io.swagger.annotations.Api;
@@ -54,7 +55,7 @@ public class SysJobLogApiController extends BaseController {
     @PreAuthorize("hasAnyAuthority('quartz:logList')")
     @GetMapping("list")
     @ApiOperation(value = "任务日志列表", response = TableDataInfo.class)
-    public TableDataInfo list(SysQuartzJobLog jobLog) {
+    public TableDataInfo list(SysQuartzJobLogQuery jobLog) {
         startPage();
         List<SysQuartzJobLog> list = jobLogService.selectJobLogList(jobLog);
         return getDataTable(list);

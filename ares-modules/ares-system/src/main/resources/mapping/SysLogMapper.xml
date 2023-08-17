@@ -24,7 +24,7 @@
         #{notes,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{modifyTime,jdbcType=TIMESTAMP})
     </insert>
 
-    <select id="list" parameterType="com.ares.core.model.system.SysNotice" resultMap="SysLog">
+    <select id="list" parameterType="com.ares.core.model.query.SysLogQuery" resultMap="SysLog">
         select
         <include refid="Base_Column_List"/>
         from `sys_log`

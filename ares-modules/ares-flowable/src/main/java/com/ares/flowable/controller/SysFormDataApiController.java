@@ -24,6 +24,7 @@ import com.ares.core.controller.BaseController;
 import com.ares.core.model.base.AjaxResult;
 import com.ares.core.model.page.TableDataInfo;
 import com.ares.core.utils.StringUtils;
+import com.ares.flowable.model.query.SysFormDataQuery;
 import com.ares.flowable.persistence.model.SysFormData;
 import com.ares.flowable.persistence.service.SysFormDataService;
 import com.ares.security.common.SecurityUtils;
@@ -53,7 +54,7 @@ public class SysFormDataApiController extends BaseController {
     @PreAuthorize("hasAnyAuthority('sysFormData:list')")
     @RequestMapping("list")
     @ApiOperation(value = "列表", response = TableDataInfo.class)
-    public TableDataInfo list(SysFormData sysFormData) {
+    public TableDataInfo list(SysFormDataQuery sysFormData) {
         startPage();
         List<SysFormData> sysFormDataList = sysFormDataService.list(sysFormData);
         return getDataTable(sysFormDataList);

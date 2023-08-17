@@ -22,6 +22,7 @@ package com.ares.system.dao;
 
 
 import com.ares.core.dao.IBaseDao;
+import com.ares.core.model.query.SysPropertiesQuery;
 import com.ares.core.model.system.SysProperties;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -29,7 +30,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface ISysPropertiesDao extends IBaseDao<SysProperties> {
+public interface ISysPropertiesDao extends IBaseDao<SysProperties, SysPropertiesQuery> {
 
     public List<SysProperties> getByGroup(@Param("group") String group);
 

@@ -20,6 +20,7 @@
 
 package com.ares.api.client;
 
+import com.ares.core.model.query.SysUserQuery;
 import com.ares.core.model.system.SysUser;
 
 import java.util.List;
@@ -53,5 +54,5 @@ public interface ISysUserService {
      * @param sysUser
      * @return
      */
-    List<SysUser> selectUserList(SysUser sysUser);
+    List<SysUser> selectUserList(SysUserQuery sysUser);
 }

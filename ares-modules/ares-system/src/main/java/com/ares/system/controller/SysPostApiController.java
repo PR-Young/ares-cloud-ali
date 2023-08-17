@@ -23,6 +23,7 @@ package com.ares.system.controller;
 import com.ares.core.controller.BaseController;
 import com.ares.core.model.base.AjaxResult;
 import com.ares.core.model.page.TableDataInfo;
+import com.ares.core.model.query.SysPostQuery;
 import com.ares.core.model.system.SysPost;
 import com.ares.core.utils.StringUtils;
 import com.ares.security.common.SecurityUtils;
@@ -56,7 +57,7 @@ public class SysPostApiController extends BaseController {
     @PreAuthorize("hasAnyAuthority('sysPost:list')")
     @RequestMapping("list")
     @ApiOperation(value = "岗位列表", response = TableDataInfo.class)
-    public TableDataInfo list(SysPost sysPost) {
+    public TableDataInfo list(SysPostQuery sysPost) {
         startPage();
         List<SysPost> sysPostList = sysPostService.list(sysPost);
         return getDataTable(sysPostList);

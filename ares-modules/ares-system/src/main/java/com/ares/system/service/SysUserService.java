@@ -24,6 +24,7 @@ import com.alibaba.excel.context.AnalysisContext;
 import com.alibaba.excel.event.AnalysisEventListener;
 import com.alibaba.fastjson.JSON;
 
+import com.ares.core.model.query.SysUserQuery;
 import com.ares.core.model.system.SysPost;
 import com.ares.core.model.system.SysRole;
 import com.ares.core.model.system.SysUser;
@@ -111,7 +112,7 @@ public class SysUserService implements BaseService<SysUser> {
         return sysUserDao.resetPassword(MD5Util.encode("123456"), id);
     }
 
-    public List<SysUser> selectUserList(SysUser user) {
+    public List<SysUser> selectUserList(SysUserQuery user) {
         return sysUserDao.selectList(user);
     }
 

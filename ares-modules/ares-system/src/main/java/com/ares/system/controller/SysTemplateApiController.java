@@ -24,6 +24,7 @@ package com.ares.system.controller;
 import com.ares.core.controller.BaseController;
 import com.ares.core.model.base.AjaxResult;
 import com.ares.core.model.page.TableDataInfo;
+import com.ares.core.model.query.SysTemplateQuery;
 import com.ares.core.model.system.SysTemplate;
 import com.ares.core.utils.StringUtils;
 import com.ares.security.common.SecurityUtils;
@@ -57,7 +58,7 @@ public class SysTemplateApiController extends BaseController {
     @PreAuthorize("hasAnyAuthority('sysTemplate:list')")
     @RequestMapping("list")
     @ApiOperation(value = "模版列表", response = TableDataInfo.class)
-    public TableDataInfo list(SysTemplate sysTemplate) {
+    public TableDataInfo list(SysTemplateQuery sysTemplate) {
         startPage();
         List<SysTemplate> sysTemplateList = sysTemplateService.list(sysTemplate);
         return getDataTable(sysTemplateList);

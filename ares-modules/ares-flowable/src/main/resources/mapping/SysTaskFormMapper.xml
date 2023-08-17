@@ -87,7 +87,7 @@
         </if>
     </select>
 
-    <select id="selectList" parameterType="com.ares.flowable.persistence.model.SysTaskForm" resultMap="SysTaskForm">
+    <select id="selectList" parameterType="com.ares.flowable.model.query.SysTaskFormQuery" resultMap="SysTaskForm">
         select
         <include refid="Base_Column_List"/>
         from `sys_task_form`

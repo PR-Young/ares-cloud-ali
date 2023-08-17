@@ -21,13 +21,14 @@
 package com.ares.system.dao;
 
 import com.ares.core.dao.IBaseDao;
+import com.ares.core.model.query.SysNoticeReadQuery;
 import com.ares.core.model.system.SysNoticeRead;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public interface ISysNoticeReadDao extends IBaseDao<SysNoticeRead> {
+public interface ISysNoticeReadDao extends IBaseDao<SysNoticeRead, SysNoticeReadQuery> {
 
     int batchInsert(List<SysNoticeRead> noticeReadList);
 

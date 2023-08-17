@@ -24,6 +24,7 @@ import com.ares.core.controller.BaseController;
 import com.ares.core.model.base.AjaxResult;
 import com.ares.core.model.page.TableDataInfo;
 import com.ares.core.utils.StringUtils;
+import com.ares.flowable.model.query.SysDeployFormQuery;
 import com.ares.flowable.persistence.model.SysDeployForm;
 import com.ares.flowable.persistence.service.SysDeployFormService;
 import com.ares.security.common.SecurityUtils;
@@ -53,7 +54,7 @@ public class SysDeployFormApiController extends BaseController {
     @PreAuthorize("hasAnyAuthority('sysDeployForm:list')")
     @RequestMapping("list")
     @ApiOperation(value = "列表", response = TableDataInfo.class)
-    public TableDataInfo list(SysDeployForm sysDeployForm) {
+    public TableDataInfo list(SysDeployFormQuery sysDeployForm) {
         startPage();
         List<SysDeployForm> sysDeployFormList = sysDeployFormService.list(sysDeployForm);
         return getDataTable(sysDeployFormList);

@@ -20,6 +20,7 @@
 
 package com.ares.system.service;
 
+import com.ares.core.model.query.SysDeptQuery;
 import com.ares.core.model.system.SysDept;
 import com.ares.core.model.tree.TreeSelect;
 import com.ares.core.service.BaseService;
@@ -76,7 +77,7 @@ public class SysDeptService implements BaseService<SysDept> {
         return sysDeptDao.getById(id);
     }
 
-    public List<SysDept> list(SysDept obj) {
+    public List<SysDept> list(SysDeptQuery obj) {
         List<SysDept> lists = sysDeptDao.selectList(obj);
         return lists;
     }

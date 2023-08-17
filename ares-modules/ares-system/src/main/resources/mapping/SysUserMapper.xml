@@ -52,10 +52,10 @@
                 `Avatar` = #{avatar,jdbcType=VARCHAR},
             </if>
             <if test="deptId != null">
-                `DeptId` = #{deptId,jdbcType=VARCHAR},
+                `DeptId` = #{deptId,jdbcType=BIGINT},
             </if>
             <if test="postId != null">
-                `PostId` = #{postId,jdbcType=VARCHAR},
+                `PostId` = #{postId,jdbcType=BIGINT},
             </if>
             <if test="creator != null">
                 `Creator` = #{creator,jdbcType=BIGINT},
@@ -179,7 +179,7 @@
         )
     </select>
 
-    <select id="selectList" parameterType="com.ares.core.model.system.SysUser" resultMap="SysUser">
+    <select id="selectList" parameterType="com.ares.core.model.query.SysUserQuery" resultMap="SysUser">
         select
         <include refid="Base_Column_List"/>
         from `sys_user`
@@ -188,7 +188,7 @@
             and `UserName` like concat('%', #{userName}, '%')
         </if>
         <if test="deptId != null">
-            and `DeptId` in (select dept.`Id` from `sys_dept` dept where dept.`Id` = #{deptId} or dept.`ParentDeptId` = #{deptId})
+            and `DeptId` in (select dept.`Id` from `sys_dept` dept where dept.`Id` = #{deptId,jdbcType=BIGINT} or dept.`ParentDeptId` = #{deptId,jdbcType=BIGINT})
         </if>
         <if test="beginTime != null and beginTime != ''"><!-- 开始时间检索 -->
             AND date_format(`CreateTime`,'%y%m%d') &gt;= date_format(#{beginTime},'%y%m%d')

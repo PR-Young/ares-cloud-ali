@@ -92,7 +92,7 @@
         </if>
     </select>
 
-    <select id="selectList" parameterType="com.ares.flowable.persistence.model.SysForm" resultMap="SysForm">
+    <select id="selectList" parameterType="com.ares.flowable.model.query.SysFormQuery" resultMap="SysForm">
         select
         <include refid="Base_Column_List"/>
         from `sys_form`

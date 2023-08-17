@@ -79,7 +79,7 @@
         where Id = #{id,jdbcType=BIGINT}
     </update>
 
-    <select id="selectList" parameterType="com.ares.quartz.persistence.model.SysQuartzJobLog"
+    <select id="selectList" parameterType="com.ares.quartz.model.query.SysQuartzJobLogQuery"
             resultMap="SysQuartzJobLog">
         select
         <include refid="Base_Column_List"/>

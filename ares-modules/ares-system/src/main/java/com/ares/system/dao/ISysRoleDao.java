@@ -22,6 +22,7 @@ package com.ares.system.dao;
 
 
 import com.ares.core.dao.IBaseDao;
+import com.ares.core.model.query.SysRoleQuery;
 import com.ares.core.model.system.SysRole;
 import org.springframework.stereotype.Repository;
 
@@ -33,7 +34,7 @@ import java.util.Map;
  * @author: Young 2020/01/25
  **/
 @Repository
-public interface ISysRoleDao extends IBaseDao<SysRole> {
+public interface ISysRoleDao extends IBaseDao<SysRole, SysRoleQuery> {
     List<SysRole> getRoleByUserId(Long userId);
 
     List<String> getPermsByRoleId(Long roleId);

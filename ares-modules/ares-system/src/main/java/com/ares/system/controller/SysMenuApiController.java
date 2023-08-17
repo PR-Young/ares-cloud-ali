@@ -22,6 +22,7 @@ package com.ares.system.controller;
 
 
 import com.ares.core.model.base.AjaxResult;
+import com.ares.core.model.query.SysMenuQuery;
 import com.ares.core.model.system.SysMenu;
 import com.ares.core.utils.StringUtils;
 import com.ares.security.common.SecurityUtils;
@@ -54,7 +55,7 @@ public class SysMenuApiController {
     @PreAuthorize("hasAnyAuthority('menu:list')")
     @RequestMapping("list")
     @ApiOperation(value = "菜单列表", response = Object.class)
-    public Object list(SysMenu menu) throws Exception {
+    public Object list(SysMenuQuery menu) throws Exception {
         Long userId = SecurityUtils.getUser().getId();
         List<SysMenu> menuList = menuService.selectMenuList(menu, userId);
         return AjaxResult.successData(menuList);

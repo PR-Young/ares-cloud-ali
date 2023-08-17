@@ -102,7 +102,7 @@
         </if>
     </select>
 
-    <select id="selectList" parameterType="com.ares.system.model.Articles" resultMap="Articles">
+    <select id="selectList" parameterType="com.ares.system.model.query.ArticlesQuery" resultMap="Articles">
         select
         <include refid="Base_Column_List"/>
         from `t_articles`

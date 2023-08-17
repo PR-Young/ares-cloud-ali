@@ -22,6 +22,7 @@ package com.ares.quartz.persistence.service;
 
 import com.ares.core.service.BaseService;
 import com.ares.core.utils.SnowflakeIdWorker;
+import com.ares.quartz.model.query.SysQuartzJobLogQuery;
 import com.ares.quartz.persistence.dao.ISysQuartzJobLogDao;
 import com.ares.quartz.persistence.model.SysQuartzJobLog;
 import com.github.pagehelper.PageHelper;
@@ -74,7 +75,7 @@ public class SysQuartzJobLogService implements BaseService<SysQuartzJobLog> {
         return jobPageInfo;
     }
 
-    public List<SysQuartzJobLog> selectJobLogList(SysQuartzJobLog jobLog) {
+    public List<SysQuartzJobLog> selectJobLogList(SysQuartzJobLogQuery jobLog) {
         return sysQuartzJobLogDao.selectList(jobLog);
     }
 

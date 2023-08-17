@@ -75,29 +75,18 @@ public class SysUser extends BaseModel implements Serializable {
     public SysUser() {
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
+    public boolean isAdmin() {
+        return isAdmin(getId());
     }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setAdmin(boolean admin) {
+        isAdmin = admin;
     }
 
-    public String getEmail() {
-        return email;
+    public static boolean isAdmin(Long userId) {
+        return userId == 1;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getAvatar() {
-        return avatar;
-    }
-
-    public void setAvatar(String avatar) {
-        this.avatar = avatar;
-    }
 
     public String getAccount() {
         return account;
@@ -123,24 +112,36 @@ public class SysUser extends BaseModel implements Serializable {
         this.password = password;
     }
 
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
     public Long[] getRoleIds() {
         return roleIds;
     }
 
     public void setRoleIds(Long[] roleIds) {
         this.roleIds = roleIds;
-    }
-
-    public boolean isAdmin() {
-        return isAdmin(getId());
-    }
-
-    public void setAdmin(boolean admin) {
-        isAdmin = admin;
-    }
-
-    public static boolean isAdmin(Long userId) {
-        return userId == 1;
     }
 
     public Long getDeptId() {
@@ -158,5 +159,4 @@ public class SysUser extends BaseModel implements Serializable {
     public void setPostId(Long postId) {
         this.postId = postId;
     }
-
 }

@@ -20,6 +20,7 @@
 
 package com.ares.system.service;
 
+import com.ares.core.model.query.SysPropertiesQuery;
 import com.ares.core.model.system.SysProperties;
 import com.ares.core.service.BaseService;
 import com.ares.core.utils.SnowflakeIdWorker;
@@ -74,7 +75,7 @@ public class SysPropertiesService implements BaseService<SysProperties> {
         return sysPropertiesDao.getById(id);
     }
 
-    public List<SysProperties> list(SysProperties obj) {
+    public List<SysProperties> list(SysPropertiesQuery obj) {
         List<SysProperties> lists = sysPropertiesDao.selectList(obj);
         return lists;
     }

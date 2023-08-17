@@ -20,6 +20,7 @@
 
 package com.ares.system.service;
 
+import com.ares.core.model.query.SysLogQuery;
 import com.ares.core.model.system.SysLog;
 import com.ares.core.utils.SnowflakeIdWorker;
 import com.ares.system.dao.ISysLogDao;
@@ -49,7 +50,7 @@ public class SysLogService {
         sysLogDao.insert(sysLog);
     }
 
-    public List<SysLog> list(SysLog sysLog) {
+    public List<SysLog> list(SysLogQuery sysLog) {
         List<SysLog> logList = sysLogDao.list(sysLog);
         return logList;
     }

@@ -24,6 +24,7 @@ import com.ares.core.controller.BaseController;
 import com.ares.core.exception.UserException;
 import com.ares.core.model.base.AjaxResult;
 import com.ares.core.model.page.TableDataInfo;
+import com.ares.core.model.query.SysNoticeQuery;
 import com.ares.core.model.system.SysNotice;
 import com.ares.core.utils.StringUtils;
 import com.ares.security.common.SecurityUtils;
@@ -58,7 +59,7 @@ public class SysNoticeApiController extends BaseController {
     @PreAuthorize("hasAnyAuthority('notice:list')")
     @RequestMapping("list")
     @ApiOperation(value = "通知公告列表", response = TableDataInfo.class)
-    public TableDataInfo list(SysNotice sysNotice) {
+    public TableDataInfo list(SysNoticeQuery sysNotice) {
         startPage();
         List<SysNotice> sysNoticeList = sysNoticeService.list(sysNotice);
         return getDataTable(sysNoticeList);

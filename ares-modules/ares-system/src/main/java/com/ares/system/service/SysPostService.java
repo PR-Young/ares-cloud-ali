@@ -20,6 +20,7 @@
 
 package com.ares.system.service;
 
+import com.ares.core.model.query.SysPostQuery;
 import com.ares.core.model.system.SysPost;
 import com.ares.core.service.BaseService;
 import com.ares.core.utils.SnowflakeIdWorker;
@@ -75,7 +76,7 @@ public class SysPostService implements BaseService<SysPost> {
         return sysPostDao.getById(id);
     }
 
-    public List<SysPost> list(SysPost obj) {
+    public List<SysPost> list(SysPostQuery obj) {
         List<SysPost> lists = sysPostDao.selectList(obj);
         return lists;
     }

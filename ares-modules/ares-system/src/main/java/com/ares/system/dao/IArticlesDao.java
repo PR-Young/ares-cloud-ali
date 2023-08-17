@@ -22,9 +22,10 @@ package com.ares.system.dao;
 
 import com.ares.system.model.Articles;
 import com.ares.core.dao.IBaseDao;
+import com.ares.system.model.query.ArticlesQuery;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface IArticlesDao extends IBaseDao<Articles> {
+public interface IArticlesDao extends IBaseDao<Articles, ArticlesQuery> {
 
 }

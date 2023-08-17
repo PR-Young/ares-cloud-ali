@@ -21,6 +21,7 @@
 package com.ares.system.provider;
 
 import com.ares.api.client.ISysUserService;
+import com.ares.core.model.query.SysUserQuery;
 import com.ares.core.model.system.SysUser;
 import com.ares.system.service.SysUserService;
 import org.apache.dubbo.config.annotation.DubboService;
@@ -50,7 +51,7 @@ public class SysUserProvider implements ISysUserService {
     }
 
     @Override
-    public List<SysUser> selectUserList(SysUser sysUser) {
+    public List<SysUser> selectUserList(SysUserQuery sysUser) {
         return userService.selectUserList(sysUser);
     }
 }

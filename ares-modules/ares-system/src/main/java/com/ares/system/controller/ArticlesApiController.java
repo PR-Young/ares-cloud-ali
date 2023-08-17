@@ -27,6 +27,7 @@ import com.ares.core.model.page.TableDataInfo;
 import com.ares.core.utils.StringUtils;
 import com.ares.security.common.SecurityUtils;
 import com.ares.system.model.Articles;
+import com.ares.system.model.query.ArticlesQuery;
 import com.ares.system.service.ArticlesService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -54,7 +55,7 @@ public class ArticlesApiController extends BaseController {
     @PreAuthorize("hasAnyAuthority('articles:list')")
     @RequestMapping("list")
     @ApiOperation(value = "列表", response = TableDataInfo.class)
-    public TableDataInfo list(Articles articles) {
+    public TableDataInfo list(ArticlesQuery articles) {
         startPage();
         List<Articles> articlesList = articlesService.list(articles);
         return getDataTable(articlesList);

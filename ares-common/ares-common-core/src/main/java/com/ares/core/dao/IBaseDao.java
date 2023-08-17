@@ -29,7 +29,7 @@ import java.util.Map;
  * @description:
  * @author: Young 2020/01/22
  **/
-public interface IBaseDao<T> {
+public interface IBaseDao<T,Q> {
     int insert(T obj);
 
     int update(T obj);
@@ -40,6 +40,6 @@ public interface IBaseDao<T> {
 
     T getById(@Param("id") Long id);
 
-    List<T> selectList(T obj);
+    List<T> selectList(Q obj);
 
 }

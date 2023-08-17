@@ -20,6 +20,7 @@
 
 package com.ares.system.service;
 
+import com.ares.core.model.query.SysDictDataQuery;
 import com.ares.core.model.system.SysDictData;
 import com.ares.core.service.BaseService;
 import com.ares.core.utils.SnowflakeIdWorker;
@@ -73,7 +74,7 @@ public class SysDictDataService implements BaseService<SysDictData> {
         return sysDictDataDao.getById(id);
     }
 
-    public List<SysDictData> list(SysDictData obj) {
+    public List<SysDictData> list(SysDictDataQuery obj) {
         List<SysDictData> lists = sysDictDataDao.selectList(obj);
         return lists;
     }

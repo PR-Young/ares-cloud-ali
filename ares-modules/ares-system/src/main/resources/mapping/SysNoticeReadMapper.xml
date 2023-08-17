@@ -103,7 +103,7 @@
         </if>
     </select>
 
-    <select id="selectList" parameterType="com.ares.core.model.system.SysNoticeRead"
+    <select id="selectList" parameterType="com.ares.core.model.query.SysNoticeReadQuery"
             resultMap="SysNoticeRead">
         select
         <include refid="Base_Column_List"/>

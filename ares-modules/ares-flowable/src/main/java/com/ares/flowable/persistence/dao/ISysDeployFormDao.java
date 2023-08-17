@@ -22,6 +22,7 @@ package com.ares.flowable.persistence.dao;
 
 
 import com.ares.core.dao.IBaseDao;
+import com.ares.flowable.model.query.SysDeployFormQuery;
 import com.ares.flowable.persistence.model.SysDeployForm;
 import com.ares.flowable.persistence.model.SysForm;
 import org.springframework.stereotype.Repository;
@@ -29,7 +30,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface ISysDeployFormDao extends IBaseDao<SysDeployForm> {
+public interface ISysDeployFormDao extends IBaseDao<SysDeployForm, SysDeployFormQuery> {
     /**
      * 查询流程实例关联表单
      *
@@ -44,7 +45,7 @@ public interface ISysDeployFormDao extends IBaseDao<SysDeployForm> {
      * @param SysDeployForm 流程实例关联表单
      * @return 流程实例关联表单集合
      */
-    public List<SysDeployForm> selectSysDeployFormList(SysDeployForm SysDeployForm);
+    public List<SysDeployForm> selectSysDeployFormList(SysDeployFormQuery SysDeployForm);
 
 
     /**

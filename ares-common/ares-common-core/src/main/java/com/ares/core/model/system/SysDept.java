@@ -22,6 +22,10 @@ package com.ares.core.model.system;
 
 
 import com.ares.core.model.base.BaseModel;
+import com.ares.core.serializer.LongJsonDeserializer;
+import com.ares.core.serializer.LongJsonSerializer;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -35,7 +39,9 @@ public class SysDept extends BaseModel {
     @ApiModelProperty("部门名称")
     private String deptName;
     @ApiModelProperty("父部门Id")
-    private String parentDeptId;
+    @JsonSerialize(using = LongJsonSerializer.class)
+    @JsonDeserialize(using = LongJsonDeserializer.class)
+    private Long parentDeptId;
 
     private String parentDeptName;
 

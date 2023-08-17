@@ -96,7 +96,7 @@
         </if>
     </select>
 
-    <select id="selectList" parameterType="com.ares.core.model.system.SysDictType" resultMap="SysDictType">
+    <select id="selectList" parameterType="com.ares.core.model.query.SysDictTypeQuery" resultMap="SysDictType">
         select
         <include refid="Base_Column_List"/>
         from `sys_dict_type`

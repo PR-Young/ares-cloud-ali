@@ -20,6 +20,7 @@
 
 package com.ares.api.client;
 
+import com.ares.core.model.query.SysRoleQuery;
 import com.ares.core.model.system.SysRole;
 
 import java.util.List;
@@ -68,5 +69,5 @@ public interface ISysRoleService {
      * @param role
      * @return
      */
-    List<SysRole> selectRoleList(SysRole role);
+    List<SysRole> selectRoleList(SysRoleQuery role);
 }

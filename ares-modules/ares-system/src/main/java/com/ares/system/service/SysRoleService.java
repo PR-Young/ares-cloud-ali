@@ -20,6 +20,7 @@
 
 package com.ares.system.service;
 
+import com.ares.core.model.query.SysRoleQuery;
 import com.ares.core.model.system.SysRole;
 import com.ares.core.service.BaseService;
 import com.ares.core.utils.SnowflakeIdWorker;
@@ -137,7 +138,7 @@ public class SysRoleService implements BaseService<SysRole> {
         }
     }
 
-    public List<SysRole> selectRoleList(SysRole role) {
+    public List<SysRole> selectRoleList(SysRoleQuery role) {
         return sysRoleDao.selectList(role);
     }
 

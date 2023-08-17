@@ -22,6 +22,7 @@ package com.ares.system.dao;
 
 
 import com.ares.core.dao.IBaseDao;
+import com.ares.core.model.query.SysUserQuery;
 import com.ares.core.model.system.SysUser;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -33,7 +34,7 @@ import java.util.List;
  * @author: Young 2020/01/22
  **/
 @Repository
-public interface ISysUserDao extends IBaseDao<SysUser> {
+public interface ISysUserDao extends IBaseDao<SysUser, SysUserQuery> {
 
     SysUser getUserByName(String userName);
 

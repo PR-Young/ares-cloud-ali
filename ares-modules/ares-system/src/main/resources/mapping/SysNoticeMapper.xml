@@ -107,7 +107,7 @@
         </if>
     </select>
 
-    <select id="selectList" parameterType="com.ares.core.model.system.SysNotice" resultMap="SysNotice">
+    <select id="selectList" parameterType="com.ares.core.model.query.SysNoticeQuery" resultMap="SysNotice">
         select
         <include refid="Base_Column_List"/>
         from `sys_notice`

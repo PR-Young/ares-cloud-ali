@@ -21,6 +21,7 @@
 package com.ares.system.dao;
 
 
+import com.ares.core.model.query.SysLogQuery;
 import com.ares.core.model.system.SysLog;
 import org.springframework.stereotype.Repository;
 
@@ -34,5 +35,5 @@ import java.util.List;
 public interface ISysLogDao {
     int insert(SysLog sysLog);
 
-    List<SysLog> list(SysLog sysLog);
+    List<SysLog> list(SysLogQuery sysLog);
 }

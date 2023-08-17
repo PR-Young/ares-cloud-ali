@@ -20,6 +20,7 @@
 
 package com.ares.system.service;
 
+import com.ares.core.model.query.SysTemplateQuery;
 import com.ares.core.model.system.SysTemplate;
 import com.ares.core.service.BaseService;
 import com.ares.core.utils.SnowflakeIdWorker;
@@ -73,7 +74,7 @@ public class SysTemplateService implements BaseService<SysTemplate> {
         return sysTemplateDao.getById(id);
     }
 
-    public List<SysTemplate> list(SysTemplate obj) {
+    public List<SysTemplate> list(SysTemplateQuery obj) {
         List<SysTemplate> lists = sysTemplateDao.selectList(obj);
         return lists;
     }

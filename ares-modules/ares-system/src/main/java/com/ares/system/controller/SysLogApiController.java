@@ -22,6 +22,7 @@ package com.ares.system.controller;
 
 import com.ares.core.controller.BaseController;
 import com.ares.core.model.page.TableDataInfo;
+import com.ares.core.model.query.SysLogQuery;
 import com.ares.core.model.system.SysLog;
 import com.ares.system.service.SysLogService;
 import io.swagger.annotations.ApiOperation;
@@ -52,7 +53,7 @@ public class SysLogApiController extends BaseController {
     @PreAuthorize("hasAnyAuthority('log:list')")
     @RequestMapping("list")
     @ApiOperation(value = "操作日志列表", response = TableDataInfo.class)
-    public TableDataInfo list(SysLog sysLog) {
+    public TableDataInfo list(SysLogQuery sysLog) {
         startPage();
         List<SysLog> sysLogList = sysLogService.list(sysLog);
         return getDataTable(sysLogList);

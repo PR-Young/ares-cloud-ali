@@ -21,6 +21,7 @@
 package com.ares.system.dao;
 
 import com.ares.core.dao.IBaseDao;
+import com.ares.core.model.query.SysNoticeQuery;
 import com.ares.core.model.system.SysNotice;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -28,7 +29,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface ISysNoticeDao extends IBaseDao<SysNotice> {
+public interface ISysNoticeDao extends IBaseDao<SysNotice, SysNoticeQuery> {
 
     int noticeNum(@Param("userId") Long userId);
 

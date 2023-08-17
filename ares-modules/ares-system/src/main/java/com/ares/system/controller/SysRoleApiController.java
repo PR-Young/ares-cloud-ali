@@ -24,8 +24,9 @@ package com.ares.system.controller;
 import com.ares.core.controller.BaseController;
 import com.ares.core.model.base.AjaxResult;
 import com.ares.core.model.page.TableDataInfo;
+import com.ares.core.model.query.SysRoleQuery;
+import com.ares.core.model.query.SysUserQuery;
 import com.ares.core.model.system.SysRole;
-import com.ares.core.model.system.SysUser;
 import com.ares.core.utils.StringUtils;
 import com.ares.security.common.SecurityUtils;
 import com.ares.system.service.SysRoleService;
@@ -60,7 +61,7 @@ public class SysRoleApiController extends BaseController {
     @PreAuthorize("hasAnyAuthority('role:list')")
     @RequestMapping("list")
     @ApiOperation(value = "角色列表", response = TableDataInfo.class)
-    public TableDataInfo list(SysRole role) {
+    public TableDataInfo list(SysRoleQuery role) {
         startPage();
         List<SysRole> roleList = roleService.selectRoleList(role);
         return getDataTable(roleList);
@@ -117,7 +118,7 @@ public class SysRoleApiController extends BaseController {
     @ApiOperation(value = "根据角色Id获取用户", response = Object.class)
     public Object roleUserselect(@PathVariable Long roleId) {
         AjaxResult result = AjaxResult.success();
-        result.put("allUser", userService.selectUserList(new SysUser()));
+        result.put("allUser", userService.selectUserList(new SysUserQuery()));
         result.put("checkedKeys", userService.getUserByRole(roleId));
         return result;
     }

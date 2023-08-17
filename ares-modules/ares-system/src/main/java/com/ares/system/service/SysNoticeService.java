@@ -20,6 +20,7 @@
 
 package com.ares.system.service;
 
+import com.ares.core.model.query.SysNoticeQuery;
 import com.ares.core.model.system.SysNotice;
 import com.ares.core.model.system.SysNoticeRead;
 import com.ares.core.service.BaseService;
@@ -78,7 +79,7 @@ public class SysNoticeService implements BaseService<SysNotice> {
         return sysNoticeDao.getById(id);
     }
 
-    public List<SysNotice> list(SysNotice obj) {
+    public List<SysNotice> list(SysNoticeQuery obj) {
         List<SysNotice> lists = sysNoticeDao.selectList(obj);
         return lists;
     }

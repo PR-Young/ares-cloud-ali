@@ -93,7 +93,7 @@
         </if>
     </select>
 
-    <select id="selectList" parameterType="com.ares.core.model.system.SysDept" resultMap="SysDept">
+    <select id="selectList" parameterType="com.ares.core.model.query.SysDeptQuery" resultMap="SysDept">
         select
         <include refid="Base_Column_List"/>
         from `sys_dept`

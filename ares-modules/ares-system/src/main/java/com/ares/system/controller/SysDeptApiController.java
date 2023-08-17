@@ -23,6 +23,7 @@ package com.ares.system.controller;
 import com.ares.core.controller.BaseController;
 import com.ares.core.model.base.AjaxResult;
 import com.ares.core.model.page.TableDataInfo;
+import com.ares.core.model.query.SysDeptQuery;
 import com.ares.core.model.system.SysDept;
 import com.ares.core.utils.StringUtils;
 import com.ares.security.common.SecurityUtils;
@@ -58,7 +59,7 @@ public class SysDeptApiController extends BaseController {
     @PreAuthorize("hasAnyAuthority('sysDept:list')")
     @RequestMapping("list")
     @ApiOperation(value = "部门列表", response = TableDataInfo.class)
-    public TableDataInfo list(SysDept sysDept) {
+    public TableDataInfo list(SysDeptQuery sysDept) {
         startPage();
         List<SysDept> sysDeptList = sysDeptService.list(sysDept);
         return getDataTable(sysDeptList);

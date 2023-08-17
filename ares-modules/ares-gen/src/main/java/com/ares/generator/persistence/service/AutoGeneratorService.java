@@ -125,17 +125,20 @@ public class AutoGeneratorService {
                 switch (config.getGeneratorLevel()) {
                     case 1:
                         generateCode(entityModel, templatePath, "Entity.ftl", entityDir, "", ".java", zip);
+                        generateCode(entityModel, templatePath, "EntityQuery.ftl", entityDir, "", "Query.java", zip);
                         generateCode(entityModel, templatePath, "EntityMapper.ftl", entityDir, "", "Mapper.xml", zip);
                         generateCode(entityModel, templatePath, "EntityDao.ftl", entityDir, "I", "Dao.java", zip);
                         break;
                     case 2:
                         generateCode(entityModel, templatePath, "Entity.ftl", entityDir, "", ".java", zip);
+                        generateCode(entityModel, templatePath, "EntityQuery.ftl", entityDir, "", "Query.java", zip);
                         generateCode(entityModel, templatePath, "EntityMapper.ftl", entityDir, "", "Mapper.xml", zip);
                         generateCode(entityModel, templatePath, "EntityDao.ftl", entityDir, "I", "Dao.java", zip);
                         generateCode(entityModel, templatePath, "EntityService.ftl", entityDir, "", "Service.java", zip);
                         break;
                     case 3:
                         generateCode(entityModel, templatePath, "Entity.ftl", entityDir, "", ".java", zip);
+                        generateCode(entityModel, templatePath, "EntityQuery.ftl", entityDir, "", "Query.java", zip);
                         generateCode(entityModel, templatePath, "EntityDao.ftl", entityDir, "I", "Dao.java", zip);
                         generateCode(entityModel, templatePath, "EntityService.ftl", entityDir, "", "Service.java", zip);
                         generateCode(entityModel, templatePath, "EntityMapper.ftl", entityDir, "", "Mapper.xml", zip);

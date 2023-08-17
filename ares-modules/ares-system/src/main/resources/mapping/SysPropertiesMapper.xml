@@ -98,7 +98,7 @@
         </if>
     </select>
 
-    <select id="selectList" parameterType="com.ares.core.model.system.SysProperties"
+    <select id="selectList" parameterType="com.ares.core.model.query.SysPropertiesQuery"
             resultMap="SysProperties">
         select
         <include refid="Base_Column_List"/>

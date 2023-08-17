@@ -24,6 +24,7 @@ import com.ares.core.controller.BaseController;
 import com.ares.core.model.base.AjaxResult;
 import com.ares.core.model.page.TableDataInfo;
 import com.ares.core.utils.StringUtils;
+import com.ares.flowable.model.query.SysTaskFormQuery;
 import com.ares.flowable.persistence.model.SysTaskForm;
 import com.ares.flowable.persistence.service.SysTaskFormService;
 import com.ares.security.common.SecurityUtils;
@@ -53,7 +54,7 @@ public class SysTaskFormApiController extends BaseController {
     @PreAuthorize("hasAnyAuthority('sysTaskForm:list')")
     @RequestMapping("list")
     @ApiOperation(value = "列表", response = TableDataInfo.class)
-    public TableDataInfo list(SysTaskForm sysTaskForm) {
+    public TableDataInfo list(SysTaskFormQuery sysTaskForm) {
         startPage();
         List<SysTaskForm> sysTaskFormList = sysTaskFormService.list(sysTaskForm);
         return getDataTable(sysTaskFormList);

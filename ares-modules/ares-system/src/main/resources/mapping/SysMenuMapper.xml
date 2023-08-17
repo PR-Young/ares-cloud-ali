@@ -145,7 +145,7 @@
         where `RoleId` = #{roleId,jdbcType=VARCHAR}
     </select>
 
-    <select id="selectList" parameterType="com.ares.core.model.system.SysMenu" resultMap="SysMenu">
+    <select id="selectList" parameterType="com.ares.core.model.query.SysMenuQuery" resultMap="SysMenu">
         select
         <include refid="Base_Column_List"/>
         from `sys_menu`
@@ -162,7 +162,7 @@
         order by `Order` asc
     </select>
 
-    <select id="selectListByUser" parameterType="com.ares.core.model.system.SysMenu" resultMap="SysMenu">
+    <select id="selectListByUser" parameterType="com.ares.core.model.query.SysMenuQuery" resultMap="SysMenu">
         select
         <include refid="Base_Column_List"/>
         from `sys_menu` menu
