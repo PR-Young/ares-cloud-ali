@@ -31,12 +31,15 @@ import com.ares.redis.utils.RedisUtil;
 import com.ares.security.common.SecurityUtils;
 import com.ares.security.jwt.JwtAuthenticationToken;
 import com.ares.system.service.SysMenuService;
-import com.ares.system.utils.AresCommonUtils;
 import com.ares.system.service.SysRoleService;
 import com.ares.system.service.SysUserService;
+import com.ares.system.utils.AresCommonUtils;
 import com.wf.captcha.ArithmeticCaptcha;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,7 +58,7 @@ import java.util.*;
  * @author: Young 2020/05/04
  **/
 @RestController
-@Api(value = "系统登录API", tags = {"系统登录"})
+@Tag(name = "LoginApiController", description = "系统登录")
 public class LoginApiController {
     private Logger logger = LoggerFactory.getLogger(LoginApiController.class);
 
@@ -82,7 +85,7 @@ public class LoginApiController {
         this.authenticationManager = authenticationManager;
     }
 
-    @ApiOperation(value = "登录", response = Object.class)
+    @Operation(summary = "登录", responses = {@ApiResponse(content = @Content(schema = @Schema(implementation = Object.class)))})
     @PostMapping("login")
     public Object login(HttpServletRequest request, HttpServletResponse response) throws Exception {
         Map<String, Object> map = ServletUtils.getParameter();
@@ -108,19 +111,19 @@ public class LoginApiController {
 
 
     @RequestMapping("unAuth")
-    @ApiOperation(value = "未登录", response = Object.class)
+    @Operation(summary = "未登录", responses = {@ApiResponse(content = @Content(schema = @Schema(implementation = Object.class)))})
     public Object unAuth(HttpServletRequest request, HttpServletResponse response) {
         return AjaxResult.unLogin();
     }
 
     @RequestMapping("unauthorized")
-    @ApiOperation(value = "无权限", response = Object.class)
+    @Operation(summary = "无权限", responses = {@ApiResponse(content = @Content(schema = @Schema(implementation = Object.class)))})
     public Object unauthorized(HttpServletRequest request, HttpServletResponse response) {
         return AjaxResult.error(HttpStatus.UNAUTHORIZED.value(), "用户无权限！");
     }
 
     @RequestMapping("getInfo")
-    @ApiOperation(value = "获取登录信息", response = Object.class)
+    @Operation(summary = "获取登录信息", responses = {@ApiResponse(content = @Content(schema = @Schema(implementation = Object.class)))})
     public Object getInfo(HttpServletRequest request, HttpServletResponse response) throws Exception {
         SysUser user = SecurityUtils.getUser();
         List<SysRole> roleList = roleService.getRoleByUserId(user.getId());
@@ -142,7 +145,7 @@ public class LoginApiController {
     }
 
     @RequestMapping("getRouters")
-    @ApiOperation(value = "获取路由", response = Object.class)
+    @Operation(summary = "获取路由", responses = {@ApiResponse(content = @Content(schema = @Schema(implementation = Object.class)))})
     public Object getRouters() throws Exception {
         SysUser user = SecurityUtils.getUser();
         List<SysMenu> menus = menuService.getAll(user.getId());

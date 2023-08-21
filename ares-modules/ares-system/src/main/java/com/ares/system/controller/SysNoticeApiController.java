@@ -30,8 +30,11 @@ import com.ares.core.utils.StringUtils;
 import com.ares.security.common.SecurityUtils;
 import com.ares.system.service.SysNoticeService;
 import com.ares.system.websocket.WebSocketServer;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -46,7 +49,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/system/notice/*")
-@Api(value = "通知公告API", tags = {"通知公告"})
+@Tag(name = "SysNoticeApiController", description = "通知公告")
 public class SysNoticeApiController extends BaseController {
 
     private SysNoticeService sysNoticeService;
@@ -58,7 +61,7 @@ public class SysNoticeApiController extends BaseController {
 
     @PreAuthorize("hasAnyAuthority('notice:list')")
     @RequestMapping("list")
-    @ApiOperation(value = "通知公告列表", response = TableDataInfo.class)
+    @Operation(summary = "通知公告列表", responses = {@ApiResponse(content = @Content(schema = @Schema(implementation = TableDataInfo.class)))})
     public TableDataInfo list(SysNoticeQuery sysNotice) {
         startPage();
         List<SysNotice> sysNoticeList = sysNoticeService.list(sysNotice);
@@ -66,14 +69,14 @@ public class SysNoticeApiController extends BaseController {
     }
 
     @GetMapping("{noticeId}")
-    @ApiOperation(value = "根据Id获取通知公告", response = Object.class)
+    @Operation(summary = "根据Id获取通知公告", responses = {@ApiResponse(content = @Content(schema = @Schema(implementation = Object.class)))})
     public Object getInfo(@PathVariable Long noticeId) {
         return AjaxResult.successData(sysNoticeService.getById(noticeId));
     }
 
     @PreAuthorize("hasAnyAuthority('notice:edit')")
     @PostMapping("edit")
-    @ApiOperation(value = "新增/修改通知公告", response = Object.class)
+    @Operation(summary = "新增/修改通知公告", responses = {@ApiResponse(content = @Content(schema = @Schema(implementation = Object.class)))})
     public Object edit(@Validated @RequestBody SysNotice sysNotice) throws Exception {
         if (StringUtils.isEmpty(sysNotice.getId())) {
             sysNotice.setCreator(SecurityUtils.getUser().getId());
@@ -88,20 +91,20 @@ public class SysNoticeApiController extends BaseController {
 
     @PreAuthorize("hasAnyAuthority('notice:delete')")
     @DeleteMapping("{noticeIds}")
-    @ApiOperation(value = "删除通知公告", response = Object.class)
+    @Operation(summary = "删除通知公告", responses = {@ApiResponse(content = @Content(schema = @Schema(implementation = Object.class)))})
     public Object remove(@PathVariable Long[] noticeIds) {
         sysNoticeService.deleteByIds(Arrays.asList(noticeIds));
         return AjaxResult.success();
     }
 
     @GetMapping("noticeNum")
-    @ApiOperation(value = "获取通知公告数量", response = Object.class)
+    @Operation(summary = "获取通知公告数量", responses = {@ApiResponse(content = @Content(schema = @Schema(implementation = Object.class)))})
     public Object noticeNum() throws UserException {
         return AjaxResult.successData(sysNoticeService.noticeNum(SecurityUtils.getUser().getId()));
     }
 
     @GetMapping("getNotices")
-    @ApiOperation(value = "通知公告时间线", response = Object.class)
+    @Operation(summary = "通知公告时间线", responses = {@ApiResponse(content = @Content(schema = @Schema(implementation = Object.class)))})
     public Object getNotices() throws Exception {
         WebSocketServer.sendInfo(String.valueOf(0), SecurityUtils.getUser().getAccount());
         return AjaxResult.successData(sysNoticeService.getNotices(SecurityUtils.getUser().getId()));

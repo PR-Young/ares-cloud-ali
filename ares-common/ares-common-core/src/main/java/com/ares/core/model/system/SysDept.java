@@ -26,19 +26,18 @@ import com.ares.core.serializer.LongJsonDeserializer;
 import com.ares.core.serializer.LongJsonSerializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 @Data
-@ApiModel(value = "SysDept对象", description = "部门对象")
+@Schema(name = "SysDept对象", description = "部门对象")
 public class SysDept extends BaseModel {
     private static final long serialVersionUID = -2238247302831731612L;
-    @ApiModelProperty("部门编号")
+    @Schema(description = "部门编号")
     private String code;
-    @ApiModelProperty("部门名称")
+    @Schema(description = "部门名称")
     private String deptName;
-    @ApiModelProperty("父部门Id")
+    @Schema(description = "父部门Id")
     @JsonSerialize(using = LongJsonSerializer.class)
     @JsonDeserialize(using = LongJsonDeserializer.class)
     private Long parentDeptId;

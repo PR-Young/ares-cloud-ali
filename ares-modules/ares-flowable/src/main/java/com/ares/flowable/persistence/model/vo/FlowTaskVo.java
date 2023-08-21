@@ -20,8 +20,7 @@
 
 package com.ares.flowable.persistence.model.vo;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.util.List;
@@ -34,34 +33,34 @@ import java.util.Map;
  * @see: com.ares.flowable.persistence.model.vo.FlowTaskVo.java
  **/
 @Data
-@ApiModel("工作流任务相关--请求参数")
+@Schema(description = "工作流任务相关--请求参数")
 public class FlowTaskVo {
 
-    @ApiModelProperty("任务Id")
+    @Schema(description = "任务Id")
     private String taskId;
 
-    @ApiModelProperty("用户Id")
+    @Schema(description = "用户Id")
     private String userId;
 
-    @ApiModelProperty("任务意见")
+    @Schema(description = "任务意见")
     private String comment;
 
-    @ApiModelProperty("流程实例Id")
+    @Schema(description = "流程实例Id")
     private String instanceId;
 
-    @ApiModelProperty("节点")
+    @Schema(description = "节点")
     private String targetKey;
 
-    @ApiModelProperty("流程变量信息")
+    @Schema(description = "流程变量信息")
     private Map<String, Object> values;
 
-    @ApiModelProperty("审批人")
+    @Schema(description = "审批人")
     private String assignee;
 
-    @ApiModelProperty("候选人")
+    @Schema(description = "候选人")
     private List<String> candidateUsers;
 
-    @ApiModelProperty("审批组")
+    @Schema(description = "审批组")
     private List<String> candidateGroups;
 
 }

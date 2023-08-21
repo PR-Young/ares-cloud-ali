@@ -25,17 +25,16 @@ import com.ares.core.serializer.LongJsonDeserializer;
 import com.ares.core.serializer.LongJsonSerializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 @Data
-@ApiModel(value = "SysTaskForm对象", description = "")
+@Schema(name = "SysTaskForm对象", description = "")
 public class SysTaskForm extends BaseModel {
-    @ApiModelProperty("")
+    @Schema(description = "")
     @JsonSerialize(using = LongJsonSerializer.class)
     @JsonDeserialize(using = LongJsonDeserializer.class)
     private Long formId;
-    @ApiModelProperty("")
+    @Schema(description = "")
     private String taskId;
 }

@@ -61,7 +61,7 @@ public class SysTaskFormService implements BaseService<SysTaskForm> {
      * @return 流程任务关联单
      */
 
-    public List<SysTaskForm> selectSysTaskFormList(SysTaskForm sysTaskForm) {
+    public List<SysTaskForm> selectSysTaskFormList(SysTaskFormQuery sysTaskForm) {
         return sysTaskFormDao.selectList(sysTaskForm);
     }
 

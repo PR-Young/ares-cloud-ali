@@ -25,7 +25,11 @@ import com.ares.core.model.page.TableDataInfo;
 import com.ares.core.model.query.SysLogQuery;
 import com.ares.core.model.system.SysLog;
 import com.ares.system.service.SysLogService;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,6 +43,7 @@ import java.util.List;
  * @date: 2022/1/10
  * @see: com.ares.system.controller.SysLogApiController.java
  **/
+@Tag(name = "SysLogApiController")
 @RequestMapping("/system/log/*")
 @RestController
 public class SysLogApiController extends BaseController {
@@ -52,7 +57,7 @@ public class SysLogApiController extends BaseController {
 
     @PreAuthorize("hasAnyAuthority('log:list')")
     @RequestMapping("list")
-    @ApiOperation(value = "操作日志列表", response = TableDataInfo.class)
+    @Operation(summary = "操作日志列表", responses = {@ApiResponse(content = @Content(schema = @Schema(implementation = TableDataInfo.class)))})
     public TableDataInfo list(SysLogQuery sysLog) {
         startPage();
         List<SysLog> sysLogList = sysLogService.list(sysLog);

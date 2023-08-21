@@ -26,8 +26,7 @@ import com.ares.core.serializer.LongJsonDeserializer;
 import com.ares.core.serializer.LongJsonSerializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import javax.validation.constraints.NotEmpty;
@@ -40,40 +39,40 @@ import java.util.List;
  * @author: Young 2020/01/23
  **/
 @Data
-@ApiModel(value = "SysMenu对象", description = "系统菜单")
+@Schema(name = "SysMenu对象", description = "系统菜单")
 public class SysMenu extends BaseModel implements Serializable {
 
     private static final long serialVersionUID = -7528858814504220374L;
-    @ApiModelProperty(value = "菜单名称", required = true)
+    @Schema(description = "菜单名称", required = true)
     @NotEmpty(message = "名称不能为空")
     private String name;
-    @ApiModelProperty("菜单描述")
+    @Schema(description = "菜单描述")
     private String description;
 
-    @ApiModelProperty(value = "菜单地址", required = true)
+    @Schema(description = "菜单地址", required = true)
     @NotEmpty(message = "url不能为空")
     private String url;
-    @ApiModelProperty("菜单路由")
+    @Schema(description = "菜单路由")
     private String path;
-    @ApiModelProperty("")
+    @Schema(description = "")
     private Integer isBlank;
 
-    @ApiModelProperty(value = "父菜单", required = true)
+    @Schema(description = "父菜单", required = true)
     @NotEmpty(message = "父菜单不能为空")
     @JsonSerialize(using = LongJsonSerializer.class)
     @JsonDeserialize(using = LongJsonDeserializer.class)
     private Long pId;
-    @ApiModelProperty("菜单图标")
+    @Schema(description = "菜单图标")
     private String icon;
 
-    @ApiModelProperty(value = "菜单权限", required = true)
+    @Schema(description = "菜单权限", required = true)
     @NotEmpty(message = "权限不能为空")
     private String perms;
-    @ApiModelProperty("菜单分类，0：目录1：菜单2：按钮")
+    @Schema(description = "菜单分类，0：目录1：菜单2：按钮")
     private Integer type;
-    @ApiModelProperty("菜单排序")
+    @Schema(description = "菜单排序")
     private Integer order;
-    @ApiModelProperty("是否可见")
+    @Schema(description = "是否可见")
     private Integer visible;
 
     private Integer childCount;

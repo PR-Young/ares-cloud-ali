@@ -36,8 +36,11 @@ import com.ares.security.common.SecurityUtils;
 import com.ares.system.service.SysPostService;
 import com.ares.system.service.SysRoleService;
 import com.ares.system.service.SysUserService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -58,7 +61,7 @@ import java.util.List;
  **/
 @RestController
 @RequestMapping("/system/user/*")
-@Api(value = "系统用户API", tags = {"系统用户"})
+@Tag(name = "SysUserApiController", description = "系统用户")
 public class SysUserApiController extends BaseController {
 
     private SysUserService userService;
@@ -76,7 +79,7 @@ public class SysUserApiController extends BaseController {
 
     @PreAuthorize("hasAnyAuthority('user:list')")
     @RequestMapping("list")
-    @ApiOperation(value = "用户列表", response = TableDataInfo.class)
+    @Operation(summary = "用户列表", responses = {@ApiResponse(content = @Content(schema = @Schema(implementation = TableDataInfo.class)))})
     public TableDataInfo list(SysUserQuery user) {
         startPage();
         List<SysUser> userList = userService.selectUserList(user);
@@ -84,7 +87,7 @@ public class SysUserApiController extends BaseController {
     }
 
     @GetMapping(value = {"", "{userId}"})
-    @ApiOperation(value = "根据用户Id获取用户", response = Object.class)
+    @Operation(summary = "根据用户Id获取用户", responses = {@ApiResponse(content = @Content(schema = @Schema(implementation = Object.class)))})
     public Object getInfo(@PathVariable(value = "userId", required = false) Long userId) {
         AjaxResult result = new AjaxResult();
         result.put("code", HttpStatus.OK.value());
@@ -99,7 +102,7 @@ public class SysUserApiController extends BaseController {
 
     @PreAuthorize("hasAnyAuthority('user:edit')")
     @PostMapping("edit")
-    @ApiOperation(value = "新增/修改用户", response = Object.class)
+    @Operation(summary = "新增/修改用户", responses = {@ApiResponse(content = @Content(schema = @Schema(implementation = Object.class)))})
     public Object edit(@Validated @RequestBody SysUser user) throws Exception {
         Long userId = 0L;
         if (StringUtils.isEmpty(user.getId())) {
@@ -121,7 +124,7 @@ public class SysUserApiController extends BaseController {
 
     @PreAuthorize("hasAnyAuthority('user:delete')")
     @DeleteMapping("{userIds}")
-    @ApiOperation(value = "删除用户", response = Object.class)
+    @Operation(summary = "删除用户", responses = {@ApiResponse(content = @Content(schema = @Schema(implementation = Object.class)))})
     public Object remove(@PathVariable Long[] userIds) {
         userService.deleteByIds(Arrays.asList(userIds));
         return AjaxResult.success();
@@ -131,14 +134,14 @@ public class SysUserApiController extends BaseController {
      * 重置密码
      */
     @PutMapping("resetPwd")
-    @ApiOperation(value = "重置密码", response = Object.class)
+    @Operation(summary = "重置密码", responses = {@ApiResponse(content = @Content(schema = @Schema(implementation = Object.class)))})
     public Object resetPwd(@RequestBody SysUser user) {
         userService.resetPassword(user.getId());
         return AjaxResult.success();
     }
 
     @RequestMapping("export")
-    @ApiOperation(value = "导出用户")
+    @Operation(summary = "导出用户")
     public void export(SysUserQuery user, HttpServletResponse response) {
         List<SysUser> userList = userService.selectUserList(user);
         String fileName = "用户信息" + System.currentTimeMillis();
@@ -151,7 +154,7 @@ public class SysUserApiController extends BaseController {
     }
 
     @RequestMapping("importTemplate")
-    @ApiOperation(value = "导入模版")
+    @Operation(summary = "导入模版")
     public void importTemplate(HttpServletResponse response) {
         List<SysUser> userList = new ArrayList<>();
         String fileName = "用户信息模版" + System.currentTimeMillis();
@@ -165,7 +168,7 @@ public class SysUserApiController extends BaseController {
 
     @RequestMapping("importData")
     @PreAuthorize("hasAnyAuthority('user:import')")
-    @ApiOperation(value = "导入用户")
+    @Operation(summary = "导入用户")
     public Object importData(MultipartFile file, HttpServletRequest request) throws Exception {
         InputStream inputStream = file.getInputStream();
         boolean needUpdate = request.getParameter("updateSupport") == "1" ? true : false;
@@ -176,7 +179,7 @@ public class SysUserApiController extends BaseController {
     }
 	
 	@RequestMapping("kick")
-    @ApiOperation(value = "下线", response = Object.class)
+    @Operation(summary = "下线", responses = {@ApiResponse(content = @Content(schema = @Schema(implementation = Object.class)))})
     public Object kickUser(@RequestParam("username") String userName) {
         SysUser user = userService.getUserByName(userName);
         RedisUtil.del(Constants.LOGIN_INFO + userName);

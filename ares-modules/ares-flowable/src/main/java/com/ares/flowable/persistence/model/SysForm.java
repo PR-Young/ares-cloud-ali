@@ -21,17 +21,16 @@
 package com.ares.flowable.persistence.model;
 
 import com.ares.core.model.base.BaseModel;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 @Data
-@ApiModel(value = "SysForm对象", description = "")
+@Schema(name = "SysForm对象", description = "")
 public class SysForm extends BaseModel {
-    @ApiModelProperty("")
+    @Schema(description = "")
     private String formName;
-    @ApiModelProperty("")
+    @Schema(description = "")
     private String formContent;
-    @ApiModelProperty("")
+    @Schema(description = "")
     private String remark;
 }

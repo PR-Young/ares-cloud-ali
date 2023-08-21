@@ -21,21 +21,20 @@
 package com.ares.system.model;
 
 import com.ares.core.model.base.BaseModel;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 @Data
-@ApiModel(value = "Articles对象", description = "")
+@Schema(name = "Articles对象", description = "")
 public class Articles extends BaseModel {
-    @ApiModelProperty("")
+    @Schema(description = "")
     private String content;
-    @ApiModelProperty("")
+    @Schema(description = "")
     private String name;
-    @ApiModelProperty("")
+    @Schema(description = "")
     private String status;
-    @ApiModelProperty("")
+    @Schema(description = "")
     private String type;
-    @ApiModelProperty("")
+    @Schema(description = "")
     private String title;
 }

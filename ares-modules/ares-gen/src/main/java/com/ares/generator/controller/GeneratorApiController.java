@@ -27,8 +27,11 @@ import com.ares.core.utils.DateUtils;
 import com.ares.core.utils.ServletUtils;
 import com.ares.generator.persistence.service.AutoGeneratorService;
 import com.ares.generator.persistence.service.GeneratorService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -49,7 +52,7 @@ import java.util.Map;
  **/
 @RestController
 @RequestMapping("/tool/gen/*")
-@Api(value = "代码生成API", tags = {"代码生成"})
+@Tag(name = "GeneratorApiController", description = "代码生成")
 public class GeneratorApiController extends BaseController {
 
     private GeneratorService generatorService;
@@ -62,7 +65,7 @@ public class GeneratorApiController extends BaseController {
     }
 
     @GetMapping("db/list")
-    @ApiOperation(value = "表信息", response = TableDataInfo.class)
+    @Operation(summary = "表信息", responses = {@ApiResponse(content = @Content(schema = @Schema(implementation = TableDataInfo.class)))})
     public TableDataInfo dataList(HttpServletRequest request, HttpServletResponse response) {
         Map<String, Object> map = new HashMap<>();
         map.put("tableName", ServletUtils.getParameter("tableName"));
@@ -75,7 +78,7 @@ public class GeneratorApiController extends BaseController {
     }
 
     @GetMapping(value = "column/{tableName}")
-    @ApiOperation(value = "根据表获取字段", response = TableDataInfo.class)
+    @Operation(summary = "根据表获取字段", responses = {@ApiResponse(content = @Content(schema = @Schema(implementation = TableDataInfo.class)))})
     public TableDataInfo columnList(@PathVariable("tableName") String tableName) {
         TableDataInfo dataInfo = new TableDataInfo();
         List<Map<String, Object>> list = generatorService.selectTableColumnListByTableName(tableName);
@@ -85,7 +88,7 @@ public class GeneratorApiController extends BaseController {
     }
 
     @GetMapping("genCode/{tableName}")
-    @ApiOperation(value = "生成代码", response = TableDataInfo.class)
+    @Operation(summary = "生成代码", responses = {@ApiResponse(content = @Content(schema = @Schema(implementation = TableDataInfo.class)))})
     public void genCode(HttpServletResponse response, @PathVariable("tableName") String tableName) throws IOException {
         byte[] data = autoGeneratorService.generator(tableName);
         genCode(response, data);

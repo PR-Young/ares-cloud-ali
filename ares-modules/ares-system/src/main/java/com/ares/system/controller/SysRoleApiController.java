@@ -31,8 +31,11 @@ import com.ares.core.utils.StringUtils;
 import com.ares.security.common.SecurityUtils;
 import com.ares.system.service.SysRoleService;
 import com.ares.system.service.SysUserService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -47,7 +50,7 @@ import java.util.List;
  **/
 @RestController
 @RequestMapping("/system/role/*")
-@Api(value = "系统角色API", tags = {"系统角色"})
+@Tag(name = "SysRoleApiController", description = "系统角色")
 public class SysRoleApiController extends BaseController {
     private SysRoleService roleService;
     private SysUserService userService;
@@ -60,7 +63,7 @@ public class SysRoleApiController extends BaseController {
 
     @PreAuthorize("hasAnyAuthority('role:list')")
     @RequestMapping("list")
-    @ApiOperation(value = "角色列表", response = TableDataInfo.class)
+    @Operation(summary = "角色列表", responses = {@ApiResponse(content = @Content(schema = @Schema(implementation = TableDataInfo.class)))})
     public TableDataInfo list(SysRoleQuery role) {
         startPage();
         List<SysRole> roleList = roleService.selectRoleList(role);
@@ -68,14 +71,14 @@ public class SysRoleApiController extends BaseController {
     }
 
     @GetMapping("{roleId}")
-    @ApiOperation(value = "根据角色Id获取用户", response = Object.class)
+    @Operation(summary = "根据角色Id获取用户", responses = {@ApiResponse(content = @Content(schema = @Schema(implementation = Object.class)))})
     public Object getInfo(@PathVariable Long roleId) {
         return AjaxResult.successData(roleService.getById(roleId));
     }
 
     @PreAuthorize("hasAnyAuthority('role:edit')")
     @PostMapping("edit")
-    @ApiOperation(value = "新增/修改角色", response = Object.class)
+    @Operation(summary = "新增/修改角色", responses = {@ApiResponse(content = @Content(schema = @Schema(implementation = Object.class)))})
     public Object edit(@Validated @RequestBody SysRole role) throws Exception {
         Long roleId = 0L;
         if (StringUtils.isEmpty(role.getId())) {
@@ -95,27 +98,27 @@ public class SysRoleApiController extends BaseController {
 
     @PreAuthorize("hasAnyAuthority('role:delete')")
     @DeleteMapping("{roleIds}")
-    @ApiOperation(value = "删除用户", response = Object.class)
+    @Operation(summary = "删除用户", responses = {@ApiResponse(content = @Content(schema = @Schema(implementation = Object.class)))})
     public Object remove(@PathVariable Long[] roleIds) {
         roleService.deleteByIds(Arrays.asList(roleIds));
         return AjaxResult.success();
     }
 
     @PutMapping("dataScope")
-    @ApiOperation(value = "角色权限分配", response = Object.class)
+    @Operation(summary = "角色权限分配", responses = {@ApiResponse(content = @Content(schema = @Schema(implementation = Object.class)))})
     public Object dataScope(@RequestBody SysRole role) {
         roleService.authDataScope(role);
         return AjaxResult.success();
     }
 
     @GetMapping("optionselect")
-    @ApiOperation(value = "角色下拉选项", response = Object.class)
+    @Operation(summary = "角色下拉选项", responses = {@ApiResponse(content = @Content(schema = @Schema(implementation = Object.class)))})
     public Object optionSelect() {
         return AjaxResult.successData(roleService.getAll());
     }
 
     @GetMapping("roleUserselect/{roleId}")
-    @ApiOperation(value = "根据角色Id获取用户", response = Object.class)
+    @Operation(summary = "根据角色Id获取用户", responses = {@ApiResponse(content = @Content(schema = @Schema(implementation = Object.class)))})
     public Object roleUserselect(@PathVariable Long roleId) {
         AjaxResult result = AjaxResult.success();
         result.put("allUser", userService.selectUserList(new SysUserQuery()));

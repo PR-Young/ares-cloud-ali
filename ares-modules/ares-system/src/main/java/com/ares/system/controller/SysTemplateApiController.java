@@ -29,8 +29,11 @@ import com.ares.core.model.system.SysTemplate;
 import com.ares.core.utils.StringUtils;
 import com.ares.security.common.SecurityUtils;
 import com.ares.system.service.SysTemplateService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -45,7 +48,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/sysTemplate/*")
-@Api(value = "系统模版API", tags = {"系统模版"})
+@Tag(name = "SysTemplateApiController", description = "系统模版")
 public class SysTemplateApiController extends BaseController {
 
     private SysTemplateService sysTemplateService;
@@ -57,7 +60,7 @@ public class SysTemplateApiController extends BaseController {
 
     @PreAuthorize("hasAnyAuthority('sysTemplate:list')")
     @RequestMapping("list")
-    @ApiOperation(value = "模版列表", response = TableDataInfo.class)
+    @Operation(summary = "模版列表", responses = {@ApiResponse(content = @Content(schema = @Schema(implementation = TableDataInfo.class)))})
     public TableDataInfo list(SysTemplateQuery sysTemplate) {
         startPage();
         List<SysTemplate> sysTemplateList = sysTemplateService.list(sysTemplate);
@@ -65,14 +68,14 @@ public class SysTemplateApiController extends BaseController {
     }
 
     @GetMapping("{sysTemplateId}")
-    @ApiOperation(value = "根据模版Id获取模版", response = Object.class)
+    @Operation(summary = "根据模版Id获取模版", responses = {@ApiResponse(content = @Content(schema = @Schema(implementation = Object.class)))})
     public Object getInfo(@PathVariable Long sysTemplateId) {
         return AjaxResult.successData(sysTemplateService.getById(sysTemplateId));
     }
 
     @PreAuthorize("hasAnyAuthority('sysTemplate:edit')")
     @PostMapping("edit")
-    @ApiOperation(value = "新增/修改模版", response = Object.class)
+    @Operation(summary = "新增/修改模版", responses = {@ApiResponse(content = @Content(schema = @Schema(implementation = Object.class)))})
     public Object edit(@Validated @RequestBody SysTemplate sysTemplate) throws Exception {
         if (StringUtils.isEmpty(sysTemplate.getId())) {
             sysTemplate.setCreator(SecurityUtils.getUser().getId());
@@ -86,7 +89,7 @@ public class SysTemplateApiController extends BaseController {
 
     @PreAuthorize("hasAnyAuthority('sysTemplate:delete')")
     @DeleteMapping("{sysTemplateIds}")
-    @ApiOperation(value = "删除模版", response = Object.class)
+    @Operation(summary = "删除模版", responses = {@ApiResponse(content = @Content(schema = @Schema(implementation = Object.class)))})
     public Object remove(@PathVariable Long[] sysTemplateIds) {
         sysTemplateService.deleteByIds(Arrays.asList(sysTemplateIds));
         return AjaxResult.success();

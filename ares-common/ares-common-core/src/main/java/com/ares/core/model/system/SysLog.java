@@ -22,8 +22,7 @@ package com.ares.core.model.system;
 
 
 import com.ares.core.model.base.BaseModel;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -35,20 +34,20 @@ import java.io.Serializable;
  **/
 @Data
 @Accessors(chain = true)
-@ApiModel(value = "SysLog对象", description = "系统日志")
+@Schema(name = "SysLog对象", description = "系统日志")
 public class SysLog extends BaseModel implements Serializable {
 
     private static final long serialVersionUID = -2925066346168762533L;
-    @ApiModelProperty("主机IP")
+    @Schema(description = "主机IP")
     private String hostIp;
-    @ApiModelProperty("用户名")
+    @Schema(description = "用户名")
     private String userName;
-    @ApiModelProperty("url地址")
+    @Schema(description = "url地址")
     private String url;
-    @ApiModelProperty("操作参数")
+    @Schema(description = "操作参数")
     private String operParams;
-    @ApiModelProperty("备注")
+    @Schema(description = "备注")
     private String notes;
-    @ApiModelProperty("请求方式")
+    @Schema(description = "请求方式")
     private String requestMethod;
 }

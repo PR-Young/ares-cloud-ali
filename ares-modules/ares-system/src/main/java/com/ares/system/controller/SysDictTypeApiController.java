@@ -28,8 +28,11 @@ import com.ares.core.model.system.SysDictType;
 import com.ares.core.utils.StringUtils;
 import com.ares.security.common.SecurityUtils;
 import com.ares.system.service.SysDictTypeService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -44,7 +47,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/system/dict/type/*")
-@Api(value = "字典类别API", tags = {"字典类别"})
+@Tag(name = "SysDictTypeApiController", description = "字典类别")
 public class SysDictTypeApiController extends BaseController {
 
     private SysDictTypeService sysDictTypeService;
@@ -56,7 +59,7 @@ public class SysDictTypeApiController extends BaseController {
 
     @PreAuthorize("hasAnyAuthority('sysDictType:list')")
     @RequestMapping("list")
-    @ApiOperation(value = "字典类别列表", response = TableDataInfo.class)
+    @Operation(summary = "字典类别列表", responses = {@ApiResponse(content = @Content(schema = @Schema(implementation = TableDataInfo.class)))})
     public TableDataInfo list(SysDictTypeQuery sysDictType) {
         startPage();
         List<SysDictType> sysDictTypeList = sysDictTypeService.list(sysDictType);
@@ -64,14 +67,14 @@ public class SysDictTypeApiController extends BaseController {
     }
 
     @GetMapping("{sysDictTypeId}")
-    @ApiOperation(value = "根据Id获取字典类别", response = Object.class)
+    @Operation(summary = "根据Id获取字典类别", responses = {@ApiResponse(content = @Content(schema = @Schema(implementation = Object.class)))})
     public Object getInfo(@PathVariable Long sysDictTypeId) {
         return AjaxResult.successData(sysDictTypeService.getById(sysDictTypeId));
     }
 
     @PreAuthorize("hasAnyAuthority('sysDictType:edit')")
     @PostMapping("edit")
-    @ApiOperation(value = "编辑字典类别", response = Object.class)
+    @Operation(summary = "编辑字典类别", responses = {@ApiResponse(content = @Content(schema = @Schema(implementation = Object.class)))})
     public Object edit(@Validated @RequestBody SysDictType sysDictType) throws Exception {
         if (StringUtils.isEmpty(sysDictType.getId())) {
             sysDictType.setCreator(SecurityUtils.getUser().getId());
@@ -85,7 +88,7 @@ public class SysDictTypeApiController extends BaseController {
 
     @PreAuthorize("hasAnyAuthority('sysDictType:delete')")
     @DeleteMapping("{sysDictTypeIds}")
-    @ApiOperation(value = "删除字典类别", response = Object.class)
+    @Operation(summary = "删除字典类别", responses = {@ApiResponse(content = @Content(schema = @Schema(implementation = Object.class)))})
     public Object remove(@PathVariable Long[] sysDictTypeIds) {
         sysDictTypeService.deleteByIds(Arrays.asList(sysDictTypeIds));
         return AjaxResult.success();

@@ -20,7 +20,7 @@
 
 package com.ares.system.controller;
 
-import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -33,7 +33,7 @@ import org.springframework.web.multipart.MultipartFile;
  **/
 @RestController
 @RequestMapping("/upload/*")
-@Api(value = "上传文件API", tags = {"上传文件"})
+@Tag(name = "UploadApiController", description = "上传文件")
 public class UploadApiController {
 
     public void upload(MultipartFile file) {

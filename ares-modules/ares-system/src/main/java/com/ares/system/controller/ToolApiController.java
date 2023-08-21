@@ -23,8 +23,11 @@ package com.ares.system.controller;
 
 import com.ares.core.model.base.AjaxResult;
 import com.ares.core.model.server.Server;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -35,24 +38,24 @@ import org.springframework.web.bind.annotation.ResponseBody;
  **/
 @Controller
 @RequestMapping("/")
-@Api(value = "通用工具API", tags = {"通用工具"})
+@Tag(name = "ToolApiController", description = "通用工具")
 public class ToolApiController {
 
     @RequestMapping("monitor/druid/index")
-    @ApiOperation(value = "druid监控", response = String.class)
+    @Operation(summary = "druid监控", responses = {@ApiResponse(content = @Content(schema = @Schema(implementation = String.class)))})
     public String druid() {
         return "redirect:/druid";
     }
 
     @RequestMapping("monitor/actuator/index")
-    @ApiOperation(value = "actuator监控", response = String.class)
+    @Operation(summary = "actuator监控", responses = {@ApiResponse(content = @Content(schema = @Schema(implementation = String.class)))})
     public String actuator() {
         return "redirect:/actuator";
     }
 
     @RequestMapping("monitor/server")
     @ResponseBody
-    @ApiOperation(value = "服务器信息", response = Object.class)
+    @Operation(summary = "服务器信息", responses = {@ApiResponse(content = @Content(schema = @Schema(implementation = Object.class)))})
     public Object server() throws Exception {
         Server server = new Server();
         server.copyTo();
@@ -60,13 +63,13 @@ public class ToolApiController {
     }
 
     @RequestMapping("tool/swagger/index")
-    @ApiOperation(value = "swagger接口", response = String.class)
+    @Operation(summary = "swagger接口", responses = {@ApiResponse(content = @Content(schema = @Schema(implementation = String.class)))})
     public String swagger() {
         return "redirect:/swagger-ui.html";
     }
 
     @RequestMapping("tool/knife4j/index")
-    @ApiOperation(value = "knife4j接口", response = String.class)
+    @Operation(summary = "knife4j接口", responses = {@ApiResponse(content = @Content(schema = @Schema(implementation = String.class)))})
     public String knife4j() {
         return "redirect:/doc.html";
     }

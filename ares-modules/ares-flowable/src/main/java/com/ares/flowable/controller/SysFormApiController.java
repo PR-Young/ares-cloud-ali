@@ -30,8 +30,11 @@ import com.ares.flowable.persistence.model.SysForm;
 import com.ares.flowable.persistence.service.SysDeployFormService;
 import com.ares.flowable.persistence.service.SysFormService;
 import com.ares.security.common.SecurityUtils;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -43,7 +46,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/sysForm/*")
-@Api(value = "API", tags = {"管理"})
+@Tag(name = "SysFormApiController", description = "管理")
 public class SysFormApiController extends BaseController {
 
     private SysFormService sysFormService;
@@ -57,7 +60,7 @@ public class SysFormApiController extends BaseController {
 
     @PreAuthorize("hasAnyAuthority('sysForm:list')")
     @RequestMapping("list")
-    @ApiOperation(value = "列表", response = TableDataInfo.class)
+    @Operation(summary = "列表", responses = {@ApiResponse(content = @Content(schema = @Schema(implementation = TableDataInfo.class)))})
     public TableDataInfo list(SysFormQuery sysForm) {
         startPage();
         List<SysForm> sysFormList = sysFormService.list(sysForm);
@@ -65,14 +68,14 @@ public class SysFormApiController extends BaseController {
     }
 
     @GetMapping("{sysFormId}")
-    @ApiOperation(value = "根据Id获取信息", response = Object.class)
+    @Operation(summary = "根据Id获取信息", responses = {@ApiResponse(content = @Content(schema = @Schema(implementation = Object.class)))})
     public Object getInfo(@PathVariable Long sysFormId) {
         return AjaxResult.successData(sysFormService.getById(sysFormId));
     }
 
     @PreAuthorize("hasAnyAuthority('sysForm:edit')")
     @PostMapping("edit")
-    @ApiOperation(value = "编辑信息", response = Object.class)
+    @Operation(summary = "编辑信息", responses = {@ApiResponse(content = @Content(schema = @Schema(implementation = Object.class)))})
     public Object edit(@Validated @RequestBody SysForm sysForm) throws Exception {
         if (StringUtils.isEmpty(sysForm.getId())) {
             sysForm.setCreator(SecurityUtils.getUser().getId());
@@ -86,7 +89,7 @@ public class SysFormApiController extends BaseController {
 
     @PreAuthorize("hasAnyAuthority('sysForm:delete')")
     @DeleteMapping("{sysFormIds}")
-    @ApiOperation(value = "删除信息", response = Object.class)
+    @Operation(summary = "删除信息", responses = {@ApiResponse(content = @Content(schema = @Schema(implementation = Object.class)))})
     public Object remove(@PathVariable Long[] sysFormIds) {
         sysFormService.deleteByIds(Arrays.asList(sysFormIds));
         return AjaxResult.success();
@@ -95,7 +98,7 @@ public class SysFormApiController extends BaseController {
     /**
      * 挂载流程表单
      */
-    @ApiOperation(value = "流程表单", response = Object.class)
+    @Operation(summary = "流程表单", responses = {@ApiResponse(content = @Content(schema = @Schema(implementation = Object.class)))})
     @PostMapping("/addDeployForm")
     public Object addDeployForm(@RequestBody SysDeployForm sysDeployForm) {
         deployFormService.insert(sysDeployForm);
