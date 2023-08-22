@@ -22,6 +22,7 @@ package com.ares.security.common;
 
 import com.ares.core.config.base.BaseConfig;
 import com.ares.security.jwt.JwtAuthenticationFilter;
+import com.ares.security.jwt.JwtAuthenticationProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -63,12 +64,6 @@ public class WebSecurityConfig {
         this.config = config;
     }
 
-    //@Bean
-    //public WebSecurityCustomizer webSecurityCustomizer() {
-    //    String[] whiteUrl = config.getWhiteUrl().split(",");
-    //    return (web) -> web.ignoring().antMatchers(whiteUrl);
-    //}
-
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         String[] whiteUrl = config.getWhiteUrl().split(",");
@@ -94,9 +89,7 @@ public class WebSecurityConfig {
 
     @Bean
     public DaoAuthenticationProvider daoAuthenticationProvider() {
-        final DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
-        authenticationProvider.setUserDetailsService(userDetailsService);
-        return authenticationProvider;
+        return new JwtAuthenticationProvider(userDetailsService);
     }
 
 

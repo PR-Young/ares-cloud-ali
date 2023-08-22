@@ -32,7 +32,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @date: 2023/5/19
  * @see: com.ares.system.provider.SysDeptProvider.java
  **/
-@DubboService
+@DubboService(version = "1.0.0",interfaceClass = com.ares.api.client.ISysDeptService.class)
 public class SysDeptProvider implements ISysDeptService {
 
     @Autowired

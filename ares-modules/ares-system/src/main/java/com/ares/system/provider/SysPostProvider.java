@@ -29,6 +29,6 @@ import org.apache.dubbo.config.annotation.DubboService;
  * @date: 2023/5/19
  * @see: com.ares.system.provider.SysPostProvider.java
  **/
-@DubboService
+@DubboService(version = "1.0.0",interfaceClass = com.ares.api.client.ISysPostService.class)
 public class SysPostProvider implements ISysPostService {
 }

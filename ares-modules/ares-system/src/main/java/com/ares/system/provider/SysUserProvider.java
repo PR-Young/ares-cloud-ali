@@ -35,7 +35,7 @@ import java.util.List;
  * @date: 2023/5/19
  * @see: com.ares.system.provider.SysUserProvider.java
  **/
-@DubboService
+@DubboService(version = "1.0.0",interfaceClass = com.ares.api.client.ISysUserService.class)
 public class SysUserProvider implements ISysUserService {
     @Autowired
     SysUserService userService;
