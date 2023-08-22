@@ -25,8 +25,8 @@ import com.ares.core.model.query.SysRoleQuery;
 import com.ares.core.model.system.SysRole;
 import com.ares.system.service.SysRoleService;
 import org.apache.dubbo.config.annotation.DubboService;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -38,7 +38,7 @@ import java.util.List;
 @DubboService
 public class SysRoleProvider implements ISysRoleService {
 
-    @Resource
+    @Autowired
     SysRoleService roleService;
 
     @Override

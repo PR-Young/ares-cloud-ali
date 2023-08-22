@@ -24,8 +24,7 @@ import com.ares.api.client.ISysDeptService;
 import com.ares.core.model.system.SysDept;
 import com.ares.system.service.SysDeptService;
 import org.apache.dubbo.config.annotation.DubboService;
-
-import javax.annotation.Resource;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * @description:
@@ -36,7 +35,7 @@ import javax.annotation.Resource;
 @DubboService
 public class SysDeptProvider implements ISysDeptService {
 
-    @Resource
+    @Autowired
     SysDeptService deptService;
     @Override
     public SysDept getByDeptId(Long id) {

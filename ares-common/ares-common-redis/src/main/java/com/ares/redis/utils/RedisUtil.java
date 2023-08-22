@@ -26,10 +26,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
-import org.springframework.util.CollectionUtils;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -100,7 +100,7 @@ public class RedisUtil {
             if (keys.length == 1) {
                 redisTemplate.delete(keys[0]);
             } else {
-                redisTemplate.delete(CollectionUtils.arrayToList(keys));
+                redisTemplate.delete(Arrays.asList(keys));
             }
         }
     }

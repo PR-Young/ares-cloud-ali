@@ -25,8 +25,8 @@ import com.ares.core.model.query.SysUserQuery;
 import com.ares.core.model.system.SysUser;
 import com.ares.system.service.SysUserService;
 import org.apache.dubbo.config.annotation.DubboService;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -37,7 +37,7 @@ import java.util.List;
  **/
 @DubboService
 public class SysUserProvider implements ISysUserService {
-    @Resource
+    @Autowired
     SysUserService userService;
 
     @Override
