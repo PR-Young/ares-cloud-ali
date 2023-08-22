@@ -31,3 +31,7 @@ spring:
       eager: true
       transport:
         dashboard: 127.0.0.1:8858
+
+management:
+  endpoints:
+    enabled-by-default: false
