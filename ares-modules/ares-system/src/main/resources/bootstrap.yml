@@ -35,7 +35,7 @@ spring:
 
 dubbo:
   application:
-    name: ares-system
+    name: ares-system-dubbo
   registry:
     address: nacos://localhost:8848
   config-center:
@@ -46,4 +46,7 @@ dubbo:
     # dubbo 协议
     name: dubbo
     # dubbo 协议端口（ -1 表示自增端口，从 20880 开始）
-    port: -1
+    port: 20880
+  consumer:
+    check: false
+    timeout: 100000

@@ -46,9 +46,9 @@ import java.util.stream.Collectors;
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-    @DubboReference
+    @DubboReference(version = "1.0.0",interfaceClass = com.ares.api.client.ISysUserService.class)
     private ISysUserService userService;
-    @DubboReference
+    @DubboReference(version = "1.0.0",interfaceClass = com.ares.api.client.ISysRoleService.class)
     private ISysRoleService roleService;
     
     @Log

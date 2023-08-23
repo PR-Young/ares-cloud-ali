@@ -153,7 +153,7 @@ public class SecurityUtils {
         if (null == userName) {
             throw new UserException(ErrorCode.NOUSER.getCode(), "用户不存在！");
         }
-        ISysUserService userService = SpringUtils.getBean(ISysUserService.class);
+        ISysUserService userService = SpringUtils.getBean("sysUserProvider");
         SysUser user = userService.getUserByName(userName);
         return user;
     }
