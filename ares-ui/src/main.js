@@ -23,6 +23,7 @@ import VueParticles from "vue-particles";
 // markdown 注册
 import mavonEditor from 'mavon-editor';
 import 'mavon-editor/dist/css/index.css';
+import VueRouter from 'vue-router'
 
 // 全局方法挂载
 Vue.prototype.getDicts = getDicts
@@ -44,6 +45,11 @@ Vue.prototype.msgError = function (msg) {
 
 Vue.prototype.msgInfo = function (msg) {
   this.$message.info(msg);
+}
+
+const originalPush = VueRouter.prototype.push
+VueRouter.prototype.push = function push(location) {
+  return originalPush.call(this, location).catch(err => err)
 }
 
 // 全局组件挂载

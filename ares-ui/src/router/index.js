@@ -119,7 +119,7 @@ export const constantRoutes = [
         ]
     },
     {
-        path: '/gen',
+        path: '/genedit',
         component: Layout,
         hidden: true,
         children: [
