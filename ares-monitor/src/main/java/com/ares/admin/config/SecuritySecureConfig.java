@@ -22,12 +22,13 @@ package com.ares.admin.config;
 
 import de.codecentric.boot.admin.server.config.AdminServerProperties;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
@@ -40,8 +41,9 @@ import java.util.UUID;
  * @date: 2020/09/16
  * @see: com.ares.admin.config SecuritySecureConfig.java
  **/
-@Configuration(proxyBeanMethods = false)
-public class SecuritySecureConfig extends WebSecurityConfigurerAdapter {
+@Configuration
+@EnableWebSecurity
+public class SecuritySecureConfig {
 
     private final AdminServerProperties adminServerProperties;
 
@@ -54,8 +56,8 @@ public class SecuritySecureConfig extends WebSecurityConfigurerAdapter {
         this.adminServerProperties = adminServerProperties;
     }
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         SavedRequestAwareAuthenticationSuccessHandler successHandler = new SavedRequestAwareAuthenticationSuccessHandler();
         successHandler.setTargetUrlParameter("redirectTo");
         successHandler.setDefaultTargetUrl(adminServerProperties.path("/"));
@@ -74,12 +76,7 @@ public class SecuritySecureConfig extends WebSecurityConfigurerAdapter {
                                 new AntPathRequestMatcher(adminServerProperties.path("/actuator/**"))
                         ))
                 .rememberMe((rememberMe) -> rememberMe.key(UUID.randomUUID().toString()).tokenValiditySeconds(1209600));
+        return http.build();
     }
-
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication().withUser(username).password("{noop}" + password).roles("USER");
-    }
-
 
 }

@@ -13,11 +13,14 @@ spring:
           - label: "🚀"
             url: https://ares
             order: 1000
+  security:
+    user:
+      name: admin
+      password: admin
+      roles: USER
 
 
 ares:
   admin:
     username: admin
     password: admin
-
-
