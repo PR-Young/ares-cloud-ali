@@ -20,7 +20,6 @@
 
 package com.ares.message.persistence.service;
 
-import com.ares.message.persistence.dao.AresDocumentRepository;
 import com.ares.message.persistence.model.AresDocument;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.MatchAllQueryBuilder;
@@ -44,29 +43,27 @@ import java.util.List;
 @Service
 public class ElasticsearchService {
 
-    private AresDocumentRepository repository;
     private ElasticsearchRestTemplate restTemplate;
 
     @Autowired
-    public ElasticsearchService(AresDocumentRepository repository, ElasticsearchRestTemplate restTemplate) {
-        this.repository = repository;
+    public ElasticsearchService(ElasticsearchRestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
 
     public void save(AresDocument document) {
-        repository.save(document);
+        restTemplate.save(document);
     }
 
     public void saveAll(List<AresDocument> documents) {
-        repository.saveAll(documents);
+        restTemplate.save(documents);
     }
 
     public void delete(AresDocument document) {
-        repository.delete(document);
+        restTemplate.delete(document);
     }
 
     public void deleteById(String id) {
-        repository.deleteById(id);
+        restTemplate.delete(id, AresDocument.class);
     }
 
     public List<AresDocument> query(String value) {
@@ -111,5 +108,5 @@ public class ElasticsearchService {
         });
         return aresDocuments;
     }
-    
+
 }

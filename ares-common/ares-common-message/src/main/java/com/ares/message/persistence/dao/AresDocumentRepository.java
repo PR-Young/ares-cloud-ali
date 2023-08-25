@@ -24,7 +24,7 @@ import com.ares.message.persistence.model.AresDocument;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.repository.NoRepositoryBean;
 
 /**
  * @description:
@@ -32,7 +32,7 @@ import org.springframework.stereotype.Repository;
  * @date: 2020/11/11
  * @see: com.ares.message.persistence.dao ESDemoRepository.java
  **/
-@Repository
+@NoRepositoryBean
 public interface AresDocumentRepository extends ElasticsearchRepository<AresDocument, String> {
     /**
      * 在内容中模糊查询
