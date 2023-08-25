@@ -56,11 +56,11 @@ import java.util.*;
 @Slf4j
 public class FlowDefinitionService extends FlowServiceFactory {
     private SysDeployFormService sysDeployFormService;
-    @DubboReference(version = "1.0.0",interfaceClass = com.ares.api.client.ISysUserService.class)
+    @DubboReference(version = "1.0.0", interfaceClass = com.ares.api.client.ISysUserService.class, check = false)
     private ISysUserService sysUserService;
-    @DubboReference(version = "1.0.0",interfaceClass = com.ares.api.client.ISysDeptService.class)
+    @DubboReference(version = "1.0.0", interfaceClass = com.ares.api.client.ISysDeptService.class, check = false)
     private ISysDeptService sysDeptService;
-    @DubboReference(version = "1.0.0",interfaceClass = com.ares.api.client.ISysPostService.class)
+    @DubboReference(version = "1.0.0", interfaceClass = com.ares.api.client.ISysPostService.class, check = false)
     private ISysPostService postService;
     private SysFormDataService formDataService;
 

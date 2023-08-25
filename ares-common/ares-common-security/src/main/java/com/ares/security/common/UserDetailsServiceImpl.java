@@ -46,11 +46,11 @@ import java.util.stream.Collectors;
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-    @DubboReference(version = "1.0.0",interfaceClass = com.ares.api.client.ISysUserService.class)
+    @DubboReference(version = "1.0.0", interfaceClass = com.ares.api.client.ISysUserService.class, check = false)
     private ISysUserService userService;
-    @DubboReference(version = "1.0.0",interfaceClass = com.ares.api.client.ISysRoleService.class)
+    @DubboReference(version = "1.0.0", interfaceClass = com.ares.api.client.ISysRoleService.class, check = false)
     private ISysRoleService roleService;
-    
+
     @Log
     @Override
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {

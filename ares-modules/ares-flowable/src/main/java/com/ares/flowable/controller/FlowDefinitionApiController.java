@@ -57,9 +57,9 @@ import java.util.Map;
 @RequestMapping("/flowable/definition")
 public class FlowDefinitionApiController extends BaseController {
     private FlowDefinitionService flowDefinitionService;
-    @DubboReference(version = "1.0.0",interfaceClass = com.ares.api.client.ISysUserService.class)
+    @DubboReference(version = "1.0.0", interfaceClass = com.ares.api.client.ISysUserService.class, check = false)
     private ISysUserService userService;
-    @DubboReference(version = "1.0.0",interfaceClass = com.ares.api.client.ISysRoleService.class)
+    @DubboReference(version = "1.0.0", interfaceClass = com.ares.api.client.ISysRoleService.class, check = false)
     private ISysRoleService sysRoleService;
 
     @Autowired

@@ -90,19 +90,19 @@ import java.util.stream.Collectors;
  **/
 @Service
 public class FlowTaskService extends FlowServiceFactory {
-    @DubboReference
+    @DubboReference(version = "1.0.0", interfaceClass = com.ares.api.client.ISysUserService.class, check = false)
     private ISysUserService userService;
-    @DubboReference
+    @DubboReference(version = "1.0.0", interfaceClass = com.ares.api.client.ISysRoleService.class, check = false)
     private ISysRoleService roleService;
     private SysDeployFormService deployFormService;
-    @DubboReference
+    @DubboReference(version = "1.0.0", interfaceClass = com.ares.api.client.ISysDeptService.class, check = false)
     private ISysDeptService deptService;
     private SysFormDataService formDataService;
 
     @Autowired
     public FlowTaskService(
-                           SysDeployFormService deployFormService,
-                           SysFormDataService formDataService) {
+            SysDeployFormService deployFormService,
+            SysFormDataService formDataService) {
         this.deployFormService = deployFormService;
         this.formDataService = formDataService;
     }
@@ -969,7 +969,7 @@ public class FlowTaskService extends FlowServiceFactory {
                             }
                             // 候选人员(多个)
                             if (ProcessConstants.USER_TYPE_USERS.equals(userType)) {
-                                List<SysUser> list  = userService.selectUserList(new SysUserQuery());
+                                List<SysUser> list = userService.selectUserList(new SysUserQuery());
 
                                 flowNextDto.setVars(ProcessConstants.PROCESS_APPROVAL);
                                 flowNextDto.setType(ProcessConstants.USER_TYPE_USERS);
