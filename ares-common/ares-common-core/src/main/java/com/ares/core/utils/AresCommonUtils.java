@@ -20,7 +20,11 @@
 
 package com.ares.core.utils;
 
+import cn.hutool.http.useragent.UserAgent;
+import cn.hutool.http.useragent.UserAgentUtil;
 import com.alibaba.fastjson.JSON;
+
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -115,6 +119,23 @@ public class AresCommonUtils {
         reader.close();
         connection.disconnect();
         return sb.toString();
+    }
+
+    public static String getUserAgent(HttpServletRequest request, String type) {
+        UserAgent userAgent = UserAgentUtil.parse(request.getHeader("user-agent"));
+        String result = "";
+        switch (type) {
+            case "browser":
+                result = userAgent.getBrowser().getName();
+                break;
+            case "os":
+                result = userAgent.getOs().getName();
+                break;
+            default:
+                result = "";
+                break;
+        }
+        return result;
     }
 
 }

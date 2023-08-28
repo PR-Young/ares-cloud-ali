@@ -23,13 +23,16 @@ package com.ares.system.controller;
 import com.ares.core.config.base.BaseConfig;
 import com.ares.core.model.base.AjaxResult;
 import com.ares.core.model.base.Constants;
+import com.ares.core.model.system.SysLoginInfo;
 import com.ares.core.model.system.SysMenu;
 import com.ares.core.model.system.SysRole;
 import com.ares.core.model.system.SysUser;
+import com.ares.core.utils.IpUtils;
 import com.ares.core.utils.ServletUtils;
 import com.ares.redis.utils.RedisUtil;
 import com.ares.security.common.SecurityUtils;
 import com.ares.security.jwt.JwtAuthenticationToken;
+import com.ares.system.service.SysLoginInfoService;
 import com.ares.system.service.SysMenuService;
 import com.ares.system.service.SysRoleService;
 import com.ares.system.service.SysUserService;
@@ -71,18 +74,21 @@ public class LoginApiController {
     private SysMenuService menuService;
     private BaseConfig config;
     private AuthenticationManager authenticationManager;
+    private SysLoginInfoService loginInfoService;
 
     @Autowired
     public LoginApiController(SysUserService userService,
                               SysRoleService roleService,
                               SysMenuService menuService,
                               BaseConfig config,
-                              AuthenticationManager authenticationManager) {
+                              AuthenticationManager authenticationManager,
+                              SysLoginInfoService loginInfoService) {
         this.userService = userService;
         this.roleService = roleService;
         this.menuService = menuService;
         this.config = config;
         this.authenticationManager = authenticationManager;
+        this.loginInfoService = loginInfoService;
     }
 
     @Operation(summary = "登录", responses = {@ApiResponse(content = @Content(schema = @Schema(implementation = Object.class)))})
@@ -106,6 +112,15 @@ public class LoginApiController {
         } else {
             RedisUtil.set(Constants.LOGIN_INFO + userName, token, config.getTimeout());
         }
+        SysLoginInfo sysLoginInfo = new SysLoginInfo();
+        sysLoginInfo.setUserName(userName);
+        sysLoginInfo.setLoginTime(new Date());
+        sysLoginInfo.setIpAddr(IpUtils.getIpAddr(request));
+        sysLoginInfo.setStatus(Constants.ONLINE);
+        sysLoginInfo.setBrowser(AresCommonUtils.getUserAgent(request, "browser"));
+        sysLoginInfo.setOs(AresCommonUtils.getUserAgent(request, "os"));
+        Long id = loginInfoService.saveInfo(sysLoginInfo);
+        RedisUtil.set(token.getToken(), id, 0);
         return AjaxResult.success().put("token", token.getToken());
     }
 

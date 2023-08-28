@@ -21,6 +21,8 @@
 package com.ares.system.utils;
 
 
+import cn.hutool.http.useragent.UserAgent;
+import cn.hutool.http.useragent.UserAgentUtil;
 import com.alibaba.fastjson.JSON;
 import com.ares.core.model.base.Constants;
 import com.ares.redis.utils.RedisUtil;
@@ -151,6 +153,23 @@ public class AresCommonUtils {
         reader.close();
         connection.disconnect();
         return sb.toString();
+    }
+
+    public static String getUserAgent(HttpServletRequest request, String type) {
+        UserAgent userAgent = UserAgentUtil.parse(request.getHeader("user-agent"));
+        String result = "";
+        switch (type) {
+            case "browser":
+                result = userAgent.getBrowser().getName();
+                break;
+            case "os":
+                result = userAgent.getOs().getName();
+                break;
+            default:
+                result = "";
+                break;
+        }
+        return result;
     }
 
 }

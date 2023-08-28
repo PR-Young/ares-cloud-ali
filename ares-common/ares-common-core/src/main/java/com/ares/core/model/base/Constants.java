@@ -87,4 +87,7 @@ public class Constants {
     public static final String KAPTCHA_SESSION_KEY = "kaptcha_session_key:";
 
     public static final String NOTFOUND_AVATAR = "notfound";
+
+    public static final String ONLINE = "1";
+    public static final String OFFLINE = "0";
 }

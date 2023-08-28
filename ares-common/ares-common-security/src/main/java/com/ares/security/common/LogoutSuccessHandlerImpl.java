@@ -20,9 +20,12 @@
 
 package com.ares.security.common;
 
+import com.ares.api.client.IAresCommonService;
 import com.ares.core.model.base.AjaxResult;
 import com.ares.core.model.base.Constants;
+import com.ares.core.model.system.SysLoginInfo;
 import com.ares.core.utils.ServletUtils;
+import com.ares.core.utils.SpringUtils;
 import com.ares.redis.utils.RedisUtil;
 import com.ares.security.jwt.JwtTokenUtils;
 import org.springframework.context.annotation.Configuration;
@@ -48,6 +51,12 @@ public class LogoutSuccessHandlerImpl implements LogoutSuccessHandler {
         if (null != token) {
             String userName = JwtTokenUtils.getUsernameFromToken(token);
             if (RedisUtil.hasKey(Constants.LOGIN_INFO + userName)) {
+                Long id = Long.valueOf(String.valueOf(RedisUtil.get(token)));
+                SysLoginInfo sysLoginInfo = new SysLoginInfo();
+                sysLoginInfo.setId(id);
+                sysLoginInfo.setStatus(Constants.OFFLINE);
+                IAresCommonService commonService = SpringUtils.getBean("aresCommonProvider");
+                commonService.update(sysLoginInfo);
                 RedisUtil.del(Constants.LOGIN_INFO + userName);
             }
         }
