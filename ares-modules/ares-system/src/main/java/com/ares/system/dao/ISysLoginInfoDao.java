@@ -18,18 +18,16 @@
  *
  */
 
-package com.ares.core.model.query;
+package com.ares.system.dao;
 
-import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Data;
 
-/**
- * @description:
- * @author: Young
- * @date: 2023/8/2
- * @see: com.ares.core.model.query.SysLoginInfoQuery.java
- **/
-@Data
-@Schema(description = "查询实体")
-public class SysLoginInfoQuery extends BaseQuery {
+import com.ares.core.dao.IBaseDao;
+import com.ares.core.model.query.SysLoginInfoQuery;
+import com.ares.core.model.system.SysLoginInfo;
+import org.apache.ibatis.annotations.Mapper;
+
+@Mapper
+public interface ISysLoginInfoDao extends IBaseDao<SysLoginInfo, SysLoginInfoQuery> {
+
+    void remove();
 }

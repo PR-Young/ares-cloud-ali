@@ -18,18 +18,31 @@
  *
  */
 
-package com.ares.core.model.query;
+package com.ares.core.model.system;
 
+import com.ares.core.model.base.BaseModel;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
-/**
- * @description:
- * @author: Young
- * @date: 2023/8/2
- * @see: com.ares.core.model.query.SysLoginInfoQuery.java
- **/
+import java.util.Date;
+
 @Data
-@Schema(description = "查询实体")
-public class SysLoginInfoQuery extends BaseQuery {
+@Schema(title = "SysLoginInfo对象", description = "")
+public class SysLoginInfo extends BaseModel {
+    @Schema(description = "")
+    private String browser;
+    @Schema(description = "")
+    private String ipAddr;
+    @Schema(description = "")
+    private String loginLocation;
+    @Schema(description = "")
+    private Date loginTime;
+    @Schema(description = "")
+    private String msg;
+    @Schema(description = "")
+    private String os;
+    @Schema(description = "")
+    private String status;
+    @Schema(description = "")
+    private String userName;
 }
