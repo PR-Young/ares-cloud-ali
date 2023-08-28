@@ -5,7 +5,7 @@
     <el-form :model="queryParams" ref="queryForm" :inline="true" label-width="68px">
       <el-form-item label="登录地址" prop="ipaddr">
         <el-input
-          v-model="queryParams.ipaddr"
+          v-model="queryParams.ipAddr"
           placeholder="请输入登录地址"
           clearable
           style="width: 240px;"
@@ -65,7 +65,7 @@
           size="mini"
           :disabled="multiple"
           @click="handleDelete"
-          v-hasPermi="['monitor:logininfor:remove']"
+          v-hasPermi="['sysLoginInfo:delete']"
         >删除</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -74,7 +74,7 @@
           icon="el-icon-delete"
           size="mini"
           @click="handleClean"
-          v-hasPermi="['monitor:logininfor:remove']"
+          v-hasPermi="['sysLoginInfo:delete']"
         >清空</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -83,21 +83,21 @@
           icon="el-icon-download"
           size="mini"
           @click="handleExport"
-          v-hasPermi="['system:logininfor:export']"
+          v-hasPermi="['sysLoginInfo:export']"
         >导出</el-button>
       </el-col>
     </el-row>
 
     <el-table v-loading="loading" :data="list" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="访问编号" align="center" prop="infoId" />
+      <el-table-column label="访问编号" align="center" prop="id" />
       <el-table-column label="用户名称" align="center" prop="userName" />
-      <el-table-column label="登录地址" align="center" prop="ipaddr" width="130" :show-overflow-tooltip="true" />
-      <el-table-column label="登录地点" align="center" prop="loginLocation" />
+      <el-table-column label="登录地址" align="center" prop="ipAddr" width="130" :show-overflow-tooltip="true" />
+      <!-- <el-table-column label="登录地点" align="center" prop="loginLocation" /> -->
       <el-table-column label="浏览器" align="center" prop="browser" />
       <el-table-column label="操作系统" align="center" prop="os" />
       <el-table-column label="登录状态" align="center" prop="status" :formatter="statusFormat" />
-      <el-table-column label="操作信息" align="center" prop="msg" />
+      <!-- <el-table-column label="操作信息" align="center" prop="msg" /> -->
       <el-table-column label="登录日期" align="center" prop="loginTime" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.loginTime) }}</span>
@@ -180,12 +180,12 @@ export default {
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.infoId)
+      this.ids = selection.map(item => item.id)
       this.multiple = !selection.length
     },
     /** 删除按钮操作 */
     handleDelete(row) {
-      const infoIds = row.infoId || this.ids;
+      const infoIds = row.id || this.ids;
       this.$confirm('是否确认删除访问编号为"' + infoIds + '"的数据项?', "警告", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
