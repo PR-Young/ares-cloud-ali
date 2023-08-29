@@ -20,10 +20,12 @@
 
 package com.ares.security.common;
 
+import com.ares.api.client.IAresCommonService;
 import com.ares.api.client.ISysUserService;
 import com.ares.core.exception.UserException;
 import com.ares.core.model.base.Constants;
 import com.ares.core.model.exception.ErrorCode;
+import com.ares.core.model.system.SysLoginInfo;
 import com.ares.core.model.system.SysUser;
 import com.ares.core.utils.SpringUtils;
 import com.ares.redis.utils.RedisUtil;
@@ -83,6 +85,12 @@ public class SecurityUtils {
             String token = ((JwtAuthenticationToken) authentication).getToken();
             String userName = JwtTokenUtils.getUsernameFromToken(token);
             if (JwtTokenUtils.isTokenExpired(token)) {
+                Long id = Long.valueOf(String.valueOf(RedisUtil.get(token)));
+                SysLoginInfo sysLoginInfo = new SysLoginInfo();
+                sysLoginInfo.setId(id);
+                sysLoginInfo.setStatus(Constants.OFFLINE);
+                IAresCommonService commonService = SpringUtils.getBean("aresCommonProvider");
+                commonService.update(sysLoginInfo);
                 throw new UserException(ErrorCode.LOGINTIMEOUT.getCode(), "登录过期！");
             }
             if (RedisUtil.hasKey(Constants.LOGIN_INFO + userName)) {
