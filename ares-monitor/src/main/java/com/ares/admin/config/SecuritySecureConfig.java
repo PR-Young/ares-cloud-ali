@@ -63,9 +63,9 @@ public class SecuritySecureConfig {
         successHandler.setDefaultTargetUrl(adminServerProperties.path("/"));
 
         http.authorizeRequests((authorizeRequests) -> authorizeRequests
-                        .antMatchers(adminServerProperties.path("/assets/**")).permitAll()
-                        .antMatchers(adminServerProperties.path("/static/**")).permitAll()
-                        .antMatchers(adminServerProperties.path("/login")).permitAll()
+                        .requestMatchers(adminServerProperties.path("/assets/**")).permitAll()
+                        .requestMatchers(adminServerProperties.path("/static/**")).permitAll()
+                        .requestMatchers(adminServerProperties.path("/login")).permitAll()
                         .anyRequest().authenticated()).formLogin((formLogin) -> formLogin.loginPage(adminServerProperties.path("/login")).successHandler(successHandler).and()
                 ).logout((logout) -> logout.logoutUrl(adminServerProperties.path("/logout"))).httpBasic(Customizer.withDefaults())
                 .csrf((csrf) -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())

@@ -27,12 +27,12 @@ import com.ares.system.dao.ISysTemplateDao;
 import com.ares.system.service.SysPropertiesService;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
+import jakarta.annotation.Resource;
+import jakarta.mail.*;
+import jakarta.mail.internet.InternetAddress;
+import jakarta.mail.internet.MimeMessage;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
-import javax.mail.*;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.*;

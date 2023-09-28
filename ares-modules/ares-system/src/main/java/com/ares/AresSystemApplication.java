@@ -30,7 +30,7 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 /**
  * @author young
  */
-@MapperScan("com.ares.system")
+@MapperScan("com.ares")
 @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
 @EnableDiscoveryClient
 @EnableDubbo(scanBasePackages = {"com.ares.system.provider", "com.ares.api"})

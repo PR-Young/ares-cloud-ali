@@ -20,15 +20,16 @@
 
 package com.ares.message.persistence.service;
 
+import com.ares.message.persistence.dao.AresDocumentRepository;
 import com.ares.message.persistence.model.AresDocument;
-import org.elasticsearch.index.query.BoolQueryBuilder;
-import org.elasticsearch.index.query.MatchAllQueryBuilder;
-import org.elasticsearch.index.query.MatchQueryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
+import org.springframework.data.elasticsearch.client.elc.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.core.SearchHits;
-import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
+import org.springframework.data.elasticsearch.core.query.Criteria;
+import org.springframework.data.elasticsearch.core.query.CriteriaQuery;
+import org.springframework.data.elasticsearch.core.query.CriteriaQueryBuilder;
+import org.springframework.data.elasticsearch.core.query.Query;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -43,41 +44,40 @@ import java.util.List;
 @Service
 public class ElasticsearchService {
 
-    private ElasticsearchRestTemplate restTemplate;
+    private ElasticsearchTemplate elasticsearchTemplate;
+    private AresDocumentRepository repository;
 
     @Autowired
-    public ElasticsearchService(ElasticsearchRestTemplate restTemplate) {
-        this.restTemplate = restTemplate;
+    public ElasticsearchService(ElasticsearchTemplate elasticsearchTemplate,AresDocumentRepository repository) {
+        this.elasticsearchTemplate = elasticsearchTemplate;
+        this.repository = repository;
     }
 
     public void save(AresDocument document) {
-        restTemplate.save(document);
+        repository.save(document);
     }
 
     public void saveAll(List<AresDocument> documents) {
-        restTemplate.save(documents);
+        repository.saveAll(documents);
     }
 
     public void delete(AresDocument document) {
-        restTemplate.delete(document);
+        repository.delete(document);
     }
 
     public void deleteById(String id) {
-        restTemplate.delete(id, AresDocument.class);
+        repository.deleteById(id);
     }
 
     public List<AresDocument> query(String value) {
         List<AresDocument> aresDocuments = new ArrayList<>();
-        MatchQueryBuilder key = new MatchQueryBuilder("key", value);
-        MatchQueryBuilder name = new MatchQueryBuilder("name", value);
-        MatchQueryBuilder body = new MatchQueryBuilder("body", value);
-        MatchQueryBuilder content = new MatchQueryBuilder("content", value);
-
-        BoolQueryBuilder queryBuilder = new BoolQueryBuilder();
-        queryBuilder.should(key).should(name).should(body).should(content);
-        NativeSearchQuery query = new NativeSearchQuery(queryBuilder);
-
-        SearchHits<AresDocument> iterable = restTemplate.search(query, AresDocument.class);
+        Criteria criteria = new Criteria("key")
+                .or("name")
+                .or("body")
+                .or("content").matches(value);
+        CriteriaQueryBuilder builder =  new CriteriaQueryBuilder(criteria);
+        Query query = new CriteriaQuery(builder);
+        SearchHits<AresDocument> iterable = elasticsearchTemplate.search(query, AresDocument.class);
         iterable.getSearchHits().forEach(document -> {
             aresDocuments.add(document.getContent());
         });
@@ -87,10 +87,11 @@ public class ElasticsearchService {
 
     public Iterable<AresDocument> queryByFiled(String fieldName, Object value, Pageable pageable) {
         List<AresDocument> aresDocuments = new ArrayList<>();
-        MatchQueryBuilder queryBuilder = new MatchQueryBuilder(fieldName, value);
-        NativeSearchQuery query = new NativeSearchQuery(queryBuilder);
+        Criteria criteria = new Criteria(fieldName).matches(value);
+        CriteriaQueryBuilder builder =  new CriteriaQueryBuilder(criteria);
+        Query query = new CriteriaQuery(builder);
         query.setPageable(pageable);
-        SearchHits<AresDocument> documents = restTemplate.search(query, AresDocument.class);
+        SearchHits<AresDocument> documents = elasticsearchTemplate.search(query, AresDocument.class);
         documents.getSearchHits().forEach(document -> {
             aresDocuments.add(document.getContent());
         });
@@ -99,10 +100,9 @@ public class ElasticsearchService {
 
     public Iterable<AresDocument> queryAll(Pageable pageable) {
         List<AresDocument> aresDocuments = new ArrayList<>();
-        MatchAllQueryBuilder queryBuilder = new MatchAllQueryBuilder();
-        NativeSearchQuery query = new NativeSearchQuery(queryBuilder);
+        Query query = Query.findAll();
         query.setPageable(pageable);
-        SearchHits<AresDocument> documents = restTemplate.search(query, AresDocument.class);
+        SearchHits<AresDocument> documents = elasticsearchTemplate.search(query, AresDocument.class);
         documents.getSearchHits().forEach(document -> {
             aresDocuments.add(document.getContent());
         });

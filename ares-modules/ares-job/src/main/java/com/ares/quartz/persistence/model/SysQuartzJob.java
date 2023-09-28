@@ -23,9 +23,10 @@ package com.ares.quartz.persistence.model;
 import com.ares.core.model.base.BaseModel;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 
-import javax.validation.constraints.NotEmpty;
+
 import java.io.Serializable;
 
 @Data

@@ -23,7 +23,6 @@ package com.ares;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 
 /**
  * @description:
@@ -32,7 +31,7 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
  * @see: com.ares.generator.GeneratorApplication.java
  **/
 @MapperScan("com.ares.generator")
-@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
+@SpringBootApplication
 public class AresGeneratorApplication {
     public static void main(String[] args) {
         SpringApplication.run(AresGeneratorApplication.class,args);

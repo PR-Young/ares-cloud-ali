@@ -32,10 +32,13 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 /**
  * @description:
@@ -67,17 +70,21 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         String[] whiteUrl = config.getWhiteUrl().split(",");
-        httpSecurity.csrf().disable()
-                .exceptionHandling().authenticationEntryPoint(authenticationEntryPoint).and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                .authorizeRequests()
-                .antMatchers(HttpMethod.OPTIONS, "*/**").permitAll()
-                .antMatchers(HttpMethod.GET, "*/**").permitAll()
-                .antMatchers(whiteUrl).permitAll()
-                .anyRequest().authenticated()
-                .and()
-                .headers().frameOptions().disable();
-        httpSecurity.logout().logoutUrl("/loginOut").logoutSuccessHandler(logoutSuccessHandler);
+        AntPathRequestMatcher[] matchers = new AntPathRequestMatcher[whiteUrl.length];
+        for (int i = 0; i < whiteUrl.length; i++) {
+            matchers[i] = AntPathRequestMatcher.antMatcher(whiteUrl[i]);
+        }
+        httpSecurity.csrf(AbstractHttpConfigurer::disable)
+                .exceptionHandling(eh -> eh.authenticationEntryPoint(authenticationEntryPoint))
+                .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests((auth) -> {
+                    auth.requestMatchers(AntPathRequestMatcher.antMatcher(HttpMethod.OPTIONS, "*/**")).permitAll()
+                            .requestMatchers(AntPathRequestMatcher.antMatcher(HttpMethod.GET, "*/**")).permitAll()
+                            .requestMatchers(matchers).permitAll()
+                            .anyRequest().authenticated();
+                })
+                .headers(header -> header.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable));
+        httpSecurity.logout(lg -> lg.logoutUrl("/loginOut").logoutSuccessHandler(logoutSuccessHandler));
         httpSecurity.addFilterBefore(new JwtAuthenticationFilter(authenticationManager(authenticationConfiguration)), UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
     }

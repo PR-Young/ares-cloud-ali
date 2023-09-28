@@ -20,8 +20,8 @@
 
 package com.ares.core.utils;
 
-import org.apache.commons.lang.WordUtils;
-import org.apache.commons.lang.text.StrBuilder;
+import cn.hutool.core.text.StrBuilder;
+import org.apache.commons.lang3.text.WordUtils;
 
 import java.util.Collection;
 import java.util.Map;

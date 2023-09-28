@@ -23,13 +23,14 @@ package com.ares.security.common;
 import com.ares.core.model.base.AjaxResult;
 import com.ares.core.model.base.ResultCode;
 import com.ares.core.utils.ServletUtils;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Serializable;
 
@@ -46,7 +47,7 @@ public class AuthenticationEntryPointImpl implements AuthenticationEntryPoint, S
     @Override
     public void commence(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException, ServletException {
         if (e.getMessage().contains(NO_AUTH)) {
-            ServletUtils.writeResponse(httpServletResponse, AjaxResult.unAuth(), ResultCode.NOAUTH.getCode());
+            ServletUtils.writeResponse(httpServletResponse, AjaxResult.unAuth(), HttpStatus.UNAUTHORIZED.value());
         } else {
             ServletUtils.writeResponse(httpServletResponse, AjaxResult.error(ResultCode.FAILED.getCode(), e.getMessage()));
         }

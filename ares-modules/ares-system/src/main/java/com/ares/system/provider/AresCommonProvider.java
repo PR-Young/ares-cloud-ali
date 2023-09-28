@@ -25,7 +25,7 @@ import com.ares.core.model.system.SysLoginInfo;
 import com.ares.system.service.SysLoginInfoService;
 import org.apache.dubbo.config.annotation.DubboService;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 
 /**
  * @description:

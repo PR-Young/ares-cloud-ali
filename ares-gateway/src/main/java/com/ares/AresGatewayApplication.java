@@ -20,7 +20,7 @@
 
 package com.ares;
 
-import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
@@ -36,7 +36,7 @@ import org.springframework.web.bind.annotation.RestController;
  **/
 @RestController
 @EnableDiscoveryClient
-@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class, DruidDataSourceAutoConfigure.class})
+@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
 public class AresGatewayApplication {
     public static void main(String[] args) {
         SpringApplication.run(AresGatewayApplication.class,args);

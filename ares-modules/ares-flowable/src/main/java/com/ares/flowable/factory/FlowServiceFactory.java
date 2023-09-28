@@ -20,13 +20,11 @@
 
 package com.ares.flowable.factory;
 
-import lombok.Getter;
+import jakarta.annotation.Resource;
 import org.flowable.engine.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-
-import javax.annotation.Resource;
 
 /**
  * @description:
@@ -35,7 +33,6 @@ import javax.annotation.Resource;
  * @see: com.ares.flowable.factory.FlowServiceFactory.java
  **/
 @Component
-@Getter
 public class FlowServiceFactory {
 
     @Resource

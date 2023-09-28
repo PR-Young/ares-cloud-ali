@@ -20,7 +20,7 @@
 
 package com.ares.generator.persistence.dao;
 
-import org.springframework.stereotype.Repository;
+import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 import java.util.Map;
@@ -29,7 +29,7 @@ import java.util.Map;
  * @description:
  * @author: Young 2020/04/28
  **/
-@Repository
+@Mapper
 public interface IGeneratorDao {
 
     public List<Map<String, Object>> getTables(Map<String, Object> map);

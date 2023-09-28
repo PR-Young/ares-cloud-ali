@@ -27,8 +27,8 @@ import com.alibaba.fastjson.JSON;
 import com.ares.core.model.base.Constants;
 import com.ares.redis.utils.RedisUtil;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
