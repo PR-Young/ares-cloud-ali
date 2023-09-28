@@ -26,14 +26,17 @@ import com.ares.security.common.SecurityUtils;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
-import jakarta.annotation.PostConstruct;
-import jakarta.annotation.Resource;
-import jakarta.servlet.http.HttpServletRequest;
 import java.io.Serializable;
+import java.security.Key;
 import java.util.*;
 
 /**
@@ -62,7 +65,7 @@ public class JwtTokenUtils implements Serializable {
     /**
      * 密钥
      */
-    private static final String SECRET = "abcdefgh";
+    private static final String SECRET = "mi96h0bYr8AzY8x630xsnYssITjrbVWz4czujp5UyE4+dfWKTrdRjtBygDG/w4V/rG61Vv0bSogNIn/aRcpTNguJFu4L/tLcGU//gV4CIE3MBcb5I4MDFLSeKSIg+K1U";
     /**
      * 有效期12小时
      */
@@ -95,7 +98,12 @@ public class JwtTokenUtils implements Serializable {
      */
     private static String generateToken(Map<String, Object> claims) {
         Date expirationDate = new Date(System.currentTimeMillis() + EXPIRE_TIME);
-        return Jwts.builder().setClaims(claims).setExpiration(expirationDate).signWith(SignatureAlgorithm.HS512, SECRET).compact();
+        return Jwts.builder().setClaims(claims).setExpiration(expirationDate).signWith(getSignInKey(), SignatureAlgorithm.HS512).compact();
+    }
+
+    private static Key getSignInKey() {
+        byte[] keyBytes = Decoders.BASE64.decode(SECRET);
+        return Keys.hmacShaKeyFor(keyBytes);
     }
 
     /**
@@ -165,8 +173,7 @@ public class JwtTokenUtils implements Serializable {
      * @return 数据声明
      */
     private static Claims getClaimsFromToken(String token) throws Exception {
-        Claims claims = Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token).getBody();
-        return claims;
+        return Jwts.parserBuilder().setSigningKey(getSignInKey()).build().parseClaimsJws(token).getBody();
     }
 
     /**
