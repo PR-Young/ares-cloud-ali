@@ -128,9 +128,9 @@ public class SysProfileApiController extends BaseController {
             SysUser user = SecurityUtils.getUser();
             String path = propertiesService.getValueByAlias("avatar.path");
             String avatar = uploadService.upload(path, file);
-            user.setAvatar(EncryptUtils.encode(avatar));
+            user.setAvatar(EncryptUtils.encodeUrl(avatar));
             userService.update(user);
-            return AjaxResult.success().put("imgUrl", EncryptUtils.encode(avatar));
+            return AjaxResult.success().put("imgUrl", EncryptUtils.encodeUrl(avatar));
         }
         return AjaxResult.error("上传图片异常，请联系管理员!");
     }

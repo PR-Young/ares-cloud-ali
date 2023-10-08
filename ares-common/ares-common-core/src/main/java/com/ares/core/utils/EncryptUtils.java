@@ -59,6 +59,10 @@ public class EncryptUtils {
         return new String(Base64.decodeBase64(str.getBytes()));
     }
 
+    public static String encodeUrl(String str) {
+        return Base64.encodeBase64URLSafeString(str.getBytes());
+    }
+
     //用于封装随机产生的公钥与私钥
     private static Map<Integer, String> keyMap = new HashMap<Integer, String>();
 
