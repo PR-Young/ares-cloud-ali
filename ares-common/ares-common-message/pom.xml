@@ -24,6 +24,7 @@
         <dependency>
             <groupId>com.ares</groupId>
             <artifactId>ares-common-core</artifactId>
+            <version>${ares.version}</version>
         </dependency>
         <dependency>
             <groupId>org.freemarker</groupId>
@@ -78,4 +79,25 @@
             <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
         </dependency>
     </dependencies>
+
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/java</directory>
+                <filtering>false</filtering>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+        </resources>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.8.1</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
 </project>

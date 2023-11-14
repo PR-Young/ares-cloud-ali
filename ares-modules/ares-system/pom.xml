@@ -39,22 +39,27 @@
         <dependency>
             <groupId>com.ares</groupId>
             <artifactId>ares-common-core</artifactId>
+            <version>${ares.version}</version>
         </dependency>
         <dependency>
             <groupId>com.ares</groupId>
             <artifactId>ares-common-log</artifactId>
+            <version>${ares.version}</version>
         </dependency>
         <dependency>
             <groupId>com.ares</groupId>
             <artifactId>ares-common-security</artifactId>
+            <version>${ares.version}</version>
         </dependency>
         <dependency>
             <groupId>com.ares</groupId>
             <artifactId>ares-common-redis</artifactId>
+            <version>${ares.version}</version>
         </dependency>
         <dependency>
             <groupId>com.ares</groupId>
             <artifactId>ares-common-message</artifactId>
+            <version>${ares.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -63,6 +68,7 @@
         <dependency>
             <groupId>com.ares</groupId>
             <artifactId>ares-common-datasource</artifactId>
+            <version>${ares.version}</version>
         </dependency>
         <!-- JWT 相关 -->
         <dependency>
@@ -150,7 +156,7 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>2.3.7.RELEASE</version>
+                <version>3.1.4</version>
                 <configuration>
                     <mainClass>com.ares.AresSystemApplication</mainClass>
                 </configuration>
