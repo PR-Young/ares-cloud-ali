@@ -57,4 +57,15 @@
             <artifactId>spring-cloud-starter-bootstrap</artifactId>
         </dependency>
     </dependencies>
+
+    <build>
+        <finalName>ares-gen</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>3.1.4</version>
+            </plugin>
+        </plugins>
+    </build>
 </project>
