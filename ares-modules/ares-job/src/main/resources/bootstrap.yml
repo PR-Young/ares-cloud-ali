@@ -36,7 +36,7 @@ spring:
 
 dubbo:
   application:
-    name: ares-job
+    name: ares-job-dubbo
   registry:
     address: nacos://localhost:8848
   config-center:

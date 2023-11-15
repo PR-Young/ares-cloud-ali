@@ -36,7 +36,7 @@ spring:
 
 dubbo:
   application:
-    name: ares-flowable
+    name: ares-flowable-dubbo
   registry:
     address: nacos://localhost:8848
   config-center:
