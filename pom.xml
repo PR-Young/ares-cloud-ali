@@ -195,11 +195,6 @@
 
             <resource>
                 <directory>src/main/resources</directory>
-                <includes>
-                    <include>**/*.xml</include>
-                    <include>**/*.yml</include>
-                    <include>**/*.txt</include>
-                </includes>
                 <filtering>false</filtering>
             </resource>
         </resources>
