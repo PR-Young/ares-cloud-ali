@@ -232,16 +232,16 @@ public class AutoGeneratorService {
                             .append("</if>\n");
                 }
                 sb.append("<if test=\"creator != null\">\n")
-                        .append("`Creator` = #{creator,jdbcType=TIMESTAMP},\n")
+                        .append("`CREATOR_` = #{creator,jdbcType=TIMESTAMP},\n")
                         .append("</if>\n")
                         .append("<if test=\"createTime != null\">\n")
-                        .append("`CreateTime` = #{createTime,jdbcType=TIMESTAMP},\n")
+                        .append("`CREATE_TIME_` = #{createTime,jdbcType=TIMESTAMP},\n")
                         .append("</if>\n")
                         .append("<if test=\"modifier != null\">\n")
-                        .append("`Modifier` = #{modifier,jdbcType=TIMESTAMP},\n")
+                        .append("`MODIFIER_` = #{modifier,jdbcType=TIMESTAMP},\n")
                         .append("</if>\n")
                         .append("<if test=\"modifyTime != null\">\n")
-                        .append("`ModifyTime` = #{modifyTime,jdbcType=TIMESTAMP},\n")
+                        .append("`MODIFY_TIME_` = #{modifyTime,jdbcType=TIMESTAMP},\n")
                         .append("</if>");
                 break;
             default:
@@ -268,10 +268,10 @@ public class AutoGeneratorService {
             String comment = rs.getString("column_comment");
             String annotation = null;
             if ("Id".equalsIgnoreCase(name)
-                    || "CreateTime".equalsIgnoreCase(name)
-                    || "ModifyTime".equalsIgnoreCase(name)
-                    || "Creator".equalsIgnoreCase(name)
-                    || "Modifier".equalsIgnoreCase(name)) {
+                    || "CREATE_TIME_".equalsIgnoreCase(name)
+                    || "MODIFY_TIME_".equalsIgnoreCase(name)
+                    || "CREATOR_".equalsIgnoreCase(name)
+                    || "MODIFIER_".equalsIgnoreCase(name)) {
                 continue;
             }
             type = ColumnType.getJavaType(type);

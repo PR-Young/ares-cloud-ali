@@ -2,27 +2,27 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ares.system.dao.ISysMenuDao">
     <resultMap id="SysMenu" type="com.ares.core.model.system.SysMenu">
-        <id column="Id" jdbcType="BIGINT" property="id"/>
-        <result column="Name" jdbcType="VARCHAR" property="name"/>
-        <result column="Description" jdbcType="VARCHAR" property="description"/>
-        <result column="Url" jdbcType="VARCHAR" property="url"/>
-        <result column="Path" jdbcType="VARCHAR" property="path"/>
-        <result column="IsBlank" jdbcType="INTEGER" property="isBlank"/>
-        <result column="PId" jdbcType="VARCHAR" property="pId"/>
-        <result column="Icon" jdbcType="VARCHAR" property="icon"/>
-        <result column="Perms" jdbcType="VARCHAR" property="perms"/>
-        <result column="Type" jdbcType="INTEGER" property="type"/>
-        <result column="Order" jdbcType="INTEGER" property="order"/>
-        <result column="Visible" jdbcType="INTEGER" property="visible"/>
-        <result column="Creator" jdbcType="BIGINT" property="creator"/>
-        <result column="CreateTime" jdbcType="TIMESTAMP" property="createTime"/>
-        <result column="Modifier" jdbcType="BIGINT" property="modifier"/>
-        <result column="ModifyTime" jdbcType="TIMESTAMP" property="modifyTime"/>
+        <id column="ID_" jdbcType="BIGINT" property="id"/>
+        <result column="NAME_" jdbcType="VARCHAR" property="name"/>
+        <result column="DESCRIPTION_" jdbcType="VARCHAR" property="description"/>
+        <result column="URL_" jdbcType="VARCHAR" property="url"/>
+        <result column="PATH_" jdbcType="VARCHAR" property="path"/>
+        <result column="IS_BLANK_" jdbcType="INTEGER" property="isBlank"/>
+        <result column="PID_" jdbcType="VARCHAR" property="pId"/>
+        <result column="ICON_" jdbcType="VARCHAR" property="icon"/>
+        <result column="PERMS_" jdbcType="VARCHAR" property="perms"/>
+        <result column="TYPE_" jdbcType="INTEGER" property="type"/>
+        <result column="ORDER_" jdbcType="INTEGER" property="order"/>
+        <result column="VISIBLE_" jdbcType="INTEGER" property="visible"/>
+        <result column="CREATOR_" jdbcType="BIGINT" property="creator"/>
+        <result column="CREATE_TIME_" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="MODIFIER_" jdbcType="BIGINT" property="modifier"/>
+        <result column="MODIFY_TIME_" jdbcType="TIMESTAMP" property="modifyTime"/>
         <result column="childCount" jdbcType="INTEGER" property="childCount"/>
     </resultMap>
     <sql id="Base_Column_List">
-        `Id`, `Name`, `Description`, `Url`,`Path`,`IsBlank`,`PId`,`Perms`,`Type`,`Icon`,`Order`,`Visible`,`Creator`,
-        `CreateTime`,`Modifier`, `ModifyTime`
+        `ID_`, `NAME_`, `DESCRIPTION_`, `URL_`,`PATH_`,`IS_BLANK_`,`PID_`,`PERMS_`,`TYPE_`,`ICON_`,`ORDER_`,`VISIBLE_`,`CREATOR_`,
+        `CREATE_TIME_`,`MODIFIER_`, `MODIFY_TIME_`
     </sql>
     <insert id="insert" parameterType="com.ares.core.model.system.SysMenu">
         insert into sys_menu (<include refid="Base_Column_List"/>)
@@ -48,56 +48,56 @@
         update sys_menu
         <set>
             <if test="name != null">
-                `Name` = #{name,jdbcType=VARCHAR},
+                `NAME_` = #{name,jdbcType=VARCHAR},
             </if>
             <if test="description != null">
-                `Description` = #{description,jdbcType=VARCHAR},
+                `DESCRIPTION_` = #{description,jdbcType=VARCHAR},
             </if>
             <if test="url != null">
-                `Url` = #{url,jdbcType=VARCHAR},
+                `URL_` = #{url,jdbcType=VARCHAR},
             </if>
             <if test="path != null">
-                `Path` = #{path,jdbcType=VARCHAR},
+                `PATH_` = #{path,jdbcType=VARCHAR},
             </if>
             <if test="isBlank != null">
-                `IsBlank` = #{isBlank,jdbcType=INTEGER},
+                `IS_BLANK_` = #{isBlank,jdbcType=INTEGER},
             </if>
             <if test="pId != null">
-                `PId` = #{pId,jdbcType=VARCHAR},
+                `PID_` = #{pId,jdbcType=VARCHAR},
             </if>
             <if test="icon != null">
-                `Icon` = #{icon,jdbcType=VARCHAR},
+                `ICON_` = #{icon,jdbcType=VARCHAR},
             </if>
             <if test="perms != null">
-                `Perms` = #{perms,jdbcType=VARCHAR},
+                `PERMS_` = #{perms,jdbcType=VARCHAR},
             </if>
             <if test="type != null">
-                `Type` = #{type,jdbcType=INTEGER},
+                `TYPE_` = #{type,jdbcType=INTEGER},
             </if>
             <if test="order != null">
-                `Order` = #{order,jdbcType=INTEGER},
+                `ORDER_` = #{order,jdbcType=INTEGER},
             </if>
             <if test="visible != null">
-                `Visible` = #{visible,jdbcType=INTEGER},
+                `VISIBLE_` = #{visible,jdbcType=INTEGER},
             </if>
             <if test="creator != null">
-                `Creator` = #{creator,jdbcType=BIGINT},
+                `CREATOR_` = #{creator,jdbcType=BIGINT},
             </if>
             <if test="createTime != null">
-                `CreateTime` = #{createTime,jdbcType=TIMESTAMP},
+                `CREATE_TIME_` = #{createTime,jdbcType=TIMESTAMP},
             </if>
             <if test="modifier != null">
-                `Modifier` = #{modifier,jdbcType=BIGINT},
+                `MODIFIER_` = #{modifier,jdbcType=BIGINT},
             </if>
             <if test="modifyTime != null">
-                `ModifyTime` = #{modifyTime,jdbcType=TIMESTAMP},
+                `MODIFY_TIME_` = #{modifyTime,jdbcType=TIMESTAMP},
             </if>
         </set>
-        where Id = #{id,jdbcType=BIGINT}
+        where ID_ = #{id,jdbcType=BIGINT}
     </update>
     <delete id="deleteByIds" parameterType="java.util.List">
         delete from `sys_menu`
-        where `Id` in
+        where `ID_` in
         <foreach collection="list" item="id" open="(" separator="," close=")">
             #{id}
         </foreach>
@@ -105,19 +105,19 @@
     </delete>
     <select id="getMenuByUserId" parameterType="java.lang.String" resultMap="SysMenu">
         select
-        menu.*, (SELECT count(1)FROM sys_menu WHERE PId = menu.Id and `Type` != 2) as childCount
+        menu.*, (SELECT count(1)FROM sys_menu WHERE PID_ = menu.ID_ and `TYPE_` != 2) as childCount
         from sys_menu menu
         <if test="userId != 1 and userId != null">
-            left join sys_permission permission on menu.Id = permission.MenuId
-            LEFT JOIN sys_role role on permission.RoleId = role.Id
-            LEFT JOIN sys_role_user roleuser on role.Id = roleuser.RoleId
-            left join sys_user user on roleuser.UserId = user.Id
+            left join sys_permission permission on menu.ID_ = permission.MenuId
+            LEFT JOIN sys_role role on permission.ROLE_ID_ = role.ID_
+            LEFT JOIN sys_role_user roleuser on role.ID_ = roleuser.ROLE_ID_
+            left join sys_user user on roleuser.USER_ID_ = user.ID_
         </if>
-        where menu.Type != 2
+        where menu.TYPE_ != 2
         <if test="userId != 1 and userId != null">
-            and user.Id = #{userId,jdbcType=VARCHAR}
+            and user.ID_ = #{userId,jdbcType=VARCHAR}
         </if>
-        order by menu.Order asc
+        order by menu.ORDER_ asc
     </select>
 
     <select id="list" parameterType="java.util.Map" resultMap="SysMenu">
@@ -125,24 +125,24 @@
         <include refid="Base_Column_List"/>
         from `sys_menu`
         where 1=1
-        order by `Order` asc
+        order by `ORDER_` asc
     </select>
     <select id="getById" parameterType="java.lang.Long" resultMap="SysMenu">
         select
         <include refid="Base_Column_List"/>
         from `sys_menu`
-        where `Id` = #{id,jdbcType=BIGINT}
+        where `ID_` = #{id,jdbcType=BIGINT}
     </select>
     <select id="getByPId" parameterType="java.lang.String" resultMap="SysMenu">
         select
         <include refid="Base_Column_List"/>
         from `sys_menu`
-        where `PId` = #{pid,jdbcType=VARCHAR}
+        where `PID_` = #{pid,jdbcType=VARCHAR}
     </select>
     <select id="getMenuByRole" parameterType="java.lang.String" resultType="java.lang.String">
         select `MenuId`
         from `sys_permission`
-        where `RoleId` = #{roleId,jdbcType=VARCHAR}
+        where `ROLE_ID_` = #{roleId,jdbcType=VARCHAR}
     </select>
 
     <select id="selectList" parameterType="com.ares.core.model.query.SysMenuQuery" resultMap="SysMenu">
@@ -151,43 +151,43 @@
         from `sys_menu`
         where 1=1
         <if test="name != null and name != ''">
-            and `Name` like concat('%', #{name}, '%')
+            and `NAME_` like concat('%', #{name}, '%')
         </if>
         <if test="beginTime != null and beginTime != ''"><!-- 开始时间检索 -->
-            AND date_format(`CreateTime`,'%y%m%d') &gt;= date_format(#{beginTime},'%y%m%d')
+            AND date_format(`CREATE_TIME_`,'%y%m%d') &gt;= date_format(#{beginTime},'%y%m%d')
         </if>
         <if test="endTime != null and endTime != ''"><!-- 结束时间检索 -->
             AND date_format(`Create_time`,'%y%m%d') &lt;= date_format(#{endTime},'%y%m%d')
         </if>
-        order by `Order` asc
+        order by `ORDER_` asc
     </select>
 
     <select id="selectListByUser" parameterType="com.ares.core.model.query.SysMenuQuery" resultMap="SysMenu">
         select
         <include refid="Base_Column_List"/>
         from `sys_menu` menu
-        left join sys_permission permission on menu.Id = permission.MenuId
-        LEFT JOIN sys_role role on permission.RoleId = role.Id
-        LEFT JOIN sys_role_user roleuser on role.Id = roleuser.RoleId
-        left join sys_user user on roleuser.UserId = user.Id
-        where user.Id = #{params.userId}
+        left join sys_permission permission on menu.ID_ = permission.MenuId
+        LEFT JOIN sys_role role on permission.ROLE_ID_ = role.ID_
+        LEFT JOIN sys_role_user roleuser on role.ID_ = roleuser.ROLE_ID_
+        left join sys_user user on roleuser.USER_ID_ = user.ID_
+        where user.ID_ = #{params.userId}
         <if test="name != null and name != ''">
-            and `Name` like concat('%', #{name}, '%')
+            and `NAME_` like concat('%', #{name}, '%')
         </if>
         <if test="beginTime != null and beginTime != ''"><!-- 开始时间检索 -->
-            AND date_format(`CreateTime`,'%y%m%d') &gt;= date_format(#{beginTime},'%y%m%d')
+            AND date_format(`CREATE_TIME_`,'%y%m%d') &gt;= date_format(#{beginTime},'%y%m%d')
         </if>
         <if test="endTime != null and endTime != ''"><!-- 结束时间检索 -->
             AND date_format(`Create_time`,'%y%m%d') &lt;= date_format(#{endTime},'%y%m%d')
         </if>
-        order by menu.`Order` asc
+        order by menu.`ORDER_` asc
     </select>
 
     <delete id="deleteById" parameterType="java.lang.String">
-        delete from `sys_menu` where `Id` = #{menuId}
+        delete from `sys_menu` where `ID_` = #{menuId}
     </delete>
 
     <select id="hasChildByMenuId" parameterType="java.lang.String" resultType="Integer">
-        select count(1) from `sys_menu` where `PId` = #{menuId}
+        select count(1) from `sys_menu` where `PID_` = #{menuId}
     </select>
 </mapper>

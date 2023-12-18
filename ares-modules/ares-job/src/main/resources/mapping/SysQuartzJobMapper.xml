@@ -2,22 +2,22 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ares.quartz.persistence.dao.ISysQuartzJobDao">
     <resultMap id="SysQuartzJob" type="com.ares.quartz.persistence.model.SysQuartzJob">
-        <id column="Id" jdbcType="BIGINT" property="id"/>
-        <result column="JobName" jdbcType="VARCHAR" property="jobName"/>
-        <result column="JobGroup" jdbcType="VARCHAR" property="jobGroup"/>
-        <result column="Description" jdbcType="VARCHAR" property="description"/>
-        <result column="InvokeTarget" jdbcType="VARCHAR" property="invokeTarget"/>
-        <result column="CronExpression" jdbcType="VARCHAR" property="cronExpression"/>
-        <result column="ConCurrent" jdbcType="VARCHAR" property="conCurrent"/>
-        <result column="Status" jdbcType="INTEGER" property="status"/>
-        <result column="Creator" jdbcType="BIGINT" property="creator"/>
-        <result column="CreateTime" jdbcType="TIMESTAMP" property="createTime"/>
-        <result column="Modifier" jdbcType="BIGINT" property="modifier"/>
-        <result column="ModifyTime" jdbcType="TIMESTAMP" property="modifyTime"/>
+        <id column="ID_" jdbcType="BIGINT" property="id"/>
+        <result column="JOB_NAME_" jdbcType="VARCHAR" property="jobName"/>
+        <result column="JOB_GROUP_" jdbcType="VARCHAR" property="jobGroup"/>
+        <result column="DESCRIPTION_" jdbcType="VARCHAR" property="description"/>
+        <result column="INVOKE_TARGET_" jdbcType="VARCHAR" property="invokeTarget"/>
+        <result column="CRON_EXPRESSION_" jdbcType="VARCHAR" property="cronExpression"/>
+        <result column="CON_CURRENT_" jdbcType="VARCHAR" property="conCurrent"/>
+        <result column="STATUS_" jdbcType="INTEGER" property="status"/>
+        <result column="CREATOR_" jdbcType="BIGINT" property="creator"/>
+        <result column="CREATE_TIME_" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="MODIFIER_" jdbcType="BIGINT" property="modifier"/>
+        <result column="MODIFY_TIME_" jdbcType="TIMESTAMP" property="modifyTime"/>
     </resultMap>
     <sql id="Base_Column_List">
-        Id, JobName, JobGroup, Description, InvokeTarget, CronExpression, ConCurrent, Status,Creator,
-        CreateTime,Modifier, ModifyTime
+        ID_, JOB_NAME_, JOB_GROUP_, DESCRIPTION_, INVOKE_TARGET_, CRON_EXPRESSION_, CON_CURRENT_, STATUS_,CREATOR_,
+        CREATE_TIME_,MODIFIER_, MODIFY_TIME_
     </sql>
     <select id="list" parameterType="java.util.Map" resultMap="SysQuartzJob">
         select
@@ -25,33 +25,33 @@
         from `sys_quartz_job`
         where 1=1
         <if test="search != null">
-            and (`JobName` like '%${search}%' or `JobGroup` like '%${search}%')
+            and (`JOB_NAME_` like '%${search}%' or `JOB_GROUP_` like '%${search}%')
         </if>
         <if test="sort != null">
             order by ${sort}
         </if>
         <if test="sort == null">
-            order by `CreateTime` desc
+            order by `CREATE_TIME_` desc
         </if>
     </select>
     <select id="getById" parameterType="java.lang.Long" resultMap="SysQuartzJob">
         select
         <include refid="Base_Column_List"/>
         from `sys_quartz_job`
-        where `Id` = #{id,jdbcType=BIGINT}
+        where `ID_` = #{id,jdbcType=BIGINT}
     </select>
     <delete id="deleteByIds" parameterType="java.util.List">
         delete from `sys_quartz_job`
-        where `Id` in
+        where `ID_` in
         <foreach collection="list" item="id" open="(" separator="," close=")">
             #{id}
         </foreach>
     </delete>
     <insert id="insert" parameterType="com.ares.quartz.persistence.model.SysQuartzJob">
-        insert into sys_quartz_job (Id, JobName, JobGroup, Description,
-        InvokeTarget, CronExpression,
-        ConCurrent, Status,Creator, CreateTime, Modifier,
-        ModifyTime)
+        insert into sys_quartz_job (ID_, JOB_NAME_, JOB_GROUP_, DESCRIPTION_,
+        INVOKE_TARGET_, CRON_EXPRESSION_,
+        CON_CURRENT_, STATUS_,CREATOR_, CREATE_TIME_, MODIFIER_,
+        MODIFY_TIME_)
         values (#{id,jdbcType=BIGINT}, #{jobName,jdbcType=VARCHAR}, #{jobGroup,jdbcType=VARCHAR},
         #{description,jdbcType=VARCHAR},#{invokeTarget,jdbcType=VARCHAR}, #{cronExpression,jdbcType=VARCHAR},
         #{conCurrent,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER},#{creator,jdbcType=BIGINT},
@@ -61,46 +61,46 @@
         update sys_quartz_job
         <set>
             <if test="jobName != null">
-                JobName = #{jobName,jdbcType=VARCHAR},
+                JOB_NAME_ = #{jobName,jdbcType=VARCHAR},
             </if>
             <if test="jobGroup != null">
-                JobGroup = #{jobGroup,jdbcType=VARCHAR},
+                JOB_GROUP_ = #{jobGroup,jdbcType=VARCHAR},
             </if>
             <if test="description != null">
-                Description = #{description,jdbcType=VARCHAR},
+                DESCRIPTION_ = #{description,jdbcType=VARCHAR},
             </if>
             <if test="invokeTarget != null">
-                InvokeTarget = #{invokeTarget,jdbcType=VARCHAR},
+                INVOKE_TARGET_ = #{invokeTarget,jdbcType=VARCHAR},
             </if>
             <if test="cronExpression != null">
-                CronExpression = #{cronExpression,jdbcType=VARCHAR},
+                CRON_EXPRESSION_ = #{cronExpression,jdbcType=VARCHAR},
             </if>
             <if test="conCurrent != null">
-                ConCurrent = #{conCurrent,jdbcType=VARCHAR},
+                CON_CURRENT_ = #{conCurrent,jdbcType=VARCHAR},
             </if>
             <if test="status != null">
-                Status = #{status,jdbcType=INTEGER},
+                STATUS_ = #{status,jdbcType=INTEGER},
             </if>
             <if test="creator != null">
-                Creator = #{creator,jdbcType=BIGINT},
+                CREATOR_ = #{creator,jdbcType=BIGINT},
             </if>
             <if test="createTime != null">
-                CreateTime = #{createTime,jdbcType=TIMESTAMP},
+                CREATE_TIME_ = #{createTime,jdbcType=TIMESTAMP},
             </if>
             <if test="modifier != null">
-                Modifier = #{modifier,jdbcType=BIGINT},
+                MODIFIER_ = #{modifier,jdbcType=BIGINT},
             </if>
             <if test="modifyTime != null">
-                ModifyTime = #{modifyTime,jdbcType=TIMESTAMP},
+                MODIFY_TIME_ = #{modifyTime,jdbcType=TIMESTAMP},
             </if>
         </set>
-        where Id = #{id,jdbcType=BIGINT}
+        where ID_ = #{id,jdbcType=BIGINT}
     </update>
 
     <select id="checkUnique" parameterType="java.lang.String" resultType="java.lang.Integer">
         select count(1)
         from `sys_quartz_job`
-        where `JobName` = #{jobName,jdbcType=VARCHAR}
+        where `JOB_NAME_` = #{jobName,jdbcType=VARCHAR}
     </select>
 
     <select id="selectList" parameterType="com.ares.quartz.model.query.SysQuartzJobQuery" resultMap="SysQuartzJob">
@@ -109,16 +109,16 @@
         from `sys_quartz_job`
         where 1=1
         <if test="jobName != null and jobName != ''">
-            and `JobName` like concat('%', #{jobName}, '%')
+            and `JOB_NAME_` like concat('%', #{jobName}, '%')
         </if>
         <if test="jobGroup != null and jobGroup != ''">
-            and `JobGroup` = #{jobGroup}
+            and `JOB_GROUP_` = #{jobGroup}
         </if>
         <if test="status != null">
-            and `Status` = #{status}
+            and `STATUS_` = #{status}
         </if>
         <if test="beginTime != null and beginTime != ''"><!-- 开始时间检索 -->
-            AND date_format(`CreateTime`,'%y%m%d') &gt;= date_format(#{beginTime},'%y%m%d')
+            AND date_format(`CREATE_TIME_`,'%y%m%d') &gt;= date_format(#{beginTime},'%y%m%d')
         </if>
         <if test="endTime != null and endTime != ''"><!-- 结束时间检索 -->
             AND date_format(`Create_time`,'%y%m%d') &lt;= date_format(#{endTime},'%y%m%d')

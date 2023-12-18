@@ -2,20 +2,20 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ares.system.dao.ISysPropertiesDao">
     <resultMap id="SysProperties" type="com.ares.core.model.system.SysProperties">
-        <id column="Id" jdbcType="BIGINT" property="id"/>
-        <result column="Alias" jdbcType="VARCHAR" property="alias"/>
-        <result column="Creator" jdbcType="BIGINT" property="creator"/>
-        <result column="Description" jdbcType="VARCHAR" property="description"/>
-        <result column="Group" jdbcType="VARCHAR" property="group"/>
-        <result column="Modifier" jdbcType="BIGINT" property="modifier"/>
-        <result column="Name" jdbcType="VARCHAR" property="name"/>
+        <id column="ID_" jdbcType="BIGINT" property="id"/>
+        <result column="ALIAS_" jdbcType="VARCHAR" property="alias"/>
+        <result column="CREATOR_" jdbcType="BIGINT" property="creator"/>
+        <result column="DESCRIPTION_" jdbcType="VARCHAR" property="description"/>
+        <result column="GROUP_" jdbcType="VARCHAR" property="group"/>
+        <result column="MODIFIER_" jdbcType="BIGINT" property="modifier"/>
+        <result column="NAME_" jdbcType="VARCHAR" property="name"/>
         <result column="Value" jdbcType="VARCHAR" property="value"/>
-        <result column="CreateTime" jdbcType="TIMESTAMP" property="createTime"/>
-        <result column="ModifyTime" jdbcType="TIMESTAMP" property="modifyTime"/>
+        <result column="CREATE_TIME_" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="MODIFY_TIME_" jdbcType="TIMESTAMP" property="modifyTime"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-        `Id`,`Alias`,`Creator`,`Description`,`Group`,`Modifier`,`Name`,`Value`, `CreateTime`, `ModifyTime`
+        `ID_`,`ALIAS_`,`CREATOR_`,`DESCRIPTION_`,`GROUP_`,`MODIFIER_`,`NAME_`,`Value`, `CREATE_TIME_`, `MODIFY_TIME_`
     </sql>
 
     <insert id="insert" parameterType="com.ares.core.model.system.SysProperties">
@@ -38,39 +38,39 @@
         update `sys_properties`
         <set>
             <if test="alias!= null">
-                `Alias`=#{alias,jdbcType=VARCHAR},
+                `ALIAS_`=#{alias,jdbcType=VARCHAR},
             </if>
             <if test="creator!= null">
-                `Creator`=#{creator,jdbcType=BIGINT},
+                `CREATOR_`=#{creator,jdbcType=BIGINT},
             </if>
             <if test="description!= null">
-                `Description`=#{description,jdbcType=VARCHAR},
+                `DESCRIPTION_`=#{description,jdbcType=VARCHAR},
             </if>
             <if test="group!= null">
-                `Group`=#{group,jdbcType=VARCHAR},
+                `GROUP_`=#{group,jdbcType=VARCHAR},
             </if>
             <if test="modifier!= null">
-                `Modifier`=#{modifier,jdbcType=BIGINT},
+                `MODIFIER_`=#{modifier,jdbcType=BIGINT},
             </if>
             <if test="name!= null">
-                `Name`=#{name,jdbcType=VARCHAR},
+                `NAME_`=#{name,jdbcType=VARCHAR},
             </if>
             <if test="value!= null">
                 `Value`=#{value,jdbcType=VARCHAR},
             </if>
             <if test="createTime != null">
-                `CreateTime` = #{createTime,jdbcType=TIMESTAMP},
+                `CREATE_TIME_` = #{createTime,jdbcType=TIMESTAMP},
             </if>
             <if test="modifyTime != null">
-                `ModifyTime` = #{modifyTime,jdbcType=TIMESTAMP},
+                `MODIFY_TIME_` = #{modifyTime,jdbcType=TIMESTAMP},
             </if>
         </set>
-        where `Id` = #{id,jdbcType=BIGINT}
+        where `ID_` = #{id,jdbcType=BIGINT}
     </update>
 
     <delete id="deleteByIds" parameterType="java.util.List">
         delete from `sys_properties`
-        where `Id` in
+        where `ID_` in
         <foreach collection="list" item="id" open="(" separator="," close=")">
             #{id}
         </foreach>
@@ -79,7 +79,7 @@
         select
         <include refid="Base_Column_List"/>
         from `sys_properties`
-        where `Id` = #{id,jdbcType=BIGINT}
+        where `ID_` = #{id,jdbcType=BIGINT}
     </select>
 
     <select id="list" parameterType="java.util.Map" resultMap="SysProperties">
@@ -94,7 +94,7 @@
             order by ${sort}
         </if>
         <if test="sort == null">
-            order by `CreateTime` desc
+            order by `CREATE_TIME_` desc
         </if>
     </select>
 
@@ -105,7 +105,7 @@
         from `sys_properties`
         where 1=1
         <if test="beginTime != null and beginTime != ''"><!-- 开始时间检索 -->
-            AND date_format(`CreateTime`,'%y%m%d') &gt;= date_format(#{beginTime},'%y%m%d')
+            AND date_format(`CREATE_TIME_`,'%y%m%d') &gt;= date_format(#{beginTime},'%y%m%d')
         </if>
         <if test="endTime != null and endTime != ''"><!-- 结束时间检索 -->
             AND date_format(`Create_time`,'%y%m%d') &lt;= date_format(#{endTime},'%y%m%d')
@@ -116,12 +116,12 @@
         select
         <include refid="Base_Column_List"/>
         from `sys_properties`
-        where `Group` = #{group}
+        where `GROUP_` = #{group}
     </select>
 
     <select id="getValueByAlias" parameterType="java.lang.String" resultType="java.lang.String">
         select `Value`
         from `sys_properties`
-        where `Alias` = #{alias}
+        where `ALIAS_` = #{alias}
     </select>
 </mapper>

@@ -2,20 +2,20 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ares.system.dao.ISysTemplateDao">
     <resultMap id="SysTemplate" type="com.ares.core.model.system.SysTemplate">
-        <id column="Id" jdbcType="BIGINT" property="id"/>
-        <result column="Name" jdbcType="VARCHAR" property="name"/>
-        <result column="Subject" jdbcType="VARCHAR" property="subject"/>
-        <result column="Text" jdbcType="VARCHAR" property="text"/>
-        <result column="Html" jdbcType="VARCHAR" property="html"/>
-        <result column="Params" jdbcType="VARCHAR" property="param"/>
-        <result column="Creator" jdbcType="BIGINT" property="creator"/>
-        <result column="Modifier" jdbcType="BIGINT" property="modifier"/>
-        <result column="CreateTime" jdbcType="TIMESTAMP" property="createTime"/>
-        <result column="ModifyTime" jdbcType="TIMESTAMP" property="modifyTime"/>
+        <id column="ID_" jdbcType="BIGINT" property="id"/>
+        <result column="NAME_" jdbcType="VARCHAR" property="name"/>
+        <result column="SUBJECT_" jdbcType="VARCHAR" property="subject"/>
+        <result column="TEXT_" jdbcType="VARCHAR" property="text"/>
+        <result column="HTML_" jdbcType="VARCHAR" property="html"/>
+        <result column="PARAMS_" jdbcType="VARCHAR" property="param"/>
+        <result column="CREATOR_" jdbcType="BIGINT" property="creator"/>
+        <result column="MODIFIER_" jdbcType="BIGINT" property="modifier"/>
+        <result column="CREATE_TIME_" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="MODIFY_TIME_" jdbcType="TIMESTAMP" property="modifyTime"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-        `Id`,`Name`,`Subject`,`Text`,`Html`,`Params`,`Creator`,`Modifier`, `CreateTime`, `ModifyTime`
+        `ID_`,`NAME_`,`SUBJECT_`,`TEXT_`,`HTML_`,`PARAMS_`,`CREATOR_`,`MODIFIER_`, `CREATE_TIME_`, `MODIFY_TIME_`
     </sql>
 
     <insert id="insert" parameterType="com.ares.core.model.system.SysTemplate">
@@ -38,39 +38,39 @@
         update `sys_template`
         <set>
             <if test="name!= null">
-                `Name`=#{name,jdbcType=VARCHAR},
+                `NAME_`=#{name,jdbcType=VARCHAR},
             </if>
             <if test="subject!= null">
-                `Subject`=#{subject,jdbcType=VARCHAR},
+                `SUBJECT_`=#{subject,jdbcType=VARCHAR},
             </if>
             <if test="text!= null">
-                `Text`=#{text,jdbcType=VARCHAR},
+                `TEXT_`=#{text,jdbcType=VARCHAR},
             </if>
             <if test="html!= null">
-                `Html`=#{html,jdbcType=VARCHAR},
+                `HTML_`=#{html,jdbcType=VARCHAR},
             </if>
             <if test="param!= null">
-                `Params`=#{param,jdbcType=VARCHAR},
+                `PARAMS_`=#{param,jdbcType=VARCHAR},
             </if>
             <if test="creator!= null">
-                `Creator`=#{creator,jdbcType=BIGINT},
+                `CREATOR_`=#{creator,jdbcType=BIGINT},
             </if>
             <if test="modifier!= null">
-                `Modifier`=#{modifier,jdbcType=BIGINT},
+                `MODIFIER_`=#{modifier,jdbcType=BIGINT},
             </if>
             <if test="createTime != null">
-                `CreateTime` = #{createTime,jdbcType=TIMESTAMP},
+                `CREATE_TIME_` = #{createTime,jdbcType=TIMESTAMP},
             </if>
             <if test="modifyTime != null">
-                `ModifyTime` = #{modifyTime,jdbcType=TIMESTAMP},
+                `MODIFY_TIME_` = #{modifyTime,jdbcType=TIMESTAMP},
             </if>
         </set>
-        where `Id` = #{id,jdbcType=BIGINT}
+        where `ID_` = #{id,jdbcType=BIGINT}
     </update>
 
     <delete id="deleteByIds" parameterType="java.util.List">
         delete from `sys_template`
-        where `Id` in
+        where `ID_` in
         <foreach collection="list" item="id" open="(" separator="," close=")">
             #{id}
         </foreach>
@@ -79,7 +79,7 @@
         select
         <include refid="Base_Column_List"/>
         from `sys_template`
-        where `Id` = #{id,jdbcType=BIGINT}
+        where `ID_` = #{id,jdbcType=BIGINT}
     </select>
 
     <select id="list" parameterType="java.util.Map" resultMap="SysTemplate">
@@ -94,7 +94,7 @@
             order by ${sort}
         </if>
         <if test="sort == null">
-            order by `CreateTime` desc
+            order by `CREATE_TIME_` desc
         </if>
     </select>
 
@@ -104,10 +104,10 @@
         from `sys_template`
         where 1=1
         <if test="subject != null and subject != ''"><!-- 开始时间检索 -->
-            AND `Subject` like concat('%', #{name}, '%')
+            AND `SUBJECT_` like concat('%', #{name}, '%')
         </if>
         <if test="beginTime != null and beginTime != ''"><!-- 开始时间检索 -->
-            AND date_format(`CreateTime`,'%y%m%d') &gt;= date_format(#{beginTime},'%y%m%d')
+            AND date_format(`CREATE_TIME_`,'%y%m%d') &gt;= date_format(#{beginTime},'%y%m%d')
         </if>
         <if test="endTime != null and endTime != ''"><!-- 结束时间检索 -->
             AND date_format(`Create_time`,'%y%m%d') &lt;= date_format(#{endTime},'%y%m%d')
@@ -118,6 +118,6 @@
         select
         <include refid="Base_Column_List"/>
         from `sys_template`
-        where `Name` = #{name,jdbcType=VARCHAR}
+        where `NAME_` = #{name,jdbcType=VARCHAR}
     </select>
 </mapper>

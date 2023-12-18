@@ -2,23 +2,23 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ares.system.dao.ISysLogDao">
     <resultMap id="SysLog" type="com.ares.core.model.system.SysLog">
-        <id column="Id" jdbcType="BIGINT" property="id"/>
-        <result column="HostIP" jdbcType="VARCHAR" property="hostIp"/>
-        <result column="UserName" jdbcType="VARCHAR" property="userName"/>
-        <result column="Url" jdbcType="VARCHAR" property="url"/>
-        <result column="Params" jdbcType="VARCHAR" property="operParams"/>
-        <result column="RequestMethod" jdbcType="VARCHAR" property="requestMethod"/>
-        <result column="Notes" jdbcType="VARCHAR" property="notes"/>
-        <result column="CreateTime" jdbcType="TIMESTAMP" property="createTime"/>
-        <result column="ModifyTime" jdbcType="TIMESTAMP" property="modifyTime"/>
+        <id column="ID_" jdbcType="BIGINT" property="id"/>
+        <result column="HOST_IP_" jdbcType="VARCHAR" property="hostIp"/>
+        <result column="USERNAME_" jdbcType="VARCHAR" property="userName"/>
+        <result column="URL_" jdbcType="VARCHAR" property="url"/>
+        <result column="PARAMS_" jdbcType="VARCHAR" property="operParams"/>
+        <result column="REQUEST_METHOD_" jdbcType="VARCHAR" property="requestMethod"/>
+        <result column="NOTES_" jdbcType="VARCHAR" property="notes"/>
+        <result column="CREATE_TIME_" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="MODIFY_TIME_" jdbcType="TIMESTAMP" property="modifyTime"/>
     </resultMap>
     <sql id="Base_Column_List">
-        `Id`
-        , `HostIP`, `UserName`, `Url`,`Params`,`RequestMethod`,`Notes`, `CreateTime`, `ModifyTime`
+        `ID_`
+        , `HOST_IP_`, `USERNAME_`, `URL_`,`PARAMS_`,`REQUEST_METHOD_`,`NOTES_`, `CREATE_TIME_`, `MODIFY_TIME_`
     </sql>
     <insert id="insert" parameterType="com.ares.core.model.system.SysLog">
-        insert into `sys_log` (`Id`, `HostIP`, `UserName`, `Url`, `Params`, `RequestMethod`, `Notes`, `CreateTime`,
-        `ModifyTime`)
+        insert into `sys_log` (`ID_`, `HOST_IP_`, `USERNAME_`, `URL_`, `PARAMS_`, `REQUEST_METHOD_`, `NOTES_`, `CREATE_TIME_`,
+        `MODIFY_TIME_`)
         values (#{id,jdbcType=BIGINT}, #{hostIp,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR},
         #{url,jdbcType=VARCHAR}, #{operParams,jdbcType=VARCHAR}, #{requestMethod,jdbcType=VARCHAR},
         #{notes,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{modifyTime,jdbcType=TIMESTAMP})
@@ -30,20 +30,20 @@
         from `sys_log`
         where 1=1
         <if test="hostIp != null">
-            and `HostIP` like concat('%', #{hostIp}, '%')
+            and `HOST_IP_` like concat('%', #{hostIp}, '%')
         </if>
         <if test="userName != null">
-            and `UserName` like concat('%', #{userName}, '%')
+            and `USERNAME_` like concat('%', #{userName}, '%')
         </if>
         <if test="requestMethod != null">
-            and `RequestMethod` = #{requestMethod}
+            and `REQUEST_METHOD_` = #{requestMethod}
         </if>
         <if test="beginTime != null and beginTime != ''"><!-- 开始时间检索 -->
-            AND date_format(`CreateTime`,'%y%m%d') &gt;= date_format(#{beginTime},'%y%m%d')
+            AND date_format(`CREATE_TIME_`,'%y%m%d') &gt;= date_format(#{beginTime},'%y%m%d')
         </if>
         <if test="endTime != null and endTime != ''"><!-- 结束时间检索 -->
             AND date_format(`Create_time`,'%y%m%d') &lt;= date_format(#{endTime},'%y%m%d')
         </if>
-        order by `CreateTime` desc
+        order by `CREATE_TIME_` desc
     </select>
 </mapper>

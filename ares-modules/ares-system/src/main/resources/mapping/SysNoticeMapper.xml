@@ -2,22 +2,22 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ares.system.dao.ISysNoticeDao">
     <resultMap id="SysNotice" type="com.ares.core.model.system.SysNotice">
-        <id column="Id" jdbcType="BIGINT" property="id"/>
-        <result column="Deadline" jdbcType="TIMESTAMP" property="deadline"/>
-        <result column="NoticeContent" jdbcType="VARCHAR" property="noticeContent"/>
-        <result column="NoticeStatus" jdbcType="VARCHAR" property="noticeStatus"/>
-        <result column="NoticeTitle" jdbcType="VARCHAR" property="noticeTitle"/>
-        <result column="NoticeType" jdbcType="VARCHAR" property="noticeType"/>
-        <result column="Remark" jdbcType="VARCHAR" property="remark"/>
-        <result column="Creator" jdbcType="BIGINT" property="creator"/>
-        <result column="CreateTime" jdbcType="TIMESTAMP" property="createTime"/>
-        <result column="Modifier" jdbcType="BIGINT" property="modifier"/>
-        <result column="ModifyTime" jdbcType="TIMESTAMP" property="modifyTime"/>
+        <id column="ID_" jdbcType="BIGINT" property="id"/>
+        <result column="DEADLINE_" jdbcType="TIMESTAMP" property="deadline"/>
+        <result column="NOTICE_CONTENT_" jdbcType="VARCHAR" property="noticeContent"/>
+        <result column="NOTICE_STATUS_" jdbcType="VARCHAR" property="noticeStatus"/>
+        <result column="NOTICE_TITLE_" jdbcType="VARCHAR" property="noticeTitle"/>
+        <result column="NOTICE_TYPE_" jdbcType="VARCHAR" property="noticeType"/>
+        <result column="REMARK_" jdbcType="VARCHAR" property="remark"/>
+        <result column="CREATOR_" jdbcType="BIGINT" property="creator"/>
+        <result column="CREATE_TIME_" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="MODIFIER_" jdbcType="BIGINT" property="modifier"/>
+        <result column="MODIFY_TIME_" jdbcType="TIMESTAMP" property="modifyTime"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-        `Id`,`Deadline`,`NoticeContent`,`NoticeStatus`,`NoticeTitle`,`NoticeType`,`Remark`,
-        `Creator`,`CreateTime`,`Modifier`, `ModifyTime`
+        `ID_`,`DEADLINE_`,`NOTICE_CONTENT_`,`NOTICE_STATUS_`,`NOTICE_TITLE_`,`NOTICE_TYPE_`,`REMARK_`,
+        `CREATOR_`,`CREATE_TIME_`,`MODIFIER_`, `MODIFY_TIME_`
     </sql>
 
     <insert id="insert" parameterType="com.ares.core.model.system.SysNotice">
@@ -43,42 +43,42 @@
         update `sys_notice`
         <set>
             <if test="deadline!= null">
-                `Deadline`=#{deadline,jdbcType=TIMESTAMP},
+                `DEADLINE_`=#{deadline,jdbcType=TIMESTAMP},
             </if>
             <if test="noticeContent!= null">
-                `NoticeContent`=#{noticeContent,jdbcType=VARCHAR},
+                `NOTICE_CONTENT_`=#{noticeContent,jdbcType=VARCHAR},
             </if>
             <if test="noticeStatus!= null">
-                `NoticeStatus`=#{noticeStatus,jdbcType=VARCHAR},
+                `NOTICE_STATUS_`=#{noticeStatus,jdbcType=VARCHAR},
             </if>
             <if test="noticeTitle!= null">
-                `NoticeTitle`=#{noticeTitle,jdbcType=VARCHAR},
+                `NOTICE_TITLE_`=#{noticeTitle,jdbcType=VARCHAR},
             </if>
             <if test="noticeType!= null">
-                `NoticeType`=#{noticeType,jdbcType=VARCHAR},
+                `NOTICE_TYPE_`=#{noticeType,jdbcType=VARCHAR},
             </if>
             <if test="remark!= null">
-                `Remark`=#{remark,jdbcType=VARCHAR},
+                `REMARK_`=#{remark,jdbcType=VARCHAR},
             </if>
             <if test="creator != null">
-                `Creator` = #{creator,jdbcType=TIMESTAMP},
+                `CREATOR_` = #{creator,jdbcType=TIMESTAMP},
             </if>
             <if test="createTime != null">
-                `CreateTime` = #{createTime,jdbcType=TIMESTAMP},
+                `CREATE_TIME_` = #{createTime,jdbcType=TIMESTAMP},
             </if>
             <if test="modifier != null">
-                `Modifier` = #{modifier,jdbcType=TIMESTAMP},
+                `MODIFIER_` = #{modifier,jdbcType=TIMESTAMP},
             </if>
             <if test="modifyTime != null">
-                `ModifyTime` = #{modifyTime,jdbcType=TIMESTAMP},
+                `MODIFY_TIME_` = #{modifyTime,jdbcType=TIMESTAMP},
             </if>
         </set>
-        where `Id` = #{id,jdbcType=BIGINT}
+        where `ID_` = #{id,jdbcType=BIGINT}
     </update>
 
     <delete id="deleteByIds" parameterType="java.util.List">
         delete from `sys_notice`
-        where `Id` in
+        where `ID_` in
         <foreach collection="list" item="id" open="(" separator="," close=")">
             #{id}
         </foreach>
@@ -88,7 +88,7 @@
         select
         <include refid="Base_Column_List"/>
         from `sys_notice`
-        where `Id` = #{id,jdbcType=BIGINT}
+        where `ID_` = #{id,jdbcType=BIGINT}
     </select>
 
     <select id="list" parameterType="java.util.Map" resultMap="SysNotice">
@@ -103,7 +103,7 @@
             order by ${sort}
         </if>
         <if test="sort == null">
-            order by `CreateTime` desc
+            order by `CREATE_TIME_` desc
         </if>
     </select>
 
@@ -113,13 +113,13 @@
         from `sys_notice`
         where 1=1
         <if test="noticeTitle != null">
-            and `NoticeTitle` like concat('%', #{noticeTitle}, '%')
+            and `NOTICE_TITLE_` like concat('%', #{noticeTitle}, '%')
         </if>
         <if test="noticeType != null">
-            and `NoticeType` = #{noticeType}
+            and `NOTICE_TYPE_` = #{noticeType}
         </if>
         <if test="beginTime != null and beginTime != ''"><!-- 开始时间检索 -->
-            AND date_format(`CreateTime`,'%y%m%d') &gt;= date_format(#{beginTime},'%y%m%d')
+            AND date_format(`CREATE_TIME_`,'%y%m%d') &gt;= date_format(#{beginTime},'%y%m%d')
         </if>
         <if test="endTime != null and endTime != ''"><!-- 结束时间检索 -->
             AND date_format(`Create_time`,'%y%m%d') &lt;= date_format(#{endTime},'%y%m%d')
@@ -129,31 +129,31 @@
     <select id="noticeNum" resultType="integer">
         select count(1)
         from `sys_notice`
-        where `NoticeStatus` = 0
-        and `Id` not in (
-        select `NoticeId`
+        where `NOTICE_STATUS_` = 0
+        and `ID_` not in (
+        select `NOTICE_ID_`
         from `sys_notice_read`
-        WHERE `UserId` = #{userId}
+        WHERE `USER_ID_` = #{userId}
         )
-        AND `Deadline` > CURRENT_TIMESTAMP
+        AND `DEADLINE_` > CURRENT_TIMESTAMP
     </select>
 
     <select id="getNotices" resultMap="SysNotice">
         SELECT
-        notice.`Id`,
-        notice.`NoticeContent`,
-        notice.`NoticeTitle`,
-        notice.`NoticeType`,
-        notice.`Remark`,
-        notice.`CreateTime`,
-        user.`UserName` AS `Creator`
+        notice.`ID_`,
+        notice.`NOTICE_CONTENT_`,
+        notice.`NOTICE_TITLE_`,
+        notice.`NOTICE_TYPE_`,
+        notice.`REMARK_`,
+        notice.`CREATE_TIME_`,
+        user.`USERNAME_` AS `CREATOR_`
         FROM
         `sys_notice` notice
-        LEFT JOIN `sys_user` user ON notice.`Creator` = USER.`Id`
+        LEFT JOIN `sys_user` user ON notice.`CREATOR_` = USER.`ID_`
         WHERE
-        notice.`NoticeStatus` = 0
-        AND notice.`Deadline` > CURRENT_TIMESTAMP
-        order by notice.`CreateTime` desc
+        notice.`NOTICE_STATUS_` = 0
+        AND notice.`DEADLINE_` > CURRENT_TIMESTAMP
+        order by notice.`CREATE_TIME_` desc
     </select>
 
 </mapper>

@@ -2,18 +2,18 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ares.flowable.persistence.dao.ISysTaskFormDao">
     <resultMap id="SysTaskForm" type="com.ares.flowable.persistence.model.SysTaskForm">
-        <id column="Id" jdbcType="BIGINT" property="id"/>
-        <result column="FormId" jdbcType="BIGINT" property="formId"/>
-        <result column="TaskId" jdbcType="VARCHAR" property="taskId"/>
-        <result column="Creator" jdbcType="BIGINT" property="creator"/>
-        <result column="CreateTime" jdbcType="TIMESTAMP" property="createTime"/>
-        <result column="Modifier" jdbcType="BIGINT" property="modifier"/>
-        <result column="ModifyTime" jdbcType="TIMESTAMP" property="modifyTime"/>
+        <id column="ID_" jdbcType="BIGINT" property="id"/>
+        <result column="FORM_ID_" jdbcType="BIGINT" property="formId"/>
+        <result column="TASK_ID_" jdbcType="VARCHAR" property="taskId"/>
+        <result column="CREATOR_" jdbcType="BIGINT" property="creator"/>
+        <result column="CREATE_TIME_" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="MODIFIER_" jdbcType="BIGINT" property="modifier"/>
+        <result column="MODIFY_TIME_" jdbcType="TIMESTAMP" property="modifyTime"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-        `Id`
-        ,`FormId`,`TaskId`, `Creator`,`CreateTime`,`Modifier`, `ModifyTime`
+        `ID_`
+        ,`FORM_ID_`,`TASK_ID_`, `CREATOR_`,`CREATE_TIME_`,`MODIFIER_`, `MODIFY_TIME_`
     </sql>
 
     <insert id="insert" parameterType="com.ares.flowable.persistence.model.SysTaskForm">
@@ -35,30 +35,30 @@
         update `sys_task_form`
         <set>
             <if test="formId!= null">
-                `FormId`=#{formId,jdbcType=BIGINT},
+                `FORM_ID_`=#{formId,jdbcType=BIGINT},
             </if>
             <if test="taskId!= null">
-                `TaskId`=#{taskId,jdbcType=VARCHAR},
+                `TASK_ID_`=#{taskId,jdbcType=VARCHAR},
             </if>
             <if test="creator != null">
-                `Creator` = #{creator,jdbcType=TIMESTAMP},
+                `CREATOR_` = #{creator,jdbcType=TIMESTAMP},
             </if>
             <if test="createTime != null">
-                `CreateTime` = #{createTime,jdbcType=TIMESTAMP},
+                `CREATE_TIME_` = #{createTime,jdbcType=TIMESTAMP},
             </if>
             <if test="modifier != null">
-                `Modifier` = #{modifier,jdbcType=TIMESTAMP},
+                `MODIFIER_` = #{modifier,jdbcType=TIMESTAMP},
             </if>
             <if test="modifyTime != null">
-                `ModifyTime` = #{modifyTime,jdbcType=TIMESTAMP},
+                `MODIFY_TIME_` = #{modifyTime,jdbcType=TIMESTAMP},
             </if>
         </set>
-        where `Id` = #{id,jdbcType=BIGINT}
+        where `ID_` = #{id,jdbcType=BIGINT}
     </update>
 
     <delete id="deleteByIds" parameterType="java.util.List">
         delete from `sys_task_form`
-        where `Id` in
+        where `ID_` in
         <foreach collection="list" item="id" open="(" separator="," close=")">
             #{id}
         </foreach>
@@ -68,7 +68,7 @@
         select
         <include refid="Base_Column_List"/>
         from `sys_task_form`
-        where `Id` = #{id,jdbcType=BIGINT}
+        where `ID_` = #{id,jdbcType=BIGINT}
     </select>
 
     <select id="list" parameterType="java.util.Map" resultMap="SysTaskForm">
@@ -83,7 +83,7 @@
             order by ${sort}
         </if>
         <if test="sort == null">
-            order by `CreateTime` desc
+            order by `CREATE_TIME_` desc
         </if>
     </select>
 
@@ -93,10 +93,10 @@
         from `sys_task_form`
         where 1=1
         <if test="beginTime != null and beginTime != ''"><!-- 开始时间检索 -->
-            AND date_format(`CreateTime`,'%y%m%d') &gt;= date_format(#{beginTime},'%y%m%d')
+            AND date_format(`CREATE_TIME_`,'%y%m%d') &gt;= date_format(#{beginTime},'%y%m%d')
         </if>
         <if test="endTime != null and endTime != ''"><!-- 结束时间检索 -->
-            AND date_format(`CreateTime`,'%y%m%d') &lt;= date_format(#{endTime},'%y%m%d')
+            AND date_format(`CREATE_TIME_`,'%y%m%d') &lt;= date_format(#{endTime},'%y%m%d')
         </if>
     </select>
 </mapper>

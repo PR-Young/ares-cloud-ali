@@ -2,19 +2,19 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ares.system.dao.ISysDictTypeDao">
     <resultMap id="SysDictType" type="com.ares.core.model.system.SysDictType">
-        <id column="Id" jdbcType="BIGINT" property="id"/>
-        <result column="DictName" jdbcType="VARCHAR" property="dictName"/>
-        <result column="DictType" jdbcType="VARCHAR" property="dictType"/>
-        <result column="Status" jdbcType="VARCHAR" property="status"/>
-        <result column="Remark" jdbcType="VARCHAR" property="remark"/>
-        <result column="Creator" jdbcType="BIGINT" property="creator"/>
-        <result column="CreateTime" jdbcType="TIMESTAMP" property="createTime"/>
-        <result column="Modifier" jdbcType="BIGINT" property="modifier"/>
-        <result column="ModifyTime" jdbcType="TIMESTAMP" property="modifyTime"/>
+        <id column="ID_" jdbcType="BIGINT" property="id"/>
+        <result column="DICT_NAME_" jdbcType="VARCHAR" property="dictName"/>
+        <result column="DICT_TYPE_" jdbcType="VARCHAR" property="dictType"/>
+        <result column="STATUS_" jdbcType="VARCHAR" property="status"/>
+        <result column="REMARK_" jdbcType="VARCHAR" property="remark"/>
+        <result column="CREATOR_" jdbcType="BIGINT" property="creator"/>
+        <result column="CREATE_TIME_" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="MODIFIER_" jdbcType="BIGINT" property="modifier"/>
+        <result column="MODIFY_TIME_" jdbcType="TIMESTAMP" property="modifyTime"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-        `Id`,`DictName`,`DictType`,`Status`,`Remark`, `Creator`,`CreateTime`,`Modifier`, `ModifyTime`
+        `ID_`,`DICT_NAME_`,`DICT_TYPE_`,`STATUS_`,`REMARK_`, `CREATOR_`,`CREATE_TIME_`,`MODIFIER_`, `MODIFY_TIME_`
     </sql>
 
     <insert id="insert" parameterType="com.ares.core.model.system.SysDictType">
@@ -38,36 +38,36 @@
         update `sys_dict_type`
         <set>
             <if test="dictName!= null">
-                `DictName`=#{dictName,jdbcType=VARCHAR},
+                `DICT_NAME_`=#{dictName,jdbcType=VARCHAR},
             </if>
             <if test="dictType!= null">
-                `DictType`=#{dictType,jdbcType=VARCHAR},
+                `DICT_TYPE_`=#{dictType,jdbcType=VARCHAR},
             </if>
             <if test="status!= null">
-                `Status`=#{status,jdbcType=VARCHAR},
+                `STATUS_`=#{status,jdbcType=VARCHAR},
             </if>
             <if test="remark!= null">
-                `Remark`=#{remark,jdbcType=VARCHAR},
+                `REMARK_`=#{remark,jdbcType=VARCHAR},
             </if>
             <if test="creator != null">
-                `Creator` = #{creator,jdbcType=TIMESTAMP},
+                `CREATOR_` = #{creator,jdbcType=TIMESTAMP},
             </if>
             <if test="createTime != null">
-                `CreateTime` = #{createTime,jdbcType=TIMESTAMP},
+                `CREATE_TIME_` = #{createTime,jdbcType=TIMESTAMP},
             </if>
             <if test="modifier != null">
-                `Modifier` = #{modifier,jdbcType=TIMESTAMP},
+                `MODIFIER_` = #{modifier,jdbcType=TIMESTAMP},
             </if>
             <if test="modifyTime != null">
-                `ModifyTime` = #{modifyTime,jdbcType=TIMESTAMP},
+                `MODIFY_TIME_` = #{modifyTime,jdbcType=TIMESTAMP},
             </if>
         </set>
-        where `Id` = #{id,jdbcType=BIGINT}
+        where `ID_` = #{id,jdbcType=BIGINT}
     </update>
 
     <delete id="deleteByIds" parameterType="java.util.List">
         delete from `sys_dict_type`
-        where `Id` in
+        where `ID_` in
         <foreach collection="list" item="id" open="(" separator="," close=")">
             #{id}
         </foreach>
@@ -77,7 +77,7 @@
         select
         <include refid="Base_Column_List"/>
         from `sys_dict_type`
-        where `Id` = #{id,jdbcType=BIGINT}
+        where `ID_` = #{id,jdbcType=BIGINT}
     </select>
 
     <select id="list" parameterType="java.util.Map" resultMap="SysDictType">
@@ -92,7 +92,7 @@
             order by ${sort}
         </if>
         <if test="sort == null">
-            order by `CreateTime` desc
+            order by `CREATE_TIME_` desc
         </if>
     </select>
 
@@ -102,16 +102,16 @@
         from `sys_dict_type`
         where 1=1
         <if test="dictName != null">
-            and `DictName` like concat('%',#{dictName},'%')
+            and `DICT_NAME_` like concat('%',#{dictName},'%')
         </if>
         <if test="dictType != null">
-            and `DictType` like concat('%',#{dictType},'%')
+            and `DICT_TYPE_` like concat('%',#{dictType},'%')
         </if>
         <if test="status != null">
-            and `Status` = #{status}
+            and `STATUS_` = #{status}
         </if>
         <if test="beginTime != null and beginTime != ''"><!-- 开始时间检索 -->
-            AND date_format(`CreateTime`,'%y%m%d') &gt;= date_format(#{beginTime},'%y%m%d')
+            AND date_format(`CREATE_TIME_`,'%y%m%d') &gt;= date_format(#{beginTime},'%y%m%d')
         </if>
         <if test="endTime != null and endTime != ''"><!-- 结束时间检索 -->
             AND date_format(`Create_time`,'%y%m%d') &lt;= date_format(#{endTime},'%y%m%d')

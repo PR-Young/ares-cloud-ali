@@ -2,21 +2,21 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ares.system.dao.IArticlesDao">
     <resultMap id="Articles" type="com.ares.system.model.Articles">
-        <id column="Id" jdbcType="BIGINT" property="id"/>
-        <result column="Content" jdbcType="VARCHAR" property="content"/>
-        <result column="Name" jdbcType="VARCHAR" property="name"/>
-        <result column="Status" jdbcType="VARCHAR" property="status"/>
-        <result column="Type" jdbcType="VARCHAR" property="type"/>
-        <result column="Title" jdbcType="VARCHAR" property="title"/>
-        <result column="Creator" jdbcType="BIGINT" property="creator"/>
-        <result column="CreateTime" jdbcType="TIMESTAMP" property="createTime"/>
-        <result column="Modifier" jdbcType="BIGINT" property="modifier"/>
-        <result column="ModifyTime" jdbcType="TIMESTAMP" property="modifyTime"/>
+        <id column="ID_" jdbcType="BIGINT" property="id"/>
+        <result column="CONTENT_" jdbcType="VARCHAR" property="content"/>
+        <result column="NAME_" jdbcType="VARCHAR" property="name"/>
+        <result column="STATUS_" jdbcType="VARCHAR" property="status"/>
+        <result column="TYPE_" jdbcType="VARCHAR" property="type"/>
+        <result column="TITLE_" jdbcType="VARCHAR" property="title"/>
+        <result column="CREATOR_" jdbcType="BIGINT" property="creator"/>
+        <result column="CREATE_TIME_" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="MODIFIER_" jdbcType="BIGINT" property="modifier"/>
+        <result column="MODIFY_TIME_" jdbcType="TIMESTAMP" property="modifyTime"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-        `Id`
-        ,`Content`,`Name`,`Status`,`Title`,`Type`, `Creator`,`CreateTime`,`Modifier`, `ModifyTime`
+        `ID_`
+        ,`CONTENT_`,`NAME_`,`STATUS_`,`TITLE_`,`TYPE_`, `CREATOR_`,`CREATE_TIME_`,`MODIFIER_`, `MODIFY_TIME_`
     </sql>
 
     <insert id="insert" parameterType="com.ares.system.model.Articles">
@@ -41,39 +41,39 @@
         update `t_articles`
         <set>
             <if test="content!= null">
-                `Content`=#{content,jdbcType=VARCHAR},
+                `CONTENT_`=#{content,jdbcType=VARCHAR},
             </if>
             <if test="name!= null">
-                `Name`=#{name,jdbcType=VARCHAR},
+                `NAME_`=#{name,jdbcType=VARCHAR},
             </if>
             <if test="status!= null">
-                `Status`=#{status,jdbcType=VARCHAR},
+                `STATUS_`=#{status,jdbcType=VARCHAR},
             </if>
             <if test="title!= null">
-                `Title`=#{title,jdbcType=VARCHAR},
+                `TITLE_`=#{title,jdbcType=VARCHAR},
             </if>
             <if test="type!= null">
-                `Type`=#{type,jdbcType=VARCHAR},
+                `TYPE_`=#{type,jdbcType=VARCHAR},
             </if>
             <if test="creator != null">
-                `Creator` = #{creator,jdbcType=TIMESTAMP},
+                `CREATOR_` = #{creator,jdbcType=TIMESTAMP},
             </if>
             <if test="createTime != null">
-                `CreateTime` = #{createTime,jdbcType=TIMESTAMP},
+                `CREATE_TIME_` = #{createTime,jdbcType=TIMESTAMP},
             </if>
             <if test="modifier != null">
-                `Modifier` = #{modifier,jdbcType=TIMESTAMP},
+                `MODIFIER_` = #{modifier,jdbcType=TIMESTAMP},
             </if>
             <if test="modifyTime != null">
-                `ModifyTime` = #{modifyTime,jdbcType=TIMESTAMP},
+                `MODIFY_TIME_` = #{modifyTime,jdbcType=TIMESTAMP},
             </if>
         </set>
-        where `Id` = #{id,jdbcType=BIGINT}
+        where `ID_` = #{id,jdbcType=BIGINT}
     </update>
 
     <delete id="deleteByIds" parameterType="java.util.List">
         delete from `t_articles`
-        where `Id` in
+        where `ID_` in
         <foreach collection="list" item="id" open="(" separator="," close=")">
             #{id}
         </foreach>
@@ -83,7 +83,7 @@
         select
         <include refid="Base_Column_List"/>
         from `t_articles`
-        where `Id` = #{id,jdbcType=BIGINT}
+        where `ID_` = #{id,jdbcType=BIGINT}
     </select>
 
     <select id="list" parameterType="java.util.Map" resultMap="Articles">
@@ -92,13 +92,13 @@
         from `t_articles`
         where 1=1
         <if test="search != null">
-            and (`Title` like '%${search}%' or `Name` like '%${search}%')
+            and (`TITLE_` like '%${search}%' or `NAME_` like '%${search}%')
         </if>
         <if test="sort != null">
             order by ${sort}
         </if>
         <if test="sort == null">
-            order by `CreateTime` desc
+            order by `CREATE_TIME_` desc
         </if>
     </select>
 
@@ -108,23 +108,23 @@
         from `t_articles`
         where 1=1
         <if test="title != null">
-            and `Title` like '%${title}%'
+            and `TITLE_` like '%${title}%'
         </if>
         <if test="name != null">
-            and `Name` like '%${name}%'
+            and `NAME_` like '%${name}%'
         </if>
         <if test="type != null">
-            and `Type` = #{type}
+            and `TYPE_` = #{type}
         </if>
         <if test="status != null">
-            and `Status` = #{status}
+            and `STATUS_` = #{status}
         </if>
         <if test="beginTime != null and beginTime != ''"><!-- 开始时间检索 -->
-            AND date_format(`CreateTime`,'%y%m%d') &gt;= date_format(#{beginTime},'%y%m%d')
+            AND date_format(`CREATE_TIME_`,'%y%m%d') &gt;= date_format(#{beginTime},'%y%m%d')
         </if>
         <if test="endTime != null and endTime != ''"><!-- 结束时间检索 -->
-            AND date_format(`CreateTime`,'%y%m%d') &lt;= date_format(#{endTime},'%y%m%d')
+            AND date_format(`CREATE_TIME_`,'%y%m%d') &lt;= date_format(#{endTime},'%y%m%d')
         </if>
-        order by `CreateTime` desc
+        order by `CREATE_TIME_` desc
     </select>
 </mapper>
