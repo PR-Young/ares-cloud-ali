@@ -823,8 +823,10 @@ public class FlowTaskService extends FlowServiceFactory {
         for (int i = 0; i < fields.size(); i++) {
             JSONObject field = fields.getJSONObject(i);
             JSONObject config = field.getJSONObject("__config__");
-            String vModel = field.getString("__vModel__");
-            config.put("defaultValue", data.get(vModel));
+            if (null != config) {
+                String vModel = field.getString("__vModel__");
+                config.put("defaultValue", data.get(vModel));
+            }
         }
         return jsonObject;
     }
