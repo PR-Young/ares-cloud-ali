@@ -120,7 +120,7 @@ public class LoginApiController {
         sysLoginInfo.setBrowser(AresCommonUtils.getUserAgent(request, "browser"));
         sysLoginInfo.setOs(AresCommonUtils.getUserAgent(request, "os"));
         Long id = loginInfoService.saveInfo(sysLoginInfo);
-        RedisUtil.set(token.getToken(), id, 0);
+        RedisUtil.set(token.getToken(), id, config.getTimeout());
         return AjaxResult.success().put("token", token.getToken());
     }
 
