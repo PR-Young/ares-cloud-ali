@@ -61,12 +61,12 @@
         left join `sys_role_user` roleuser on role.ID_ = roleuser.ROLE_ID_
         where roleuser.USER_ID_ = #{userId,jdbcType=BIGINT}
     </select>
-    <select id="getPermsByRoleId" parameterType="java.lang.String" resultType="java.lang.String">
+    <select id="getPermsByRoleId" parameterType="java.lang.Long" resultType="java.lang.String">
         select menu.PERMS_
         from sys_menu menu
         <if test="roleId != null">
             left join sys_permission permission on menu.ID_ = permission.MenuId
-            where permission.ROLE_ID_ = #{roleId,jdbcType=VARCHAR}
+            where permission.ROLE_ID_ = #{roleId,jdbcType=BIGINT}
         </if>
     </select>
     <select id="getById" parameterType="java.lang.Long" resultMap="SysRole">
@@ -99,20 +99,20 @@
         insert into sys_permission(ID_, MenuId, ROLE_ID_)
         values (#{id}, #{menuId}, #{roleId})
     </insert>
-    <delete id="deleteRoleUser" parameterType="java.lang.String">
+    <delete id="deleteRoleUser" parameterType="java.lang.Long">
         delete
         from sys_role_user
-        where ROLE_ID_ = #{roleId,jdbcType=VARCHAR}
+        where ROLE_ID_ = #{roleId,jdbcType=BIGINT}
     </delete>
-    <delete id="deletePermission" parameterType="java.lang.String">
+    <delete id="deletePermission" parameterType="java.lang.Long">
         delete
         from sys_permission
-        where ROLE_ID_ = #{roleId,jdbcType=VARCHAR}
+        where ROLE_ID_ = #{roleId,jdbcType=BIGINT}
     </delete>
-    <delete id="deleteRoleByUser" parameterType="java.lang.String">
+    <delete id="deleteRoleByUser" parameterType="java.lang.Long">
         delete
         from sys_role_user
-        where USER_ID_ = #{userId,jdbcType=VARCHAR}
+        where USER_ID_ = #{userId,jdbcType=BIGINT}
     </delete>
 
     <select id="selectList" parameterType="com.ares.core.model.query.SysRoleQuery" resultMap="SysRole">
