@@ -142,7 +142,7 @@ public class SysMenuService implements BaseService<SysMenu> {
         for (Iterator<SysMenu> iterator = menus.iterator(); iterator.hasNext(); ) {
             SysMenu t = (SysMenu) iterator.next();
             // 根据传入的某个父节点ID,遍历该父节点的所有子节点
-            if ("0".equals(t.getPId())) {
+            if (t.getPId() == 0) {
                 recursionFn(menus, t);
                 returnList.add(t);
             }
