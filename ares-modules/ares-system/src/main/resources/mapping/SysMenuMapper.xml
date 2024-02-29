@@ -139,10 +139,10 @@
         from `sys_menu`
         where `PID_` = #{pid,jdbcType=VARCHAR}
     </select>
-    <select id="getMenuByRole" parameterType="java.lang.String" resultType="java.lang.String">
-        select `MenuId`
+    <select id="getMenuByRole" parameterType="java.lang.Long" resultType="java.lang.String">
+        select `MENU_ID_`
         from `sys_permission`
-        where `ROLE_ID_` = #{roleId,jdbcType=VARCHAR}
+        where `ROLE_ID_` = #{roleId,jdbcType=BIGINT}
     </select>
 
     <select id="selectList" parameterType="com.ares.core.model.query.SysMenuQuery" resultMap="SysMenu">

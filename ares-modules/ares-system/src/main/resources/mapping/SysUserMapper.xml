@@ -159,23 +159,23 @@
         where `ACCOUNT_` = #{account,jdbcType=VARCHAR}
     </update>
 
-    <select id="getUserByRole" parameterType="java.lang.String" resultMap="SysUser">
+    <select id="getUserByRole" parameterType="java.lang.Long" resultMap="SysUser">
         select
         user.`ID_`, user.`ACCOUNT_`, user.`USERNAME_`, user.`PASSWORD_`,user.`PHONE_NUMBER_`,user.`EMAIL_`,user.`AVATAR_`,
         user.`CREATE_TIME_`, user.`MODIFY_TIME_`
         from `sys_user` user
         left join `sys_role_user` roleuser on user.ID_ = roleuser.USER_ID_
-        where roleuser.ROLE_ID_ = #{roleId,jdbcType=VARCHAR}
+        where roleuser.ROLE_ID_ = #{roleId,jdbcType=BIGINT}
     </select>
 
-    <select id="allUser" parameterType="java.lang.String" resultMap="SysUser">
+    <select id="allUser" parameterType="java.lang.Long" resultMap="SysUser">
         select
         <include refid="Base_Column_List"/>
         from `sys_user`
         where `ID_` not in (
         select `USER_ID_`
         from `sys_role_user`
-        where `ROLE_ID_` = #{roleId,jdbcType=VARCHAR}
+        where `ROLE_ID_` = #{roleId,jdbcType=BIGINT}
         )
     </select>
 

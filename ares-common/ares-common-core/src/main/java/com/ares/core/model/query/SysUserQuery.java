@@ -31,7 +31,7 @@ import lombok.Data;
 @Data
 public class SysUserQuery extends BaseQuery {
     
-    private String deptId;
+    private Long deptId;
     
     private String userName;
 }
