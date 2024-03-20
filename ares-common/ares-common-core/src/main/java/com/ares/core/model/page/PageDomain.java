@@ -93,8 +93,7 @@ public class PageDomain {
         if (StringUtils.isEmpty(orderByColumn)) {
             return "";
         }
-        //return StringUtils.toUnderScoreCase(orderByColumn) + " " + isAsc;
-        return orderByColumn + "  " + ("ascending".equals(isAsc) ? "asc" : "desc");
+        return StringUtils.toUpperScoreCase(orderByColumn) + "  " + ("ascending".equals(isAsc) ? "asc" : "desc");
     }
 
     public Integer getPageNum() {
