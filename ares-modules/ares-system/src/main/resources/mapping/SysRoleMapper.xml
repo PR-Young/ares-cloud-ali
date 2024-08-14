@@ -79,10 +79,11 @@
         select
         <include refid="Base_Column_List"/>
         from `sys_role`
-        where 1=1
+        <where>
         <if test="search != null">
             and (`ROLE_NAME_` like '%${search}%' or `DESCRIPTION_` like '%${search}%')
         </if>
+        </where>
         <if test="sort != null">
             order by ${sort}
         </if>
@@ -119,7 +120,7 @@
         select
         <include refid="Base_Column_List"/>
         from `sys_role`
-        where 1=1
+        <where>
         <if test="roleName != null and roleName != ''">
             and `ROLE_NAME_` like concat('%', #{roleName}, '%')
         </if>
@@ -129,6 +130,7 @@
         <if test="endTime != null and endTime != ''"><!-- 结束时间检索 -->
             AND date_format(`Create_time`,'%y%m%d') &lt;= date_format(#{endTime},'%y%m%d')
         </if>
+        </where>
     </select>
 
     <select id="checkRoleName" parameterType="java.lang.String" resultType="int">

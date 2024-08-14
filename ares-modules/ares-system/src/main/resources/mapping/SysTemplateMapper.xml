@@ -86,10 +86,11 @@
         select
         <include refid="Base_Column_List"/>
         from `sys_template`
-        where 1=1
+        <where>
         <if test="search != null">
 
         </if>
+        </where>
         <if test="sort != null">
             order by ${sort}
         </if>
@@ -102,7 +103,7 @@
         select
         <include refid="Base_Column_List"/>
         from `sys_template`
-        where 1=1
+        <where>
         <if test="subject != null and subject != ''"><!-- 开始时间检索 -->
             AND `SUBJECT_` like concat('%', #{name}, '%')
         </if>
@@ -112,6 +113,7 @@
         <if test="endTime != null and endTime != ''"><!-- 结束时间检索 -->
             AND date_format(`Create_time`,'%y%m%d') &lt;= date_format(#{endTime},'%y%m%d')
         </if>
+        </where>
     </select>
 
     <select id="getByName" parameterType="java.lang.String" resultMap="SysTemplate">

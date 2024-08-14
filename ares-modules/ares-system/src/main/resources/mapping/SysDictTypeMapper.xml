@@ -84,10 +84,11 @@
         select
         <include refid="Base_Column_List"/>
         from `sys_dict_type`
-        where 1=1
+        <where>
         <if test="search != null">
 
         </if>
+        </where>
         <if test="sort != null">
             order by ${sort}
         </if>
@@ -100,7 +101,7 @@
         select
         <include refid="Base_Column_List"/>
         from `sys_dict_type`
-        where 1=1
+        <where>
         <if test="dictName != null">
             and `DICT_NAME_` like concat('%',#{dictName},'%')
         </if>
@@ -116,6 +117,7 @@
         <if test="endTime != null and endTime != ''"><!-- 结束时间检索 -->
             AND date_format(`Create_time`,'%y%m%d') &lt;= date_format(#{endTime},'%y%m%d')
         </if>
+        </where>
     </select>
 
 

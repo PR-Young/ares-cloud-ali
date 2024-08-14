@@ -20,10 +20,11 @@
         select
         <include refid="Base_Column_List"/>
         from `sys_quartz_job_log`
-        where 1=1
+        <where>
         <if test="search != null">
             and (`JOB_NAME_` like '%${search}%' or `JOB_GROUP_` like '%${search}%')
         </if>
+        </where>
         <if test="sort != null">
             order by ${sort}
         </if>
@@ -84,7 +85,7 @@
         select
         <include refid="Base_Column_List"/>
         from `sys_quartz_job_log`
-        where 1=1
+        <where>
         <if test="jobName != null and jobName != ''">
             and `JOB_NAME_` like concat('%', #{jobName}, '%')
         </if>
@@ -100,6 +101,7 @@
         <if test="endTime != null and endTime != ''"><!-- 结束时间检索 -->
             AND date_format(`START_TIME_`,'%y%m%d') &lt;= date_format(#{endTime},'%y%m%d')
         </if>
+        </where>
     </select>
 
     <update id="cleanJobLog">

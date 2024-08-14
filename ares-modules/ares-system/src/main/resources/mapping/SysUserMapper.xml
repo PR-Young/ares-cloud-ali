@@ -97,10 +97,11 @@
         select
         <include refid="Base_Column_List"/>
         from `sys_user`
-        where 1=1
+        <where>
         <if test="search != null">
             and (`ACCOUNT_` like '%${search}%' or `USERNAME_` like '%${search}%')
         </if>
+        </where>
         <if test="sort != null">
             order by ${sort}
         </if>
@@ -183,7 +184,7 @@
         select
         <include refid="Base_Column_List"/>
         from `sys_user`
-        where 1=1
+        <where>
         <if test="userName != null and userName != ''">
             and `USERNAME_` like concat('%', #{userName}, '%')
         </if>
@@ -196,5 +197,6 @@
         <if test="endTime != null and endTime != ''"><!-- 结束时间检索 -->
             AND date_format(`CREATE_TIME_`,'%y%m%d') &lt;= date_format(#{endTime},'%y%m%d')
         </if>
+        </where>
     </select>
 </mapper>

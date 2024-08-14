@@ -52,10 +52,11 @@
         select
         <include refid="Base_Column_List"/>
         from `${tableName}`
-        where 1=1
+        <where>
         <if test="search != null">
 
         </if>
+        </where>
         <if test="sort != null">
             order by ${specialSort}
         </if>
@@ -68,12 +69,13 @@
         select
         <include refid="Base_Column_List"/>
         from `${tableName}`
-        where 1=1
+        <where>
         <if test="beginTime != null and beginTime != ''"><!-- 开始时间检索 -->
             AND date_format(`CREATE_TIME_`,'%y%m%d') &gt;= date_format(${r"#{beginTime}"},'%y%m%d')
         </if>
         <if test="endTime != null and endTime != ''"><!-- 结束时间检索 -->
             AND date_format(`CREATE_TIME_`,'%y%m%d') &lt;= date_format(${r"#{endTime}"},'%y%m%d')
         </if>
+        </where>
     </select>
 </mapper>
