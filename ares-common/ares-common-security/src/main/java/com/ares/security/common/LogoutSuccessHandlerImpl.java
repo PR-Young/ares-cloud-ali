@@ -25,12 +25,12 @@ import com.ares.core.model.base.AjaxResult;
 import com.ares.core.model.base.Constants;
 import com.ares.core.model.system.SysLoginInfo;
 import com.ares.core.utils.ServletUtils;
-import com.ares.core.utils.SpringUtils;
 import com.ares.redis.utils.RedisUtil;
 import com.ares.security.jwt.JwtTokenUtils;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
@@ -45,6 +45,9 @@ import java.io.IOException;
  **/
 @Configuration
 public class LogoutSuccessHandlerImpl implements LogoutSuccessHandler {
+
+    @DubboReference(version = "1.0.0", interfaceClass = com.ares.api.client.IAresCommonService.class, check = false)
+    private IAresCommonService commonService;
     @Override
     public void onLogoutSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
         String token = JwtTokenUtils.getToken(httpServletRequest);
@@ -55,7 +58,6 @@ public class LogoutSuccessHandlerImpl implements LogoutSuccessHandler {
                 SysLoginInfo sysLoginInfo = new SysLoginInfo();
                 sysLoginInfo.setId(id);
                 sysLoginInfo.setStatus(Constants.OFFLINE);
-                IAresCommonService commonService = SpringUtils.getBean("aresCommonProvider");
                 commonService.update(sysLoginInfo);
                 RedisUtil.del(Constants.LOGIN_INFO + userName);
             }

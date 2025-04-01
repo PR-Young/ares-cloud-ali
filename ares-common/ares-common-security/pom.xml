@@ -34,11 +34,6 @@
         </dependency>
         <dependency>
             <groupId>com.ares</groupId>
-            <artifactId>ares-common-log</artifactId>
-            <version>${ares.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.ares</groupId>
             <artifactId>ares-common-api</artifactId>
             <version>${ares.version}</version>
         </dependency>

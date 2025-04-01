@@ -18,27 +18,17 @@
  *
  */
 
-package com.ares.system.common.log;
+package com.ares.api.client;
 
 
-import com.ares.core.model.system.SysLog;
-import com.ares.system.service.SysLogService;
+import com.ares.core.model.system.SysLoginInfo;
 
 /**
  * @description:
- * @author: Young 2020/05/08
+ * @author: Young
+ * @date: 2025/4/1
+ * @see: com.ares.api.client.ISysLoginInfoService.java
  **/
-public class SaveLogThread implements Runnable {
-    private SysLog sysLog;
-    private SysLogService sysLogService;
-
-    public SaveLogThread(SysLog sysLog, SysLogService sysLogService) {
-        this.sysLog = sysLog;
-        this.sysLogService = sysLogService;
-    }
-
-    @Override
-    public void run() {
-        sysLogService.insert(sysLog);
-    }
+public interface ISysLoginInfoService {
+    Long saveInfo(SysLoginInfo sysLoginInfo);
 }

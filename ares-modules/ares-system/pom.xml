@@ -48,11 +48,6 @@
         </dependency>
         <dependency>
             <groupId>com.ares</groupId>
-            <artifactId>ares-common-security</artifactId>
-            <version>${ares.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.ares</groupId>
             <artifactId>ares-common-redis</artifactId>
             <version>${ares.version}</version>
         </dependency>

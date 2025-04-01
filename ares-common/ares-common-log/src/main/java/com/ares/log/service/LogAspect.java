@@ -18,15 +18,23 @@
  *
  */
 
-package com.ares.system.common.log;
+package com.ares.log.service;
+
 
 import com.alibaba.fastjson.JSON;
+import com.ares.api.client.ISysLogService;
 import com.ares.core.model.system.SysLog;
 import com.ares.core.model.system.SysUser;
-import com.ares.core.utils.*;
+import com.ares.core.utils.DateUtils;
+import com.ares.core.utils.IpUtils;
+import com.ares.core.utils.ServletUtils;
+import com.ares.core.utils.ThreadPoolUtils;
 import com.ares.log.common.Log;
 import com.ares.security.common.SecurityUtils;
-import com.ares.system.service.SysLogService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.dubbo.config.annotation.DubboReference;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.AfterThrowing;
@@ -35,7 +43,6 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
@@ -43,8 +50,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.HandlerMapping;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.Date;
@@ -61,12 +66,9 @@ public class LogAspect {
     private static Logger logger = LoggerFactory.getLogger(LogAspect.class);
 
     private static final ThreadLocal<Date> dateThreadLocal = new ThreadLocal<>();
-    private SysLogService sysLogService;
+    @DubboReference(version = "1.0.0", interfaceClass = com.ares.api.client.ISysLogService.class, check = false)
+    private ISysLogService sysLogService;
 
-    @Autowired
-    public LogAspect(SysLogService sysLogService) {
-        this.sysLogService = sysLogService;
-    }
 
     @Pointcut("@annotation(com.ares.log.common.Log)")
     public void logPointCut() {

@@ -10,7 +10,7 @@ export function login(username, password, code, uuid, rememberMe) {
     rememberMe
   }
   return request({
-    url: '/ares/system/login',
+    url: '/ares/auth/login',
     method: 'post',
     data: data
   })
@@ -27,7 +27,7 @@ export function getInfo() {
 // 退出方法
 export function logout() {
   return request({
-    url: '/ares/system/loginOut',
+    url: '/ares/auth/loginOut',
     method: 'post'
   })
 }
@@ -35,7 +35,7 @@ export function logout() {
 // 获取验证码
 export function getCodeImg() {
   return request({
-    url: '/ares/system/kaptcha',
+    url: '/ares/auth/kaptcha',
     method: 'get'
   })
 }

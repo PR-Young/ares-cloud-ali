@@ -8,7 +8,6 @@
 
 ```
 ares-cloud
-│
 ├─ares-common
 │ ├─ares-common-api
 │ ├─ares-common-core
@@ -18,18 +17,15 @@ ares-cloud
 │ ├─ares-common-redis
 │ └─ares-common-security
 ├─ares-gateway
-│
+├─ares-auth
 ├─ares-modules
 │ ├─ares-flowable
 │ ├─ares-gen
 │ ├─ares-job
 │ └─ares-system
 ├─ares-monitor
-│
 ├─ares-ui
-│
 ├─doc
-│
 └─pom.xml
 
 ```
@@ -43,3 +39,13 @@ ares-cloud
 
 1. npm install
 2. npm run dev
+
+#### 功能清单
+- [x] 权限认证
+- [x] 网关
+- [x] 监控
+- [x] 流程模块
+- [x] 代码生成
+- [x] 定时任务
+- [x] 系统管理
+- [x] 用户管理

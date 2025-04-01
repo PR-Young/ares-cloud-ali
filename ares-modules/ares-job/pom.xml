@@ -45,7 +45,7 @@
         </dependency>
         <dependency>
             <groupId>com.ares</groupId>
-            <artifactId>ares-common-security</artifactId>
+            <artifactId>ares-common-log</artifactId>
             <version>${ares.version}</version>
         </dependency>
         <dependency>

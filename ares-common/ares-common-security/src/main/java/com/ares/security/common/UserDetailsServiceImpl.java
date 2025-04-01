@@ -24,7 +24,6 @@ import com.ares.api.client.ISysRoleService;
 import com.ares.api.client.ISysUserService;
 import com.ares.core.model.system.SysRole;
 import com.ares.core.model.system.SysUser;
-import com.ares.log.common.Log;
 import com.ares.security.jwt.JwtUserDetails;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.security.core.GrantedAuthority;
@@ -51,7 +50,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @DubboReference(version = "1.0.0", interfaceClass = com.ares.api.client.ISysRoleService.class, check = false)
     private ISysRoleService roleService;
 
-    @Log
     @Override
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
         SysUser user = userService.getUserByName(userName);

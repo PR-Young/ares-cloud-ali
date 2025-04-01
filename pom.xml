@@ -42,6 +42,7 @@
         <module>ares-modules</module>
         <module>ares-gateway</module>
         <module>ares-monitor</module>
+        <module>ares-auth</module>
     </modules>
 
     <dependencies>

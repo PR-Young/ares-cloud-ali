@@ -18,26 +18,29 @@
  *
  */
 
-package com.ares.system.jobs;
+package com.ares.system.provider;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import com.ares.api.client.ISysLogService;
+import com.ares.core.model.system.SysLog;
+import com.ares.system.service.SysLogService;
+import org.apache.dubbo.config.annotation.DubboService;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * @description:
  * @author: Young
- * @date: 2020/08/07
- * @see: com.ares.system.jobs DemoJob.java
+ * @date: 2025/4/1
+ * @see: com.ares.system.provider.SysLogProvider.java
  **/
-public class DemoJob {
+@DubboService(version = "1.0.0",interfaceClass = com.ares.api.client.ISysLogService.class)
+public class SysLogProvider implements ISysLogService {
 
-    private static Logger logger = LoggerFactory.getLogger(DemoJob.class);
+    @Autowired
+    private SysLogService sysLogService;
 
-    public void demo1() {
-        logger.info("demo1 job start!");
-    }
-
-    public void demo2(String a, String b) {
-        logger.info("demo2 job start,paramA={},paramB={}", a, b);
+    @Override
+    public void insert(SysLog sysLog) {
+        sysLogService.insert(sysLog);
     }
 }
