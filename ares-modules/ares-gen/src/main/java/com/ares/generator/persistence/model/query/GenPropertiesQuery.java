@@ -18,24 +18,17 @@
  *
  */
 
-package com.ares;
+package com.ares.generator.persistence.model.query;
 
-import org.apache.dubbo.config.spring.context.annotation.EnableDubbo;
-import org.mybatis.spring.annotation.MapperScan;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import com.ares.core.model.query.BaseQuery;
+import lombok.Data;
 
 /**
- * @description:
- * @author: Young
- * @date: 2022/2/14
- * @see: com.ares.generator.GeneratorApplication.java
- **/
-@MapperScan("com.ares.generator")
-@SpringBootApplication
-@EnableDubbo(scanBasePackages = {"com.ares.api"})
-public class AresGeneratorApplication {
-    public static void main(String[] args) {
-        SpringApplication.run(AresGeneratorApplication.class, args);
-    }
+* @description:
+* @author: ares
+* @date: 2025-04-21 10:19:03
+**/
+@Data
+public class GenPropertiesQuery extends BaseQuery{
+
 }

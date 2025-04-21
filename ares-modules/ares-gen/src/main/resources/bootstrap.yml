@@ -13,6 +13,11 @@ spring:
     # 环境配置
     active: dev
   cloud:
+    sentinel:
+      enabled: true
+      eager: true
+      transport:
+        dashboard: 127.0.0.1:8858
     nacos:
       discovery:
         # 服务注册地址
@@ -25,3 +30,20 @@ spring:
         # 共享配置
         shared-configs:
           - application-${spring.profiles.active}.${spring.cloud.nacos.config.file-extension}
+
+dubbo:
+  application:
+    name: ares-job-dubbo
+  registry:
+    address: nacos://localhost:8848
+  config-center:
+    address: nacos://localhost:8848
+  monitor:
+    address: nacos://localhost:8848
+  protocol:
+    # dubbo 协议
+    name: dubbo
+    # dubbo 协议端口（ -1 表示自增端口，从 20880 开始）
+    port: -1
+  consumer:
+    check: false

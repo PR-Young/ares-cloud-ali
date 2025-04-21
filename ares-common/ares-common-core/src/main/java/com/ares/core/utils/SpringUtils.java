@@ -20,6 +20,8 @@
 
 package com.ares.core.utils;
 
+import org.apache.dubbo.config.spring.ReferenceBean;
+import org.apache.dubbo.config.spring.reference.ReferenceBeanManager;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
@@ -29,6 +31,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.stereotype.Component;
+
+import java.util.Collection;
 
 /**
  * spring工具类 方便在非spring管理环境中获取bean
@@ -134,6 +138,18 @@ public final class SpringUtils implements BeanFactoryPostProcessor, ApplicationC
         if (null != event) {
             context.publishEvent(event);
         }
+    }
+
+    public static <T> T getDubboBean(Class<T> requiredType){
+        ReferenceBeanManager dubboContext = context.getBean(ReferenceBeanManager.class);
+        Collection<ReferenceBean> referenceBeans = dubboContext.getReferences();
+        for (ReferenceBean<?> referenceBean : referenceBeans) {
+            Class<?> objectType = referenceBean.getObjectType();
+            if(objectType == requiredType){
+                return (T)referenceBean.getObject();
+            }
+        }
+        return null;
     }
 
 }

@@ -50,3 +50,4 @@ dubbo:
     port: -1
   consumer:
     check: false
+    timeout: 100000

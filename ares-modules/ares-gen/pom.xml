@@ -32,6 +32,11 @@
             <version>${ares.version}</version>
         </dependency>
         <dependency>
+            <groupId>com.ares</groupId>
+            <artifactId>ares-common-security</artifactId>
+            <version>${ares.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
         </dependency>

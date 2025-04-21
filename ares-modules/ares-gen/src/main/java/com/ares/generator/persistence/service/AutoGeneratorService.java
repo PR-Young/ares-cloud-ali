@@ -21,12 +21,11 @@
 package com.ares.generator.persistence.service;
 
 import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.StrUtil;
 import com.ares.core.config.gen.GeneratorConfig;
-import com.ares.generator.persistence.model.Column;
-import com.ares.generator.persistence.model.ColumnType;
-import com.ares.generator.persistence.model.DataType;
-import com.ares.generator.persistence.model.EntityDataModel;
+import com.ares.core.utils.DateUtils;
+import com.ares.generator.persistence.model.*;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -40,7 +39,6 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -56,23 +54,38 @@ import java.util.zip.ZipOutputStream;
 public class AutoGeneratorService {
 
     private GeneratorConfig config;
+    private GenPropertiesService genPropertiesService;
 
     @Autowired
-    public AutoGeneratorService(GeneratorConfig config) {
+    public AutoGeneratorService(GeneratorConfig config, GenPropertiesService genPropertiesService) {
         this.config = config;
+        this.genPropertiesService = genPropertiesService;
+    }
+
+    private void init() {
+        GenProperties properties = genPropertiesService.getByUser();
+        if (null != properties) {
+            config.setBasePackage(properties.getBasePackage());
+            config.setEntityPackage(properties.getEntityPackage());
+            config.setDaoPackage(properties.getDaoPackage());
+            config.setServicePackage(properties.getServicePackage());
+            config.setControllerPackage(properties.getControllerPackage());
+            config.setAuthor(properties.getAuthor());
+            config.setGeneratorLevel(properties.getGenLevel());
+            config.setTablePrefix(properties.getTablePrefix());
+        }
     }
 
     public byte[] generator(String tableName) {
-        return generator(config.getDriverClassName(),
-                config.getUrl(),
-                config.getUsername(),
-                config.getPassword(),
-                tableName,
-                config.getDatabaseName(),
-                config.getTablePrefix());
+        init();
+        return gen(tableName);
     }
 
-    private Connection getConn(String driver, String url, String user, String pwd) {
+    public Connection getConn() {
+        String driver = config.getDriverClassName();
+        String url = config.getUrl();
+        String user = config.getUsername();
+        String pwd = config.getPassword();
         Connection con = null;
         //注册驱动
         try {
@@ -84,74 +97,52 @@ public class AutoGeneratorService {
         return con;
     }
 
-    public byte[] generator(String driver, String url, String user, String pwd, String tableName, String databaseName,
-                            String tablePrefix) {
-        Connection con = getConn(driver, url, user, pwd);
-        //查询dbName所有表
-        String sql = "select table_name from information_schema.tables where table_schema='" + databaseName + "'";
-        //获取当前项目路径
-        String path = AutoGeneratorService.class.getResource("/").getPath();
-        path = StrUtil.sub(path, 1, path.indexOf("/target"));
-        log.info("当前项目路径为：{}", path);
-        //获取模板路径
-        String templatePath = System.getProperty("user.dir") + "/ares-generator/src/main/resources/templates";
-        log.info("当前模板路径为：{}", templatePath);
-        boolean onlySingleTable = StrUtil.isNotBlank(tableName);
+    public byte[] gen(String tableName) {
+        Assert.notNull(tableName);
+        String driver = config.getDriverClassName();
+        String url = config.getUrl();
+        String user = config.getUsername();
+        String pwd = config.getPassword();
+        String tablePrefix = config.getTablePrefix();
+        Connection con = getConn();
 
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         ZipOutputStream zip = new ZipOutputStream(outputStream);
         String entityDir = autoCodePath();
         try {
-            PreparedStatement ps = con.prepareStatement(sql);
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                if (!onlySingleTable) {
-                    tableName = rs.getString(1);
-                }
+            //根据实体包名创建目录
+            if (!FileUtil.exist(entityDir)) {
+                FileUtil.mkdir(entityDir);
+                log.info("创建目录：{} 成功！ ", entityDir);
+            }
 
-                //根据实体包名创建目录
-                if (!FileUtil.exist(entityDir)) {
-                    FileUtil.mkdir(entityDir);
-                    log.info("创建目录：{} 成功！ ", entityDir);
-                }
-
-                EntityDataModel entityModel = getEntityModel(con,
-                        tableName,
-                        config.getBasePackage(),
-                        config.getDaoPackage(),
-                        config.getServicePackage(),
-                        config.getControllerPackage(),
-                        tablePrefix);
-                switch (config.getGeneratorLevel()) {
-                    case 1:
-                        generateCode(entityModel, templatePath, "Entity.ftl", entityDir, "", ".java", zip);
-                        generateCode(entityModel, templatePath, "EntityQuery.ftl", entityDir, "", "Query.java", zip);
-                        generateCode(entityModel, templatePath, "EntityMapper.ftl", entityDir, "", "Mapper.xml", zip);
-                        generateCode(entityModel, templatePath, "EntityDao.ftl", entityDir, "I", "Dao.java", zip);
-                        break;
-                    case 2:
-                        generateCode(entityModel, templatePath, "Entity.ftl", entityDir, "", ".java", zip);
-                        generateCode(entityModel, templatePath, "EntityQuery.ftl", entityDir, "", "Query.java", zip);
-                        generateCode(entityModel, templatePath, "EntityMapper.ftl", entityDir, "", "Mapper.xml", zip);
-                        generateCode(entityModel, templatePath, "EntityDao.ftl", entityDir, "I", "Dao.java", zip);
-                        generateCode(entityModel, templatePath, "EntityService.ftl", entityDir, "", "Service.java", zip);
-                        break;
-                    case 3:
-                        generateCode(entityModel, templatePath, "Entity.ftl", entityDir, "", ".java", zip);
-                        generateCode(entityModel, templatePath, "EntityQuery.ftl", entityDir, "", "Query.java", zip);
-                        generateCode(entityModel, templatePath, "EntityDao.ftl", entityDir, "I", "Dao.java", zip);
-                        generateCode(entityModel, templatePath, "EntityService.ftl", entityDir, "", "Service.java", zip);
-                        generateCode(entityModel, templatePath, "EntityMapper.ftl", entityDir, "", "Mapper.xml", zip);
-                        generateCode(entityModel, templatePath, "EntityApiController.ftl", entityDir, "", "ApiController.java", zip);
-                        generateCode(entityModel, templatePath, "View.ftl", entityDir, "", ".vue", zip);
-                        generateCode(entityModel, templatePath, "View-js.ftl", entityDir, "", ".js", zip);
-                        break;
-                    default:
-                        break;
-                }
-                if (onlySingleTable) {
+            EntityDataModel entityModel = getEntityModel(con, tableName, tablePrefix);
+            switch (config.getGeneratorLevel()) {
+                case 1:
+                    generateCode(entityModel, "Entity.ftl", "", ".java", zip);
+                    generateCode(entityModel, "EntityQuery.ftl", "", "Query.java", zip);
+                    generateCode(entityModel, "EntityMapper.ftl", "", "Mapper.xml", zip);
+                    generateCode(entityModel, "EntityDao.ftl", "I", "Dao.java", zip);
                     break;
-                }
+                case 2:
+                    generateCode(entityModel, "Entity.ftl", "", ".java", zip);
+                    generateCode(entityModel, "EntityQuery.ftl", "", "Query.java", zip);
+                    generateCode(entityModel, "EntityMapper.ftl", "", "Mapper.xml", zip);
+                    generateCode(entityModel, "EntityDao.ftl", "I", "Dao.java", zip);
+                    generateCode(entityModel, "EntityService.ftl", "", "Service.java", zip);
+                    break;
+                case 3:
+                    generateCode(entityModel, "Entity.ftl", "", ".java", zip);
+                    generateCode(entityModel, "EntityQuery.ftl", "", "Query.java", zip);
+                    generateCode(entityModel, "EntityDao.ftl", "I", "Dao.java", zip);
+                    generateCode(entityModel, "EntityService.ftl", "", "Service.java", zip);
+                    generateCode(entityModel, "EntityMapper.ftl", "", "Mapper.xml", zip);
+                    generateCode(entityModel, "EntityApiController.ftl", "", "ApiController.java", zip);
+                    generateCode(entityModel, "View.ftl", "", ".vue", zip);
+                    generateCode(entityModel, "View-js.ftl", "", ".js", zip);
+                    break;
+                default:
+                    break;
             }
         } catch (Exception e) {
             log.error("代码生成出错 {}", e.getMessage());
@@ -166,8 +157,14 @@ public class AutoGeneratorService {
         return outputStream.toByteArray();
     }
 
-    private void generateCode(EntityDataModel dataModel, String templatePath, String templateName, String outDir, String filePrefix, String fileSuffix, ZipOutputStream zip)
+    private void generateCode(EntityDataModel dataModel, String templateName, String filePrefix, String fileSuffix, ZipOutputStream zip)
             throws IOException, TemplateException {
+        //获取模板路径
+        String templatePath = config.getTemplatePath();
+        templatePath = templatePath.replace("/", File.separator).replace("\\", File.separator);
+        log.info("当前模板路径为：{}", templatePath);
+        String outDir = autoCodePath();
+
         if (fileSuffix.contains("xml")) {
             dataModel.setInsertValue(handleSQL(dataModel.getColumns(), "insert"));
             dataModel.setUpdateValue(handleSQL(dataModel.getColumns(), "update"));
@@ -206,7 +203,7 @@ public class AutoGeneratorService {
         inputStream.close();
     }
 
-    private String handleSQL(List<Column> columns, String flag) {
+    public String handleSQL(List<Column> columns, String flag) {
         StringBuffer sb = new StringBuffer();
         switch (flag) {
             case "columnList":
@@ -250,12 +247,18 @@ public class AutoGeneratorService {
         return sb.toString();
     }
 
-    private EntityDataModel getEntityModel(Connection con, String tableName, String basePackage, String daoPackage, String servicePackage,
-                                           String controllerPackage, String tablePrefix)
+    public EntityDataModel getEntityModel(Connection con, String tableName, String tablePrefix)
             throws Exception {
+        String basePackage = config.getBasePackage();
+        String daoPackage = config.getDaoPackage();
+        String servicePackage = config.getServicePackage();
+        String controllerPackage = config.getControllerPackage();
+        String author = config.getAuthor();
+
+
         //查询表属性,格式化生成实体所需属性
         String sql = "SELECT table_name, column_name, column_comment, column_type, column_key, column_default "
-                + "FROM INFORMATION_SCHEMA. COLUMNS " + "WHERE table_name = '" + tableName + "' " + "AND table_schema = '" + config.getDatabaseName() + "'";
+                + " FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = '" + tableName + "' " + "AND table_schema = '" + config.getDatabaseName() + "'";
 
         PreparedStatement ps = con.prepareStatement(sql);
         ResultSet rs = ps.executeQuery();
@@ -267,7 +270,7 @@ public class AutoGeneratorService {
             String type = rs.getString("column_type");
             String comment = rs.getString("column_comment");
             String annotation = null;
-            if ("Id".equalsIgnoreCase(name)
+            if ("ID_".equalsIgnoreCase(name)
                     || "CREATE_TIME_".equalsIgnoreCase(name)
                     || "MODIFY_TIME_".equalsIgnoreCase(name)
                     || "CREATOR_".equalsIgnoreCase(name)
@@ -288,7 +291,8 @@ public class AutoGeneratorService {
         dataModel.setDaoPackage(daoPackage);
         dataModel.setServicePackage(servicePackage);
         dataModel.setControllerPackage(controllerPackage);
-        dataModel.setCreateTime(new Date().toString());
+        dataModel.setCreateTime(DateUtils.getTime());
+        dataModel.setAuthor(config.getAuthor());
         if (StrUtil.isNotBlank(tablePrefix)) {
             dataModel.setEntityName(StrUtil.upperFirst(StrUtil.toCamelCase(StrUtil.removePrefix(tableName, tablePrefix))));
             dataModel.setEntityName1(StrUtil.lowerFirst(StrUtil.toCamelCase(StrUtil.removePrefix(tableName, tablePrefix))));
@@ -305,20 +309,15 @@ public class AutoGeneratorService {
         File file = new File(url);
         if (file.isDirectory()) {
             File[] files = file.listFiles();
-            for (File f : files) {
+            for (File f : files != null ? files : new File[0]) {
                 FileUtil.del(f);
             }
         }
     }
 
-    public String autoCodePath() {
-        //获取当前项目路径
-        String path = AutoGeneratorService.class.getResource("/").getPath();
-        if (path.indexOf("/ares-system-new") > 0) {
-            path = StrUtil.sub(path, 0, path.indexOf("/ares-system-new"));
-        } else {
-            path = StrUtil.sub(path, 0, path.indexOf("/ares-system"));
-        }
+    private String autoCodePath() {
+        String path = config.getProjectPtah();
+        path = path.replace("/", File.separator).replace("\\", File.separator);
         return path + File.separator + "autocode";
     }
 }

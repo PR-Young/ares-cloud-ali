@@ -22,6 +22,7 @@ package com.ares.generator.controller;
 
 
 import com.ares.core.controller.BaseController;
+import com.ares.core.model.base.AjaxResult;
 import com.ares.core.model.page.TableDataInfo;
 import com.ares.core.utils.DateUtils;
 import com.ares.core.utils.ServletUtils;
@@ -104,5 +105,11 @@ public class GeneratorApiController extends BaseController {
         response.addHeader("Content-Length", "" + data.length);
         response.setContentType("application/octet-stream; charset=UTF-8");
         IOUtils.write(data, response.getOutputStream());
+    }
+
+    @GetMapping("preview/{tableName}")
+    @Operation(summary = "预览代码", responses = {@ApiResponse(content = @Content(schema = @Schema(implementation = TableDataInfo.class)))})
+    public Object preview(HttpServletResponse response, @PathVariable("tableName") String tableName) throws IOException {
+        return AjaxResult.successData(generatorService.preview(tableName));
     }
 }

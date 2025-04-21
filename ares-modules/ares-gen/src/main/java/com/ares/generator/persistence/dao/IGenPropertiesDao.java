@@ -18,24 +18,20 @@
  *
  */
 
-package com.ares;
+package com.ares.generator.persistence.dao;
 
-import org.apache.dubbo.config.spring.context.annotation.EnableDubbo;
-import org.mybatis.spring.annotation.MapperScan;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+import com.ares.core.dao.IBaseDao;
+import com.ares.generator.persistence.model.GenProperties;
+import com.ares.generator.persistence.model.query.GenPropertiesQuery;
+import org.springframework.stereotype.Repository;
 
 /**
  * @description:
- * @author: Young
- * @date: 2022/2/14
- * @see: com.ares.generator.GeneratorApplication.java
+ * @author: ares
+ * @date: 2025-04-21 10:19:03
  **/
-@MapperScan("com.ares.generator")
-@SpringBootApplication
-@EnableDubbo(scanBasePackages = {"com.ares.api"})
-public class AresGeneratorApplication {
-    public static void main(String[] args) {
-        SpringApplication.run(AresGeneratorApplication.class, args);
-    }
+@Repository
+public interface IGenPropertiesDao extends IBaseDao<GenProperties, GenPropertiesQuery> {
+    GenProperties getByUser(Long userId);
 }

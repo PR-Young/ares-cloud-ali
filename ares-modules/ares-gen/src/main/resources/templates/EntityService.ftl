@@ -15,6 +15,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+* @description:
+* @author: ${author}
+* @date: ${createTime}
+**/
 @Service
 public class ${entityName}Service implements BaseService<${entityName}>{
 
@@ -46,7 +51,7 @@ public class ${entityName}Service implements BaseService<${entityName}>{
     }
 
     @Override
-    public void deleteByIds(${"List<String>"} ids) {
+    public void deleteByIds(${"List<Long>"} ids) {
         ${entityName1}Dao.deleteByIds(ids);
     }
 
@@ -55,7 +60,7 @@ public class ${entityName}Service implements BaseService<${entityName}>{
         return ${entityName1}Dao.getById(id);
     }
 
-    public List<${entityName}> list(${entityName} obj) {
+    public List<${entityName}> list(${entityName}Query obj) {
         List<${entityName}> lists = ${entityName1}Dao.selectList(obj);
         return lists;
     }

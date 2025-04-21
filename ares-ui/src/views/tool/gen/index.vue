@@ -2,7 +2,12 @@
 
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" :inline="true" label-width="68px">
+    <el-form
+      :model="queryParams"
+      ref="queryForm"
+      :inline="true"
+      label-width="68px"
+    >
       <el-form-item label="表名称" prop="tableName">
         <el-input
           v-model="queryParams.tableName"
@@ -34,22 +39,30 @@
         ></el-date-picker>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
-        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+        <el-button
+          type="primary"
+          icon="el-icon-search"
+          size="mini"
+          @click="handleQuery"
+          >搜索</el-button
+        >
+        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery"
+          >重置</el-button
+        >
       </el-form-item>
     </el-form>
 
-    <!-- <el-row :gutter="10" class="mb8">
+    <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
         <el-button
           type="primary"
           icon="el-icon-download"
           size="mini"
-          @click="handleGenTable"
-
-        >生成</el-button>
+          @click="handleGenBasicInfo"
+          >生成配置</el-button
+        >
       </el-col>
-    </el-row>-->
+    </el-row>
 
     <el-table v-loading="loading" :data="tableList">
       <el-table-column
@@ -57,45 +70,61 @@
         align="center"
         prop="TABLE_NAME"
         :show-overflow-tooltip="true"
-        width="400"
+        width="300"
       />
       <el-table-column
         label="表描述"
         align="center"
         prop="TABLE_COMMENT"
         :show-overflow-tooltip="true"
-        width="400"
+        width="300"
       />
-      <el-table-column label="创建时间" align="center" prop="CREATE_TIME" width="200">
+      <el-table-column
+        label="创建时间"
+        align="center"
+        prop="CREATE_TIME"
+        width="200"
+      >
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.CREATE_TIME) }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="更新时间" align="center" prop="UPDATE_TIME" width="200">
+      <el-table-column
+        label="更新时间"
+        align="center"
+        prop="UPDATE_TIME"
+        width="200"
+      >
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.UPDATE_TIME) }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" fixed="right">
+      <el-table-column
+        label="操作"
+        align="center"
+        class-name="small-padding fixed-width"
+        fixed="right"
+      >
         <template slot-scope="scope">
           <el-button
             type="text"
             size="small"
             icon="el-icon-view"
             @click="handlePreview(scope.row)"
-            v-hasPermi="['tool:gen:preview']"
-          >预览</el-button>
+            >预览</el-button
+          >
           <el-button
             type="text"
             size="small"
             icon="el-icon-download"
             @click="handleGenTable(scope.row)"
-          >生成代码</el-button>
+            >生成代码</el-button
+          >
         </template>
       </el-table-column>
     </el-table>
     <pagination
-      v-show="total>0"
+      v-show="total > 0"
       :total="total"
       :page.sync="queryParams.pageNum"
       :limit.sync="queryParams.pageSize"
@@ -112,8 +141,8 @@
       <el-tabs v-model="preview.activeName">
         <el-tab-pane
           v-for="(value, key) in preview.data"
-          :label="key.substring(key.lastIndexOf('/')+1,key.indexOf('.vm'))"
-          :name="key.substring(key.lastIndexOf('/')+1,key.indexOf('.vm'))"
+          :label="key.substring(0, key.indexOf('.ftl'))"
+          :name="key.substring(0, key.indexOf('.ftl'))"
           :key="key"
         >
           <pre>{{ value }}</pre>
@@ -163,7 +192,7 @@ export default {
         open: false,
         title: "代码预览",
         data: {},
-        activeName: "domain.java",
+        activeName: "Entity.ftl",
       },
     };
   },
@@ -201,7 +230,10 @@ export default {
         this.msgError("请选择要生成的数据");
         return;
       }
-      downLoadZip("ares/tool/gen/genCode/" + tableNames, "code");
+      downLoadZip("/ares/gen/tool/gen/genCode/" + tableNames, "code");
+    },
+    handleGenBasicInfo() {
+      this.$router.push("/genbasicinfo/basicinfo");
     },
     /** 打开导入表弹窗 */
     openImportTable() {
@@ -215,7 +247,7 @@ export default {
     },
     /** 预览按钮 */
     handlePreview(row) {
-      previewTable(row.tableId).then((response) => {
+      previewTable(row.TABLE_NAME).then((response) => {
         this.preview.data = response.data;
         this.preview.open = true;
       });

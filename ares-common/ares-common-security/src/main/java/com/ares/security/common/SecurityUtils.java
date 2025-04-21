@@ -32,14 +32,13 @@ import com.ares.redis.utils.RedisUtil;
 import com.ares.security.jwt.JwtAuthenticationToken;
 import com.ares.security.jwt.JwtTokenUtils;
 import com.ares.security.jwt.JwtUserDetails;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
-
-import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * @description:
@@ -48,6 +47,7 @@ import jakarta.servlet.http.HttpServletRequest;
  * @see: com.ares.security.security SecurityUtils.java
  **/
 public class SecurityUtils {
+
 
     private SecurityUtils() {
     }
@@ -161,7 +161,7 @@ public class SecurityUtils {
         if (null == userName) {
             throw new UserException(ErrorCode.NOUSER.getCode(), "用户不存在！");
         }
-        ISysUserService userService = SpringUtils.getBean("sysUserProvider");
+        ISysUserService userService = SpringUtils.getDubboBean(ISysUserService.class);
         SysUser user = userService.getUserByName(userName);
         return user;
     }

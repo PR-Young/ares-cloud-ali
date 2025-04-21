@@ -65,7 +65,7 @@
         </if>
     </select>
 
-    <select id="selectList" parameterType="${entityPackage}.${entityName}" resultMap="${entityName}">
+    <select id="selectList" parameterType="${entityPackage}.${entityName}Query" resultMap="${entityName}">
         select
         <include refid="Base_Column_List"/>
         from `${tableName}`

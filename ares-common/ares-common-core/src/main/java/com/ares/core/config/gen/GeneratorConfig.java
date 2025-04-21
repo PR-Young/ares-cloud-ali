@@ -122,5 +122,12 @@ public class GeneratorConfig {
     @Value("${ares.generator.controllerPackage}")
     private String controllerPackage;
 
+    @Value("${ares.generator.templatePath}")
+    private String templatePath;
 
+    @Value("${ares.generator.projectPtah}")
+    private String projectPtah;
+
+    @Value("${ares.generator.author}")
+    private String author;
 }
