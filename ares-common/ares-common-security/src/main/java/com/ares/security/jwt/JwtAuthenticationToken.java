@@ -20,6 +20,8 @@
 
 package com.ares.security.jwt;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 
@@ -31,6 +33,8 @@ import java.util.Collection;
  * @date: 2020/10/19
  * @see: com.ares.security.jwt JwtAuthenticationToken.java
  **/
+@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
+@JsonTypeInfo(use = JsonTypeInfo.Id.CLASS,include = JsonTypeInfo.As.PROPERTY,property = "@class")
 public class JwtAuthenticationToken extends UsernamePasswordAuthenticationToken {
     private static final long serialVersionUID = 1L;
 

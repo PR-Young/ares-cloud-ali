@@ -11,23 +11,24 @@
         <result column="DEPT_ID_" jdbcType="BIGINT" property="deptId"/>
         <result column="POST_ID_" jdbcType="BIGINT" property="postId"/>
         <result column="AVATAR_" jdbcType="VARCHAR" property="avatar"/>
+        <result column="STATUS_" jdbcType="INTEGER" property="status"/>
         <result column="CREATOR_" jdbcType="BIGINT" property="creator"/>
         <result column="CREATE_TIME_" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="MODIFIER_" jdbcType="BIGINT" property="modifier"/>
         <result column="MODIFY_TIME_" jdbcType="TIMESTAMP" property="modifyTime"/>
     </resultMap>
     <sql id="Base_Column_List">
-        `ID_`, `ACCOUNT_`, `USERNAME_`, `PASSWORD_`,`PHONE_NUMBER_`,`EMAIL_`,`DEPT_ID_`,`POST_ID_`,`AVATAR_`,`CREATOR_`
-        ,`CREATE_TIME_`,`MODIFIER_`, `MODIFY_TIME_`
+        `ID_`, `ACCOUNT_`, `USERNAME_`, `PASSWORD_`,`PHONE_NUMBER_`,`EMAIL_`,`DEPT_ID_`,`POST_ID_`,`AVATAR_`,
+             `STATUS_`,`CREATOR_`,`CREATE_TIME_`,`MODIFIER_`, `MODIFY_TIME_`
     </sql>
     <insert id="insert" parameterType="com.ares.core.model.system.SysUser">
         insert into `sys_user` (`ID_`, `ACCOUNT_`,
-        `USERNAME_`,`PASSWORD_`,`PHONE_NUMBER_`,`EMAIL_`,`AVATAR_`,`DEPT_ID_`,`POST_ID_`,`CREATOR_` ,`CREATE_TIME_`,`MODIFIER_`,
+        `USERNAME_`,`PASSWORD_`,`PHONE_NUMBER_`,`EMAIL_`,`AVATAR_`,`DEPT_ID_`,`POST_ID_`,`STATUS_`,`CREATOR_` ,`CREATE_TIME_`,`MODIFIER_`,
         `MODIFY_TIME_`)
         values (#{id,jdbcType=BIGINT}, #{account,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR},
         #{password,jdbcType=VARCHAR},#{phoneNumber,jdbcType=VARCHAR},#{email,jdbcType=VARCHAR},
         #{avatar,jdbcType=VARCHAR}, #{deptId,jdbcType=VARCHAR},#{postId,jdbcType=VARCHAR},
-        #{creator,jdbcType=BIGINT},#{createTime,jdbcType=TIMESTAMP},
+        #{status,jdbcType=INTEGER},#{creator,jdbcType=BIGINT},#{createTime,jdbcType=TIMESTAMP},
         #{modifier,jdbcType=BIGINT},#{modifyTime,jdbcType=TIMESTAMP})
     </insert>
     <update id="update" parameterType="com.ares.core.model.system.SysUser">
@@ -57,6 +58,9 @@
             <if test="postId != null">
                 `POST_ID_` = #{postId,jdbcType=BIGINT},
             </if>
+            <if test="status != null">
+                `STATUS_` = #{status,jdbcType=INTEGER},
+            </if>
             <if test="creator != null">
                 `CREATOR_` = #{creator,jdbcType=BIGINT},
             </if>
@@ -84,7 +88,7 @@
         select
         <include refid="Base_Column_List"/>
         from `sys_user`
-        where `ACCOUNT_` = #{userName,jdbcType=VARCHAR}
+        where `STATUS_` = 1 and `ACCOUNT_` = #{userName,jdbcType=VARCHAR}
     </select>
     <select id="getById" parameterType="java.lang.Long" resultMap="SysUser">
         select
@@ -113,7 +117,8 @@
     <select id="checkAccount" parameterType="java.lang.String" resultType="java.lang.Integer">
         select count(1)
         from `sys_user`
-        where `ACCOUNT_` = #{userName,jdbcType=VARCHAR}
+        where `STATUS_` = 1
+          and `ACCOUNT_` = #{userName,jdbcType=VARCHAR}
     </select>
 
     <update id="resetPassword">
@@ -144,6 +149,9 @@
             <if test="postId != null">
                 `POST_ID_` = #{postId,jdbcType=VARCHAR},
             </if>
+            <if test="status != null">
+                `STATUS_` = #{status,jdbcType=INTEGER},
+            </if>
             <if test="creator != null">
                 `CREATOR_` = #{creator,jdbcType=BIGINT},
             </if>
@@ -166,14 +174,14 @@
         user.`CREATE_TIME_`, user.`MODIFY_TIME_`
         from `sys_user` user
         left join `sys_role_user` roleuser on user.ID_ = roleuser.USER_ID_
-        where roleuser.ROLE_ID_ = #{roleId,jdbcType=BIGINT}
+        where user.`STATUS_` = 1 and roleuser.ROLE_ID_ = #{roleId,jdbcType=BIGINT}
     </select>
 
     <select id="allUser" parameterType="java.lang.Long" resultMap="SysUser">
         select
         <include refid="Base_Column_List"/>
         from `sys_user`
-        where `ID_` not in (
+        where `STATUS_` = 1 and `ID_` not in (
         select `USER_ID_`
         from `sys_role_user`
         where `ROLE_ID_` = #{roleId,jdbcType=BIGINT}

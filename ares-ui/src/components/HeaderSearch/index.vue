@@ -22,8 +22,12 @@
 <script>
 // fuse is a lightweight fuzzy-search module
 // make search results more in line with expectations
-import Fuse from 'fuse.js'
-import path from 'path'
+import Fuse from "fuse.js";
+import path from "path-browserify";
+import store from "@/store";
+import usePermissionStore from "@/store/modules/permission";
+import { nextTick } from "vue";
+const permission = usePermissionStore(store);
 
 export default {
   name: 'HeaderSearch',
@@ -38,12 +42,12 @@ export default {
   },
   computed: {
     routes() {
-      return this.$store.getters.permission_routes
-    }
+      return permission.permissionRoutes;
+    },
   },
   watch: {
     routes() {
-      this.searchPool = this.generateRoutes(this.routes)
+      this.searchPool = this.generateRoutes(this.routes);
     },
     searchPool(list) {
       this.initFuse(list)
@@ -71,13 +75,13 @@ export default {
       this.options = []
       this.show = false
     },
-    change(val) {
-      this.$router.push(val.path)
-      this.search = ''
-      this.options = []
-      this.$nextTick(() => {
-        this.show = false
-      })
+    async change(val) {
+      this.$router.push(val.path);
+      this.search = "";
+      this.options = [];
+      await nextTick(() => {
+        this.show = false;
+      });
     },
     initFuse(list) {
       this.fuse = new Fuse(list, {
@@ -161,7 +165,7 @@ export default {
     display: inline-block;
     vertical-align: middle;
 
-    ::v-deep .el-input__inner {
+    ::deep .el-input__inner {
       border-radius: 0;
       border: 0;
       padding-left: 0;

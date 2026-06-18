@@ -20,6 +20,7 @@
 
 package com.ares.security.jwt;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 
@@ -31,6 +32,7 @@ import java.util.Collection;
  * @date: 2020/10/19
  * @see: com.ares.security.jwt JwtUserDetails.java
  **/
+@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class JwtUserDetails extends User {
     private static final long serialVersionUID = 1L;
 

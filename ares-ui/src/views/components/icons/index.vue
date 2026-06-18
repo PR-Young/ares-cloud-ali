@@ -1,5 +1,3 @@
-
-
 <template>
   <div class="icons-container">
     <aside>
@@ -9,7 +7,9 @@
       <el-tab-pane label="Icons">
         <div v-for="item of svgIcons" :key="item">
           <el-tooltip placement="top">
-            <div slot="content">{{ generateIconCode(item) }}</div>
+            <template v-slot:content>
+              <div>{{ generateIconCode(item) }}</div>
+            </template>
             <div class="icon-item">
               <svg-icon :icon-class="item" class-name="disabled" />
               <span>{{ item }}</span>
@@ -20,9 +20,11 @@
       <el-tab-pane label="Element-UI Icons">
         <div v-for="item of elementIcons" :key="item">
           <el-tooltip placement="top">
-            <div slot="content">{{ generateElementIconCode(item) }}</div>
+            <template v-slot:content>
+              <div>{{ generateElementIconCode(item) }}</div>
+            </template>
             <div class="icon-item">
-              <i :class="'el-icon-' + item" />
+              <el-icon> {{ showIcons(item) }}</el-icon>
               <span>{{ item }}</span>
             </div>
           </el-tooltip>
@@ -32,26 +34,18 @@
   </div>
 </template>
 
-<script>
+<script setup name="Icons">
 import svgIcons from "./svg-icons";
 import elementIcons from "./element-icons";
 
-export default {
-  name: "Icons",
-  data() {
-    return {
-      svgIcons,
-      elementIcons,
-    };
-  },
-  methods: {
-    generateIconCode(symbol) {
-      return `<svg-icon icon-class="${symbol}" />`;
-    },
-    generateElementIconCode(symbol) {
-      return `<i class="el-icon-${symbol}" />`;
-    },
-  },
+const generateIconCode = (symbol) => {
+  return `<svg-icon icon-class="${symbol}" />`;
+};
+const generateElementIconCode = (symbol) => {
+  return `<${symbol} />`;
+};
+const showIcons = (symbol) => {
+  return `<${symbol} />`;
 };
 </script>
 
@@ -59,7 +53,6 @@ export default {
 .icons-container {
   margin: 10px 20px 0;
   overflow: hidden;
-
   .icon-item {
     margin: 20px;
     height: 85px;

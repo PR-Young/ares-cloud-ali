@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ares.flow.persistence.dao.IFlowTaskDao">
+    <resultMap id="flowTask" type="com.ares.flow.persistence.model.FlowTask">
+        <result column="flow_name" jdbcType="VARCHAR" property="flowName"/>
+        <result column="version" jdbcType="VARCHAR" property="version"/>
+        <result column="category" jdbcType="VARCHAR" property="category"/>
+        <result column="definition_id" jdbcType="BIGINT" property="definitionId"/>
+        <result column="node_name" jdbcType="VARCHAR" property="nodeName"/>
+        <result column="instance_id" jdbcType="BIGINT" property="instanceId"/>
+        <result column="business_id" jdbcType="VARCHAR" property="businessId"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="flow_status" jdbcType="VARCHAR" property="flowStatus"/>
+        <result column="permission_flag" jdbcType="TIMESTAMP" property="permissionFlag"/>
+        <result column="task_id" jdbcType="BIGINT" property="taskId"/>
+        <result column="USERNAME_" jdbcType="VARCHAR" property="userName"/>
+        <result column="finish_time" jdbcType="TIMESTAMP" property="finishTime"/>
+    </resultMap>
+    <select id="getMyProcess" resultMap="flowTask">
+        SELECT
+            def.flow_name,
+            def.version,
+            def.category,
+            def.id AS definition_id,
+            ins.node_name,
+            ins.id AS instance_id,
+            ins.business_id,
+            ins.create_time,
+            ins.flow_status,
+            node.permission_flag,
+            task.id AS task_id
+        FROM
+            flow_instance ins
+            LEFT JOIN flow_definition def ON ins.definition_id = def.id
+            LEFT JOIN flow_node node ON ins.definition_id = node.definition_id AND ins.node_code = node.node_code
+            LEFT JOIN flow_task task ON ins.id = task.instance_id
+        WHERE
+            ins.create_by = #{userId}
+        ORDER BY ins.create_time DESC
+    </select>
+
+    <select id="getTodoList" resultMap="flowTask">
+        SELECT
+            task.id AS task_id,
+            task.node_name,
+            task.create_time,
+            task.instance_id,
+            task.definition_id,
+            def.flow_name,
+            def.category,
+            def.version,
+            user.USERNAME_
+        FROM
+            flow_user ur
+            LEFT JOIN flow_task task ON ur.associated = task.id
+            LEFT JOIN flow_definition def ON task.definition_id = def.id
+            LEFT JOIN flow_instance ins ON task.instance_id = ins.id
+            LEFT JOIN sys_user user ON ins.create_by = user.ID_
+        WHERE
+            ur.processed_by in
+        <foreach collection="list" item="processedBy" open="(" separator="," close=")">
+            #{processedBy}
+        </foreach>
+        ORDER BY task.create_time DESC
+    </select>
+
+    <select id="finishedList" resultMap="flowTask">
+        SELECT
+            subquery.definition_id,
+            def.flow_name,
+            def.version,
+            def.category,
+            us.USERNAME_,
+            subquery.create_time,
+            ins.node_name,
+            subquery.instance_id,
+            subquery.task_id,
+            subquery.update_time AS finish_time
+        FROM
+            ( SELECT *, ROW_NUMBER() OVER ( PARTITION BY instance_id ORDER BY update_time DESC ) AS rn FROM flow_his_task where approver = #{userId} ORDER BY update_time DESC) AS subquery
+                LEFT JOIN flow_instance ins ON subquery.instance_id = ins.id
+                LEFT JOIN flow_definition def ON subquery.definition_id = def.id
+                LEFT JOIN sys_user us ON ins.create_by = us.ID_
+        WHERE
+            rn = 1
+    </select>
+
+
+</mapper>

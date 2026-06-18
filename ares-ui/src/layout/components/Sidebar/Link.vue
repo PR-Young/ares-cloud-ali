@@ -1,9 +1,5 @@
-
-
-
 <template>
-  <!-- eslint-disable vue/require-component-is -->
-  <component v-bind="linkProps(to)">
+  <component :is="type" v-bind="linkProps()">
     <slot />
   </component>
 </template>
@@ -15,24 +11,30 @@ export default {
   props: {
     to: {
       type: String,
-      required: true
+      required: true,
+    },
+  },
+  computed:{
+    type(){
+      if (isExternal(this.to)) {
+        return 'a'
+      }
+      return 'router-link'
     }
   },
   methods: {
-    linkProps(url) {
-      if (isExternal(url)) {
+    linkProps() {
+      if (isExternal(this.to)) {
         return {
-          is: 'a',
-          href: url,
+          href: this.to,
           target: '_blank',
-          rel: 'noopener'
+          rel: 'noopener',
         }
       }
       return {
-        is: 'router-link',
-        to: url
+        to: this.to,
       }
-    }
-  }
+    },
+  },
 }
 </script>

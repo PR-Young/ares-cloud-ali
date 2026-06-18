@@ -5,22 +5,34 @@
     <scroll-pane ref="scrollPane" class="tags-view-wrapper">
       <router-link
         v-for="tag in visitedViews"
-        ref="tag"
+        :ref="getRefSetter('tag')"
         :key="tag.path"
         :class="isActive(tag)?'active':''"
         :to="{ path: tag.path, query: tag.query, fullPath: tag.fullPath }"
-        tag="span"
         class="tags-view-item"
-        @click.middle.native="!isAffix(tag)?closeSelectedTag(tag):''"
-        @contextmenu.prevent.native="openMenu(tag,$event)"
+        @click.middle="!isAffix(tag) ? closeSelectedTag(tag) : ''"
+        @contextmenu.prevent="openMenu(tag, $event)"
       >
         {{ tag.title }}
-        <span v-if="!isAffix(tag)" class="el-icon-close" @click.prevent.stop="closeSelectedTag(tag)" />
+
+        <span v-if="!isAffix(tag)" @click.prevent.stop="closeSelectedTag(tag)">
+          <el-icon
+            class="el-icon-close"
+            style="width: 1em; height: 1em; vertical-align: text-bottom"
+            ><Close
+          /></el-icon>
+        </span>
       </router-link>
     </scroll-pane>
-    <ul v-show="visible" :style="{left:left+'px',top:top+'px'}" class="contextmenu">
+    <ul
+      v-show="visible"
+      :style="{ left: left + 'px', top: top + 'px' }"
+      class="contextmenu"
+    >
       <li @click="refreshSelectedTag(selectedTag)">刷新页面</li>
-      <li v-if="!isAffix(selectedTag)" @click="closeSelectedTag(selectedTag)">关闭当前</li>
+      <li v-if="!isAffix(selectedTag)" @click="closeSelectedTag(selectedTag)">
+        关闭当前
+      </li>
       <li @click="closeOthersTags">关闭其他</li>
       <li @click="closeAllTags(selectedTag)">关闭所有</li>
     </ul>
@@ -28,32 +40,41 @@
 </template>
 
 <script>
-import ScrollPane from './ScrollPane'
-import path from 'path'
+import ScrollPane from "./ScrollPane.vue";
+import path from "path-browserify";
+import { Close } from "@element-plus/icons";
+import store from "@/store";
+import useTagsViewStore from "@/store/modules/tagsView";
+import usePermissionStore from "@/store/modules/permission";
+import { nextTick } from "vue";
+
+const tagsView = useTagsViewStore(store);
+const permission = usePermissionStore(store);
 
 export default {
-  components: { ScrollPane },
+  components: { ScrollPane, Close },
+
   data() {
     return {
       visible: false,
       top: 0,
       left: 0,
       selectedTag: {},
-      affixTags: []
-    }
+      affixTags: [],
+    };
   },
   computed: {
     visitedViews() {
-      return this.$store.state.tagsView.visitedViews
+      return tagsView.visitedViews;
     },
     routes() {
-      return this.$store.state.permission.routes
-    }
+      return permission.routes;
+    },
   },
   watch: {
     $route() {
-      this.addTags()
-      this.moveToCurrentTag()
+      this.addTags();
+      this.moveToCurrentTag();
     },
     visible(value) {
       if (value) {
@@ -74,9 +95,9 @@ export default {
     isAffix(tag) {
       return tag.meta && tag.meta.affix
     },
-    filterAffixTags(routes, basePath = '/') {
-      let tags = []
-      routes.forEach(route => {
+    filterAffixTags(routes, basePath = "/") {
+      let tags = [];
+      routes.forEach((route) => {
         if (route.meta && route.meta.affix) {
           const tagPath = path.resolve(basePath, route.path)
           tags.push({
@@ -96,40 +117,40 @@ export default {
       return tags
     },
     initTags() {
-      const affixTags = this.affixTags = this.filterAffixTags(this.routes)
+      const affixTags = (this.affixTags = this.filterAffixTags(this.routes));
       for (const tag of affixTags) {
         // Must have tag name
         if (tag.name) {
-          this.$store.dispatch('tagsView/addVisitedView', tag)
+          tagsView.addVisitedView(tag);
         }
       }
     },
     addTags() {
       const { name } = this.$route
       if (name) {
-        this.$store.dispatch('tagsView/addView', this.$route)
+        tagsView.addView(this.$route);
       }
       return false
     },
-    moveToCurrentTag() {
-      const tags = this.$refs.tag
-      this.$nextTick(() => {
+    async moveToCurrentTag() {
+      const tags = this.$arrRefs.tag;
+      await nextTick(() => {
         for (const tag of tags) {
           if (tag.to.path === this.$route.path) {
             this.$refs.scrollPane.moveToTarget(tag)
             // when query is different then update
             if (tag.to.fullPath !== this.$route.fullPath) {
-              this.$store.dispatch('tagsView/updateVisitedView', this.$route)
+              tagsView.updateVisitedView(this.$route);
             }
             break
           }
         }
       })
     },
-    refreshSelectedTag(view) {
-      this.$store.dispatch('tagsView/delCachedView', view).then(() => {
-        const { fullPath } = view
-        this.$nextTick(() => {
+    async refreshSelectedTag(view) {
+      tagsView.delCachedView(view).then(async () => {
+        const { fullPath } = view;
+        await nextTick(() => {
           this.$router.replace({
             path: '/redirect' + fullPath
           })
@@ -137,22 +158,22 @@ export default {
       })
     },
     closeSelectedTag(view) {
-      this.$store.dispatch('tagsView/delView', view).then(({ visitedViews }) => {
+      tagsView.delView(view).then(({ visitedViews }) => {
         if (this.isActive(view)) {
           this.toLastView(visitedViews, view)
         }
       })
     },
     closeOthersTags() {
-      this.$router.push(this.selectedTag)
-      this.$store.dispatch('tagsView/delOthersViews', this.selectedTag).then(() => {
-        this.moveToCurrentTag()
-      })
+      this.$router.push(this.selectedTag);
+      tagsView.delOthersViews(this.selectedTag).then(() => {
+        this.moveToCurrentTag();
+      });
     },
     closeAllTags(view) {
-      this.$store.dispatch('tagsView/delAllViews').then(({ visitedViews }) => {
-        if (this.affixTags.some(tag => tag.path === view.path)) {
-          return
+      tagsView.delAllViews().then(({ visitedViews }) => {
+        if (this.affixTags.some((tag) => tag.path === view.path)) {
+          return;
         }
         this.toLastView(visitedViews, view)
       })
@@ -190,10 +211,21 @@ export default {
       this.selectedTag = tag
     },
     closeMenu() {
-      this.visible = false
-    }
-  }
-}
+      this.visible = false;
+    },
+    getRefSetter(refKey) {
+      return (ref) => {
+        !this.$arrRefs && (this.$arrRefs = {});
+        !this.$arrRefs[refKey] && (this.$arrRefs[refKey] = []);
+        ref && this.$arrRefs[refKey].push(ref);
+      };
+    },
+  },
+
+  beforeUpdate() {
+    this.$arrRefs && (this.$arrRefs = {});
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -202,7 +234,7 @@ export default {
   width: 100%;
   background: #fff;
   border-bottom: 1px solid #d8dce5;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .12), 0 0 3px 0 rgba(0, 0, 0, .04);
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.12), 0 0 3px 0 rgba(0, 0, 0, 0.04);
   .tags-view-wrapper {
     .tags-view-item {
       display: inline-block;
@@ -251,7 +283,7 @@ export default {
     font-size: 12px;
     font-weight: 400;
     color: #333;
-    box-shadow: 2px 2px 3px 0 rgba(0, 0, 0, .3);
+    box-shadow: 2px 2px 3px 0 rgba(0, 0, 0, 0.3);
     li {
       margin: 0;
       padding: 7px 16px;
@@ -274,16 +306,18 @@ export default {
       vertical-align: 2px;
       border-radius: 50%;
       text-align: center;
-      transition: all .3s cubic-bezier(.645, .045, .355, 1);
+      transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
       transform-origin: 100% 50%;
       &:before {
-        transform: scale(.6);
+        transform: scale(0.6);
         display: inline-block;
         vertical-align: -3px;
       }
       &:hover {
         background-color: #b4bccc;
         color: #fff;
+        width: 12px !important;
+        height: 12px !important;
       }
     }
   }

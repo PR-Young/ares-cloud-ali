@@ -70,6 +70,8 @@ public class SysUser extends BaseModel implements Serializable {
     @JsonSerialize(using = LongJsonSerializer.class)
     @JsonDeserialize(using = LongJsonDeserializer.class)
     private Long postId;
+    @ExcelIgnore
+    private int status;
 
     public SysUser() {
     }
@@ -157,5 +159,13 @@ public class SysUser extends BaseModel implements Serializable {
 
     public void setPostId(Long postId) {
         this.postId = postId;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 }

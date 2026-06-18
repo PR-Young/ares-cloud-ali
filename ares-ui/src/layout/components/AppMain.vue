@@ -2,38 +2,46 @@
 
 <template>
   <section class="app-main">
-    <transition name="fade-transform" mode="out-in">
-      <keep-alive :include="cachedViews">
-        <router-view :key="key" />
-      </keep-alive>
-    </transition>
+    <router-view v-slot="{ Component, route }">
+      <transition name="fade-transform" mode="out-in">
+        <keep-alive :include="cachedViews">
+          <component
+            v-if="!route.meta.link"
+            :is="Component"
+            :key="route.path"
+          />
+        </keep-alive>
+      </transition>
+    </router-view>
   </section>
 </template>
 
 <script>
+import useTagsViewStore from "@/store/modules/tagsView";
+import store from "@/store";
+const tagsViewStore = useTagsViewStore(store);
 export default {
-  name: 'AppMain',
+  name: "AppMain",
   computed: {
     cachedViews() {
-      return this.$store.state.tagsView.cachedViews
+      const cachedViews = tagsViewStore.cachedViews;
+      return [cachedViews];
     },
     key() {
-      return this.$route.path
-    }
-  }
-}
+      return this.$route.fullPath;
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
 .app-main {
-  /* 50= navbar  50  */
   min-height: calc(100vh - 50px);
   width: 100%;
   position: relative;
   overflow: hidden;
 }
-
-.fixed-header+.app-main {
+.fixed-header + .app-main {
   padding-top: 50px;
 }
 
@@ -43,13 +51,10 @@ export default {
     min-height: calc(100vh - 84px);
   }
 
-  .fixed-header+.app-main {
+  .fixed-header + .app-main {
     padding-top: 84px;
   }
 }
-</style>
-
-<style lang="scss">
 // fix css style bug in open el-dialog
 .el-popup-parent--hidden {
   .fixed-header {

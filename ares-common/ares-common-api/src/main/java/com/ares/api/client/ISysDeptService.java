@@ -21,6 +21,7 @@
 package com.ares.api.client;
 
 import com.ares.core.model.system.SysDept;
+import com.github.pagehelper.PageInfo;
 
 /**
  * @description:
@@ -37,4 +38,6 @@ public interface ISysDeptService {
      * @return
      */
     SysDept getByDeptId(Long id);
+
+    PageInfo<SysDept> deptList();
 }

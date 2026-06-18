@@ -3,37 +3,39 @@
 <template>
   <div class="dashboard-editor-container">
     <el-row>
-      <el-form :inline="true" style="text-align: center">
-        <el-form-item>
-          <el-input
-            style="width: 500px"
-            v-model="queryParams.searchValue"
-            placeholder="请输入"
-            clearable
-            size="small"
-            @keyup.enter.native="handleQuery"
-          />
-        </el-form-item>
-        <el-form-item>
-          <el-button
-            type="primary"
-            icon="el-icon-search"
-            size="mini"
-            @click="handleQuery"
-          ></el-button>
-        </el-form-item>
-      </el-form>
+      <el-col>
+        <el-form :inline="true" style="text-align: center">
+          <el-form-item>
+            <el-input
+              style="width: 500px"
+              v-model="queryParams.searchValue"
+              placeholder="请输入"
+              clearable
+              size="default"
+              @keyup.enter="handleQuery"
+            />
+          </el-form-item>
+          <el-form-item>
+            <el-button
+              type="primary"
+              :icon="Search"
+              size="default"
+              @click="handleQuery"
+            ></el-button>
+          </el-form-item>
+        </el-form>
+      </el-col>
     </el-row>
 
     <panel-group @handleSetLineChartData="handleSetLineChartData" />
 
-    <el-row style="background: #fff; padding: 16px 16px 0; margin-bottom: 32px">
-      <time-line-chart :chart-data="lineData" />
-    </el-row>
-
     <!-- <el-row style="background: #fff; padding: 16px 16px 0; margin-bottom: 32px">
-      <line-chart :chart-data="lineChartData" />
+      <time-line-chart :chart-data="lineData" />
     </el-row> -->
+
+    <el-row style="background: #fff; padding: 16px 16px 0; margin-bottom: 32px">
+      <line-chart :chart-data="lineChartData" />
+    </el-row>
 
     <el-row :gutter="32">
       <el-col :xs="24" :sm="24" :lg="8">
@@ -59,63 +61,53 @@
   </div>
 </template>
 
-<script>
-import PanelGroup from "./dashboard/PanelGroup";
-import LineChart from "./dashboard/LineChart";
-import RaddarChart from "./dashboard/RaddarChart";
-import PieChart from "./dashboard/PieChart";
-import BarChart from "./dashboard/BarChart";
-import TimeLineChart from "./dashboard/TimeLineChart";
+<script setup name="Index">
+import { Search } from "@element-plus/icons-vue";
+import PanelGroup from "./dashboard/PanelGroup.vue";
+import LineChart from "./dashboard/LineChart.vue";
+import RaddarChart from "./dashboard/RaddarChart.vue";
+import PieChart from "./dashboard/PieChart.vue";
+import BarChart from "./dashboard/BarChart.vue";
+import TimeLineChart from "./dashboard/TimeLineChart.vue";
 import { getLineChartData, getLineChart, queryByKey } from "@/api/home";
+import { getCurrentInstance, onMounted, reactive, ref } from "vue";
+import { useRouter } from "vue-router";
 
-export default {
-  name: "Index",
-  components: {
-    PanelGroup,
-    LineChart,
-    RaddarChart,
-    PieChart,
-    BarChart,
-    TimeLineChart,
-  },
-  data() {
-    return {
-      today: new Date(),
-      lineChartData: {
-        expected: [],
-        actual: [],
-      },
-      lineData: {},
-      queryParams: {
-        searchValue: undefined,
-      },
+const router = useRouter();
+
+const today = new Date();
+const lineChartData = ref({
+  expected: [],
+  actual: [],
+});
+const lineData = ref({});
+const queryParams = reactive({
+  searchValue: undefined,
+});
+
+onMounted(() => {
+  getLineChartData().then((res) => {
+    lineChartData.value = res.data.newVisitis;
+  });
+  getLineChart().then((res) => {
+    lineData.value = res.data;
+  });
+});
+
+const handleSetLineChartData = (type) => {
+  getLineChartData().then((res) => {
+    lineChartData.value = res.data[type];
+  });
+};
+/** 搜索按钮操作 */
+const handleQuery = () => {
+  queryByKey(queryParams).then((res) => {
+    const data = {
+      searchValue: queryParams.searchValue,
+      data: res.data,
     };
-  },
-  created() {
-    getLineChartData().then((res) => {
-      this.lineChartData = res.data.newVisitis;
-    });
-    getLineChart().then((res) => {
-      this.lineData = res.data;
-    });
-  },
-  methods: {
-    handleSetLineChartData(type) {
-      getLineChartData().then((res) => {
-        this.lineChartData = res.data[type];
-      });
-    },
-    /** 搜索按钮操作 */
-    handleQuery() {
-      queryByKey(this.queryParams).then((res) => {
-        const data = {
-          searchValue: this.queryParams.searchValue,
-          data: res.data,
-        };
-        this.$router.push({ path: "/query/result", query: data });
-      });
-    },
-  },
+    router.push({ path: "/query/result", query: data });
+  });
 };
 </script>
 

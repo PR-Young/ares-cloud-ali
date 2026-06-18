@@ -1,13 +1,13 @@
-
-
 <template>
   <div :class="className" :style="{ height: height, width: width }" />
 </template>
 
 <script>
 import * as echarts from "echarts";
-require("echarts/theme/macarons"); // echarts theme
+import "echarts/theme/macarons";
+// require("echarts/theme/macarons"); // echarts theme
 import resize from "./mixins/resize";
+import { nextTick } from "vue";
 
 const animationDuration = 3000;
 
@@ -33,11 +33,11 @@ export default {
     };
   },
   mounted() {
-    this.$nextTick(() => {
+    nextTick(() => {
       this.initChart();
     });
   },
-  beforeDestroy() {
+  beforeUnmount() {
     if (!this.chart) {
       return;
     }
@@ -71,12 +71,12 @@ export default {
             },
           },
           indicator: [
-            { name: "Sales", max: 10000 },
-            { name: "Administration", max: 20000 },
-            { name: "Information Techology", max: 20000 },
-            { name: "Customer Support", max: 20000 },
-            { name: "Development", max: 20000 },
-            { name: "Marketing", max: 20000 },
+            { name: "Sales" },
+            { name: "Administration" },
+            { name: "Information Techology" },
+            { name: "Customer Support" },
+            { name: "Development" },
+            { name: "Marketing" },
           ],
         },
         legend: {

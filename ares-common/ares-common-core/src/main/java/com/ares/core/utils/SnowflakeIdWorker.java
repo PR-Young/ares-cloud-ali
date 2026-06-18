@@ -214,4 +214,9 @@ public class SnowflakeIdWorker {
         long id = idWorker.nextId();
         return id;
     }
+
+    public static String getSUID() {
+        long id = idWorker.nextId();
+        return String.valueOf(id);
+    }
 }

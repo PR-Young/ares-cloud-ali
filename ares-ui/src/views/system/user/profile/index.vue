@@ -1,13 +1,13 @@
-
-
 <template>
   <div class="app-container">
     <el-row :gutter="20">
       <el-col :span="6" :xs="24">
         <el-card class="box-card">
-          <div slot="header" class="clearfix">
-            <span>个人信息</span>
-          </div>
+          <template v-slot:header>
+            <div class="clearfix">
+              <span>个人信息</span>
+            </div>
+          </template>
           <div>
             <div class="text-center">
               <userAvatar :user="user" />
@@ -47,9 +47,11 @@
       </el-col>
       <el-col :span="18" :xs="24">
         <el-card>
-          <div slot="header" class="clearfix">
-            <span>基本资料</span>
-          </div>
+          <template v-slot:header>
+            <div class="clearfix">
+              <span>基本资料</span>
+            </div>
+          </template>
           <el-tabs v-model="activeTab">
             <el-tab-pane label="基本资料" name="userinfo">
               <userInfo :user="user" />
@@ -64,36 +66,29 @@
   </div>
 </template>
 
-<script>
-import userAvatar from "./userAvatar";
-import userInfo from "./userInfo";
-import resetPwd from "./resetPwd";
+<script setup name="Profile">
+import userAvatar from "./userAvatar.vue";
+import userInfo from "./userInfo.vue";
+import resetPwd from "./resetPwd.vue";
 import { getUserProfile } from "@/api/system/user";
+import { ref, onMounted } from "vue";
 
-export default {
-  name: "Profile",
-  components: { userAvatar, userInfo, resetPwd },
-  data() {
-    return {
-      user: {},
-      roleGroup: {},
-      deptGroup: "",
-      postGroup: "",
-      activeTab: "userinfo",
-    };
-  },
-  created() {
-    this.getUser();
-  },
-  methods: {
-    getUser() {
-      getUserProfile().then((response) => {
-        this.user = response.data;
-        this.roleGroup = response.roleGroup;
-        this.postGroup = response.postGroup;
-        this.deptGroup = response.deptGroup;
-      });
-    },
-  },
+const user = ref({});
+const roleGroup = ref({});
+const deptGroup = ref();
+const postGroup = ref();
+const activeTab = ref("userinfo");
+
+onMounted(() => {
+  getUser();
+});
+
+const getUser = () => {
+  getUserProfile().then((response) => {
+    user.value = response.data;
+    roleGroup.value = response.roleGroup;
+    postGroup.value = response.postGroup;
+    deptGroup.value = response.deptGroup;
+  });
 };
 </script>

@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.ares</groupId>
     <artifactId>ares-cloud</artifactId>
-    <version>2.0.0</version>
+    <version>3.0.0</version>
     <name>ares-cloud</name>
     <description>Ares project for Spring Cloud</description>
     <packaging>pom</packaging>
@@ -16,7 +16,7 @@
         <spring-boot.version>3.1.4</spring-boot.version>
         <spring-cloud-alibaba.version>2022.0.0.0</spring-cloud-alibaba.version>
         <spring-cloud.version>2022.0.4</spring-cloud.version>
-        <ares.version>2.0.0</ares.version>
+        <ares.version>3.0.0</ares.version>
         <pagehelper.version>1.4.7</pagehelper.version>
         <durid.version>1.2.19</durid.version>
         <fastjson.version>2.0.40</fastjson.version>

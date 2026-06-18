@@ -5,26 +5,29 @@ target/
 !**/src/test/**
 .obsidian
 .DS_Store
-node_modules/
-dist/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-**/*.log
 
-tests/**/coverage/
-tests/e2e/reports
-selenium-debug.log
 
-# Editor directories and files
+### IntelliJ IDEA ###
 .idea
-.vscode
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.local
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+.github/
+.mvn/
+autocode/
+logs/
+upload/
+target/
 
 ### VS Code ###
 .vscode/
 node_modules/
+package-lock.json
+.vtj/

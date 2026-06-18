@@ -1,13 +1,8 @@
-
-
 <template>
-  <div id="app">
-    <router-view />
-  </div>
+  <Suspense>
+    <router-view></router-view>
+  </Suspense>
 </template>
 
-<script>
-export default  {
-  name:  'App'
-}
+<script setup lang="ts" name="App">
 </script>

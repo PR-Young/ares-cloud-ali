@@ -1,5 +1,3 @@
-
-
 <template>
   <div class="app-container">
     <el-form
@@ -13,8 +11,8 @@
           v-model="queryParams.tableName"
           placeholder="请输入表名称"
           clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
+          size="default"
+          @keyup.enter="handleQuery"
         />
       </el-form-item>
       <el-form-item label="表描述" prop="tableComment">
@@ -22,31 +20,41 @@
           v-model="queryParams.tableComment"
           placeholder="请输入表描述"
           clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
+          size="default"
+          @keyup.enter="handleQuery"
         />
       </el-form-item>
       <el-form-item label="创建时间">
         <el-date-picker
           v-model="dateRange"
-          size="small"
+          size="default"
           style="width: 240px"
-          value-format="yyyy-MM-dd"
+          value-format="YYYY-MM-DD"
           type="daterange"
           range-separator="-"
           start-placeholder="开始日期"
           end-placeholder="结束日期"
         ></el-date-picker>
       </el-form-item>
+      <el-form-item label="数据源">
+        <el-radio-group
+          v-model="queryParams.flag"
+          class="ml-4"
+          @change="handleQuery"
+        >
+          <el-radio label="master">主库</el-radio>
+          <el-radio label="slave">从库</el-radio>
+        </el-radio-group>
+      </el-form-item>
       <el-form-item>
         <el-button
           type="primary"
-          icon="el-icon-search"
-          size="mini"
+          :icon="Search"
+          size="default"
           @click="handleQuery"
           >搜索</el-button
         >
-        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery"
+        <el-button :icon="Refresh" size="default" @click="resetQuery"
           >重置</el-button
         >
       </el-form-item>
@@ -56,8 +64,8 @@
       <el-col :span="1.5">
         <el-button
           type="primary"
-          icon="el-icon-download"
-          size="mini"
+          :icon="Operation"
+          size="default"
           @click="handleGenBasicInfo"
           >生成配置</el-button
         >
@@ -85,7 +93,7 @@
         prop="CREATE_TIME"
         width="200"
       >
-        <template slot-scope="scope">
+        <template v-slot="scope">
           <span>{{ parseTime(scope.row.CREATE_TIME) }}</span>
         </template>
       </el-table-column>
@@ -95,7 +103,7 @@
         prop="UPDATE_TIME"
         width="200"
       >
-        <template slot-scope="scope">
+        <template v-slot="scope">
           <span>{{ parseTime(scope.row.UPDATE_TIME) }}</span>
         </template>
       </el-table-column>
@@ -105,18 +113,20 @@
         class-name="small-padding fixed-width"
         fixed="right"
       >
-        <template slot-scope="scope">
+        <template v-slot="scope">
           <el-button
-            type="text"
-            size="small"
-            icon="el-icon-view"
+            link
+            size="default"
+            type="primary"
+            :icon="View"
             @click="handlePreview(scope.row)"
             >预览</el-button
           >
           <el-button
-            type="text"
-            size="small"
-            icon="el-icon-download"
+            link
+            size="default"
+            type="primary"
+            :icon="Download"
             @click="handleGenTable(scope.row)"
             >生成代码</el-button
           >
@@ -126,14 +136,14 @@
     <pagination
       v-show="total > 0"
       :total="total"
-      :page.sync="queryParams.pageNum"
-      :limit.sync="queryParams.pageSize"
+      v-model:page="queryParams.pageNum"
+      v-model:limit="queryParams.pageSize"
       @pagination="getList"
     />
     <!-- 预览界面 -->
     <el-dialog
       :title="preview.title"
-      :visible.sync="preview.open"
+      v-model="preview.open"
       width="80%"
       top="5vh"
       append-to-body
@@ -149,138 +159,147 @@
         </el-tab-pane>
       </el-tabs>
     </el-dialog>
-    <import-table ref="import" @ok="handleQuery" />
+    <import-table ref="importRef" @ok="handleQuery" />
   </div>
 </template>
 
-<script>
+<script setup name="Gen">
+import {
+  Search,
+  Refresh,
+  View,
+  Download,
+  Operation,
+} from "@element-plus/icons-vue";
 import { listDbTable, previewTable, delTable } from "@/api/tool/gen";
-import importTable from "./importTable";
+import importTable from "./importTable.vue";
 import { downLoadZip } from "@/utils/zipdownload";
-export default {
-  name: "Gen",
-  components: { importTable },
-  data() {
-    return {
-      // 遮罩层
-      loading: true,
-      // 唯一标识符
-      uniqueId: "",
-      // 选中数组
-      ids: [],
-      // 选中表数组
-      tableNames: [],
-      // 非单个禁用
-      single: true,
-      // 非多个禁用
-      multiple: true,
-      // 总条数
-      total: 0,
-      // 表数据
-      tableList: [],
-      // 日期范围
-      dateRange: "",
-      // 查询参数
-      queryParams: {
-        pageNum: 1,
-        pageSize: 10,
-        tableName: undefined,
-        tableComment: undefined,
-      },
-      // 预览参数
-      preview: {
-        open: false,
-        title: "代码预览",
-        data: {},
-        activeName: "Entity.ftl",
-      },
-    };
-  },
-  created() {
-    this.getList();
-  },
-  activated() {
-    const time = this.$route.query.t;
-    if (time != null && time != this.uniqueId) {
-      this.uniqueId = time;
-      this.resetQuery();
+import { getCurrentInstance, onMounted, reactive, ref } from "vue";
+import { useRouter } from "vue-router";
+const { proxy } = getCurrentInstance();
+const router = useRouter();
+// 遮罩层
+const loading = ref(true);
+// 唯一标识符
+const uniqueId = ref();
+// 选中数组
+const ids = ref([]);
+// 选中表数组
+const tableNames = ref([]);
+// 非单个禁用
+const single = ref(true);
+// 非多个禁用
+const multiple = ref(true);
+// 总条数
+const total = ref(0);
+// 表数据
+const tableList = ref([]);
+// 日期范围
+const dateRange = ref();
+// 查询参数
+const queryParams = reactive({
+  pageNum: 1,
+  pageSize: 10,
+  tableName: undefined,
+  tableComment: undefined,
+  flag: "master",
+});
+// 预览参数
+const preview = ref({
+  open: false,
+  title: "代码预览",
+  data: {},
+  activeName: "Entity.ftl",
+});
+const importRef = ref();
+
+onMounted(() => {
+  getList();
+});
+const activated = () => {
+  const time = router.query.t;
+  if (time != null && time != uniqueId.value) {
+    uniqueId.value = time;
+    resetQuery();
+  }
+};
+
+/** 查询表集合 */
+const getList = () => {
+  loading.value = true;
+  listDbTable(proxy.addDateRange(queryParams, dateRange.value)).then(
+    (response) => {
+      tableList.value = response.rows;
+      total.value = response.total;
+      loading.value = false;
     }
-  },
-  methods: {
-    /** 查询表集合 */
-    getList() {
-      this.loading = true;
-      listDbTable(this.addDateRange(this.queryParams, this.dateRange)).then(
-        (response) => {
-          this.tableList = response.rows;
-          this.total = response.total;
-          this.loading = false;
-        }
-      );
-    },
-    /** 搜索按钮操作 */
-    handleQuery() {
-      this.queryParams.pageNum = 1;
-      this.getList();
-    },
-    /** 生成代码操作 */
-    handleGenTable(row) {
-      const tableNames = row.TABLE_NAME;
-      if (tableNames == "") {
-        this.msgError("请选择要生成的数据");
-        return;
-      }
-      downLoadZip("/ares/gen/tool/gen/genCode/" + tableNames, "code");
-    },
-    handleGenBasicInfo() {
-      this.$router.push("/genbasicinfo/basicinfo");
-    },
-    /** 打开导入表弹窗 */
-    openImportTable() {
-      this.$refs.import.show();
-    },
-    /** 重置按钮操作 */
-    resetQuery() {
-      this.dateRange = [];
-      this.resetForm("queryForm");
-      this.handleQuery();
-    },
-    /** 预览按钮 */
-    handlePreview(row) {
-      previewTable(row.TABLE_NAME).then((response) => {
-        this.preview.data = response.data;
-        this.preview.open = true;
-      });
-    },
-    // 多选框选中数据
-    handleSelectionChange(selection) {
-      this.ids = selection.map((item) => item.tableId);
-      this.tableNames = selection.map((item) => item.tableName);
-      this.single = selection.length != 1;
-      this.multiple = !selection.length;
-    },
-    /** 修改按钮操作 */
-    handleEditTable(row) {
-      const tableId = row.tableId || this.ids[0];
-      this.$router.push({ path: "/genedit/edit", query: { tableId: tableId } });
-    },
-    /** 删除按钮操作 */
-    handleDelete(row) {
-      const tableIds = row.tableId || this.ids;
-      this.$confirm('是否确认删除表编号为"' + tableIds + '"的数据项?', "警告", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
-      })
-        .then(function () {
-          return delTable(tableIds);
-        })
-        .then(() => {
-          this.getList();
-          this.msgSuccess("删除成功");
-        })
-        .catch(function () {});
-    },
-  },
+  );
+};
+/** 搜索按钮操作 */
+const handleQuery = () => {
+  queryParams.pageNum = 1;
+  getList();
+};
+/** 生成代码操作 */
+const handleGenTable = (row) => {
+  const tableNames = row.TABLE_NAME;
+  if (tableNames == "") {
+    proxy.msgError("请选择要生成的数据");
+    return;
+  }
+  downLoadZip(
+    "ares/tool/gen/genCode/" + queryParams.flag + "/" + tableNames,
+    "code"
+  );
+};
+const handleGenBasicInfo = () => {
+  router.push("/genbasicinfo/basicinfo");
+};
+/** 打开导入表弹窗 */
+const openImportTable = () => {
+  importRef.value.show();
+};
+/** 重置按钮操作 */
+const resetQuery = () => {
+  dateRange.value = [];
+  proxy.resetForm("queryForm");
+  handleQuery();
+};
+/** 预览按钮 */
+const handlePreview = (row) => {
+  previewTable(queryParams.flag, row.TABLE_NAME).then((response) => {
+    preview.value.data = response.data;
+    preview.value.open = true;
+  });
+};
+// 多选框选中数据
+const handleSelectionChange = (selection) => {
+  ids.value = selection.map((item) => item.tableId);
+  tableNames.value = selection.map((item) => item.tableName);
+  single.value = selection.length != 1;
+  multiple.value = !selection.length;
+};
+/** 修改按钮操作 */
+const handleEditTable = (row) => {
+  const tableId = row.tableId || ids.value[0];
+  router.push({ path: "/genedit/edit", query: { tableId: tableId } });
+};
+/** 删除按钮操作 */
+const handleDelete = (row) => {
+  const tableIds = row.tableId || ids;
+  proxy
+    .$confirm('是否确认删除表编号为"' + tableIds + '"的数据项?', "警告", {
+      confirmButtonText: "确定",
+      cancelButtonText: "取消",
+      type: "warning",
+    })
+    .then(function () {
+      return delTable(tableIds);
+    })
+    .then(() => {
+      getList();
+      proxy.msgSuccess("删除成功");
+    })
+    .catch(function () {});
 };
 </script>

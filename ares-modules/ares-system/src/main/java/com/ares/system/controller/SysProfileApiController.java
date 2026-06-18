@@ -35,15 +35,16 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.OutputStream;
+import java.util.Base64;
 
 /**
  * @description: 个人信息 业务处理
@@ -137,20 +138,21 @@ public class SysProfileApiController extends BaseController {
 
     @GetMapping("{path}")
     @Operation(summary = "获取头像")
-    public void getAvatar(HttpServletRequest request, HttpServletResponse response, @PathVariable String path) throws Exception {
+    public Object getAvatar(HttpServletRequest request, HttpServletResponse response, @PathVariable String path) throws Exception {
         File file = new File(EncryptUtils.decode(path));
-        OutputStream toClient = response.getOutputStream();
+        ByteArrayOutputStream toClient = new ByteArrayOutputStream();
+        String img = null;
         if (file.exists()) {
             FileInputStream fileInputStream = new FileInputStream(file);
             int i = fileInputStream.available();
             byte data[] = new byte[i];
             fileInputStream.read(data);
             fileInputStream.close();
-            response.setContentType("image/*");
             toClient.write(data);
-        } else {
-            toClient.write(null);
+            toClient.close();
+            img = "data:image/png;base64,";
         }
-        toClient.close();
+        img = img + Base64.getEncoder().encodeToString(toClient.toByteArray());
+        return AjaxResult.successData(img);
     }
 }

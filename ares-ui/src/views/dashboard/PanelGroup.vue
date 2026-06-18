@@ -1,5 +1,3 @@
-
-
 <template>
   <el-row :gutter="40" class="panel-group">
     <el-col
@@ -32,8 +30,9 @@
 </template>
 
 <script>
-import CountTo from "vue-count-to";
+import { CountTo } from "vue3-count-to";
 import { getPanelGroups } from "@/api/home";
+import { $on, $off, $once, $emit } from "../../utils/gogocodeTransfer";
 
 export default {
   components: {
@@ -51,16 +50,16 @@ export default {
   },
   methods: {
     handleSetLineChartData(type) {
-      this.$emit("handleSetLineChartData", type);
+      $emit(this, "handleSetLineChartData", type);
     },
   },
+  emits: ["handleSetLineChartData"],
 };
 </script>
 
 <style lang="scss" scoped>
 .panel-group {
   margin-top: 18px;
-
   .card-panel-col {
     margin-bottom: 32px;
   }
@@ -146,18 +145,15 @@ export default {
     }
   }
 }
-
 @media (max-width: 550px) {
   .card-panel-description {
     display: none;
   }
-
   .card-panel-icon-wrapper {
     float: none !important;
     width: 100%;
     height: 100%;
     margin: 0 !important;
-
     .svg-icon {
       display: block;
       margin: 14px auto !important;

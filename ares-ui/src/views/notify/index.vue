@@ -18,12 +18,14 @@
         placement="top"
       >
         <el-card shadow="always">
-          <div slot="header" class="clearfix">
-            <span>{{ msg.noticeTitle }}</span>
-            <span style="float: right; padding: 3px 0"
-              >{{ msg.creator }} - {{ msg.createTime }}</span
-            >
-          </div>
+          <template v-slot:header>
+            <div class="clearfix">
+              <span>{{ msg.noticeTitle }}</span>
+              <span style="float: right; padding: 3px 0"
+                >{{ msg.creator }} - {{ msg.createTime }}</span
+              >
+            </div>
+          </template>
           <p style="padding-left: 20px" v-html="msg.noticeContent" />
         </el-card>
       </el-timeline-item>
@@ -31,27 +33,23 @@
   </div>
 </template>
 
-<script>
+<script setup name="Message">
 import { getNotices } from "@/api/notify/message";
 import store from "@/store";
+import useUserStore from "@/store/modules/user";
+import { ref, onMounted } from "vue";
+const user = useUserStore(store);
 
-export default {
-  name: "Message",
-  data() {
-    return {
-      msgList: [],
-    };
-  },
-  created() {
-    this.getList();
-    store.dispatch("GetNoticeNumber");
-  },
-  methods: {
-    getList() {
-      getNotices().then((response) => {
-        this.msgList = response.data;
-      });
-    },
-  },
+const msgList = ref([]);
+
+onMounted(() => {
+  getList();
+  user.GetNoticeNumber();
+});
+
+const getList = () => {
+  getNotices().then((response) => {
+    msgList.value = response.data;
+  });
 };
 </script>

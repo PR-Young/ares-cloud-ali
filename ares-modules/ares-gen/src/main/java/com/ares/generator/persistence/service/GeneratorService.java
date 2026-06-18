@@ -22,7 +22,7 @@ package com.ares.generator.persistence.service;
 
 
 import cn.hutool.core.lang.Assert;
-import com.ares.core.config.gen.GeneratorConfig;
+import com.ares.generator.config.GeneratorConfig;
 import com.ares.generator.persistence.dao.IGeneratorDao;
 import com.ares.generator.persistence.model.EntityDataModel;
 import com.ares.generator.persistence.model.GenProperties;

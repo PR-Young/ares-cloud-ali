@@ -2,17 +2,43 @@
 
 <template>
   <div v-if="!item.hidden">
-    <template v-if="hasOneShowingChild(item.children,item) && (!onlyOneChild.children||onlyOneChild.noShowingChildren)&&!item.alwaysShow">
+    <template
+      v-if="
+        hasOneShowingChild(item.children, item) &&
+        (!onlyOneChild.children || onlyOneChild.noShowingChildren) &&
+        !item.alwaysShow
+      "
+    >
       <app-link v-if="onlyOneChild.meta" :to="resolvePath(onlyOneChild.path)">
-        <el-menu-item :index="resolvePath(onlyOneChild.path)" :class="{'submenu-title-noDropdown':!isNest}">
-          <item :icon="onlyOneChild.meta.icon||(item.meta&&item.meta.icon)" :title="onlyOneChild.meta.title" />
+        <el-menu-item
+          :index="resolvePath(onlyOneChild.path)"
+          :class="{ 'submenu-title-noDropdown': !isNest }"
+        >
+          <svg-icon
+            :icon-class="
+              onlyOneChild.meta.icon || (item.meta && item.meta.icon)
+            "
+          />
+          <template #title>
+            <span class="menu-title" :title="hasTitle(onlyOneChild.meta.title)"
+              >{{ onlyOneChild.meta.title }}
+            </span>
+          </template>
         </el-menu-item>
       </app-link>
     </template>
 
-    <el-submenu v-else ref="subMenu" :index="resolvePath(item.path)" popper-append-to-body>
-      <template slot="title">
-        <item v-if="item.meta" :icon="item.meta && item.meta.icon" :title="item.meta.title" />
+    <el-sub-menu
+      v-else
+      ref="subMenu"
+      :index="resolvePath(item.path)"
+      teleported
+    >
+      <template v-if="item.meta" #title>
+        <svg-icon :icon-class="item.meta && item.meta.icon" />
+        <span class="menu-title" :title="hasTitle(item.meta.title)">{{
+          item.meta.title
+        }}</span>
       </template>
       <sidebar-item
         v-for="child in item.children"
@@ -22,19 +48,19 @@
         :base-path="resolvePath(child.path)"
         class="nest-menu"
       />
-    </el-submenu>
+    </el-sub-menu>
   </div>
 </template>
 
 <script>
-import path from 'path'
-import { isExternal } from '@/utils/validate'
-import Item from './Item'
-import AppLink from './Link'
-import FixiOSBug from './FixiOSBug'
+import { isExternal } from "@/utils/validate";
+import Item from "./Item.vue";
+import AppLink from "./Link.vue";
+import FixiOSBug from "./FixiOSBug.js";
+import path from "path-browserify";
 
 export default {
-  name: 'SidebarItem',
+  name: "SidebarItem",
   components: { Item, AppLink },
   mixins: [FixiOSBug],
   props: {
@@ -88,8 +114,15 @@ export default {
       if (isExternal(this.basePath)) {
         return this.basePath
       }
-      return path.resolve(this.basePath, routePath)
-    }
-  }
-}
+      return path.resolve(this.basePath, routePath);
+    },
+    hasTitle(title) {
+      if (title.length > 5) {
+        return title;
+      } else {
+        return "";
+      }
+    },
+  },
+};
 </script>

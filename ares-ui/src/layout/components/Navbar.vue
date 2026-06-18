@@ -17,18 +17,22 @@
 
         <el-badge
           class="right-menu-item"
-          :value="notice_num > 0 ? notice_num : ''"
+          :model-value="notice_num > 0 ? notice_num : ''"
           :max="99"
         >
           <router-link to="/notify/message">
-            <i class="el-icon-bell bell-style" />
+            <el-icon class="bell-style"><el-icon-bell /></el-icon>
           </router-link>
         </el-badge>
 
         <screenfull id="screenfull" class="right-menu-item hover-effect" />
 
         <el-tooltip content="布局大小" effect="dark" placement="bottom">
-          <size-select id="size-select" class="right-menu-item hover-effect" />
+          <size-select
+            id="size-select"
+            style="padding-top: 15px"
+            class="right-menu-item hover-effect"
+          />
         </el-tooltip>
       </template>
 
@@ -37,75 +41,100 @@
         trigger="click"
       >
         <div class="avatar-wrapper">
-          <img
-            :src="avatar.url"
-            @error="imgError(avatar)"
-            class="user-avatar"
-          />
-          <i class="el-icon-caret-bottom" />
+          <img :src="imgUrl" @error="imgError(avatar)" class="user-avatar" />
+          <el-icon><el-icon-caret-bottom /></el-icon>
         </div>
-        <el-dropdown-menu slot="dropdown">
-          <router-link to="/userfile/profile">
-            <el-dropdown-item>个人中心</el-dropdown-item>
-          </router-link>
-          <el-dropdown-item @click.native="setting = true">
-            <span>布局设置</span>
-          </el-dropdown-item>
-          <el-dropdown-item divided @click.native="logout">
-            <span>退出登录</span>
-          </el-dropdown-item>
-        </el-dropdown-menu>
+        <template v-slot:dropdown>
+          <el-dropdown-menu>
+            <router-link to="/userfile/profile">
+              <el-dropdown-item>个人中心</el-dropdown-item>
+            </router-link>
+            <el-dropdown-item @click="setting = true">
+              <span>布局设置</span>
+            </el-dropdown-item>
+            <el-dropdown-item divided @click="logout">
+              <span>退出登录</span>
+            </el-dropdown-item>
+          </el-dropdown-menu>
+        </template>
       </el-dropdown>
     </div>
   </div>
 </template>
 
 <script>
-import { mapGetters, mapState } from "vuex";
-import Breadcrumb from "@/components/Breadcrumb";
-import Hamburger from "@/components/Hamburger";
-import Screenfull from "@/components/Screenfull";
-import SizeSelect from "@/components/SizeSelect";
-import Search from "@/components/HeaderSearch";
+import {
+  Bell as ElIconBell,
+  CaretBottom as ElIconCaretBottom,
+} from "@element-plus/icons";
+import Breadcrumb from "@/components/Breadcrumb/index.vue";
+import Hamburger from "@/components/Hamburger/index.vue";
+import Screenfull from "@/components/Screenfull/index.vue";
+import SizeSelect from "@/components/SizeSelect/index.vue";
+import Search from "@/components/HeaderSearch/index.vue";
+import useAppStore from "@/store/modules/app";
+import useUserStore from "@/store/modules/user";
+import useSettingsStore from "@/store/modules/settings";
 import store from "@/store";
+import url from "@/assets/image/profile.jpeg";
+import { getAvatar } from "@/api/system/user";
+
+const app = useAppStore(store);
+const user = useUserStore(store);
+const settings = useSettingsStore(store);
 
 export default {
+  data() {
+    return { imgUrl: url };
+  },
   components: {
     Breadcrumb,
     Hamburger,
     Screenfull,
     SizeSelect,
     Search,
+    ElIconBell,
+    ElIconCaretBottom,
   },
   created() {
-    // setInterval(() => {
-    //   store.dispatch("GetNoticeNumber");
-    // }, 60 * 1000);
-    this.connectWebsocket()
+    this.connectWebsocket();
+    getAvatar(user.avatar.path).then((response) => {
+      response.data != "null"
+        ? (this.imgUrl = response.data)
+        : (this.imgUrl = url);
+    });
   },
-  destroyed() {
+  unmounted() {
     //clearInterval();
   },
   computed: {
-    ...mapGetters(["sidebar", "avatar", "device", "notice_num"]),
+    sidebar() {
+      return app.sidebar;
+    },
+    avatar() {
+      return user.avatar;
+    },
+    device() {
+      return app.device;
+    },
+    notice_num() {
+      return user.getNoticeNum;
+    },
     setting: {
       get() {
-        return this.$store.state.settings.showSettings;
+        return settings.showSettings;
       },
       set(val) {
-        this.$store.dispatch("settings/changeSetting", {
-          key: "showSettings",
-          value: val,
-        });
+        settings.changeSetting(val);
       },
     },
   },
   methods: {
     imgError(avatar) {
-      avatar.url = require("@/assets/image/profile.jpeg");
+      avatar.url = url;
     },
     toggleSideBar() {
-      this.$store.dispatch("app/toggleSideBar");
+      app.toggleSideBar();
     },
     async logout() {
       this.$confirm("确定注销并退出系统吗？", "提示", {
@@ -113,13 +142,13 @@ export default {
         cancelButtonText: "取消",
         type: "warning",
       }).then(() => {
-        this.$store.dispatch("LogOut").then(() => {
+        user.LogOut().then(() => {
           location.reload();
         });
       });
     },
     connectWebsocket() {
-      let userAccount = this.$store.getters.userAccount
+      let userAccount = user.getUserAccount;
       let websocket;
       if (typeof WebSocket === "undefined") {
         console.log("您的浏览器不支持WebSocket");
@@ -130,8 +159,12 @@ export default {
         if (window.location.protocol == "https:") {
           protocol = "wss";
         }
-      
-        url = `${protocol}://localhost:8080/ares/ws/`+userAccount;
+
+        url =
+          `${protocol}://` +
+          import.meta.env.VITE_VUE_APP_ADDR +
+          `:8080/ares/system/ws/` +
+          userAccount;
 
         // 打开一个websocket
         websocket = new WebSocket(url);
@@ -142,20 +175,20 @@ export default {
           console.log("websocket发送数据中");
         };
         // 客户端接收服务端返回的数据
-        websocket.onmessage = evt => {
-          this.$store.dispatch("updateNoticeNumber",evt.data)
+        websocket.onmessage = (evt) => {
+          user.updateNoticeNumber(evt.data);
           console.log("websocket返回的数据:", evt);
         };
         // 发生错误时
-        websocket.onerror = evt => {
+        websocket.onerror = (evt) => {
           console.log("websocket错误:", evt);
         };
         // 关闭连接
-        websocket.onclose = evt => {
+        websocket.onclose = (evt) => {
           console.log("websocket关闭:", evt);
         };
       }
-    }
+    },
   },
 };
 </script>
@@ -244,7 +277,7 @@ export default {
     .bell-style {
       font-weight: bold;
       font-size: larger;
-      padding-top: 15px;
+      padding-top: 25px;
     }
   }
 }

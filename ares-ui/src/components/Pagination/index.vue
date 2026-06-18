@@ -1,15 +1,15 @@
 
 
 <template>
-  <div :class="{'hidden':hidden}" class="pagination-container">
+  <div :class="{ hidden: hidden }" class="pagination-container">
     <el-pagination
+      v-bind="$attrs"
       :background="background"
-      :current-page.sync="currentPage"
-      :page-size.sync="pageSize"
+      v-model:current-page="currentPage"
+      v-model:page-size="pageSize"
       :layout="layout"
       :page-sizes="pageSizes"
       :total="total"
-      v-bind="$attrs"
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
     />
@@ -17,79 +17,81 @@
 </template>
 
 <script>
-import { scrollTo } from '@/utils/scroll-to'
+import { $on, $off, $once, $emit } from "../../utils/gogocodeTransfer";
+import { scrollTo } from "@/utils/scroll-to";
 
 export default {
-  name: 'Pagination',
+  name: "Pagination",
   props: {
     total: {
       required: true,
-      type: Number
+      type: Number,
     },
     page: {
       type: Number,
-      default: 1
+      default: 1,
     },
     limit: {
       type: Number,
-      default: 20
+      default: 20,
     },
     pageSizes: {
       type: Array,
       default() {
-        return [10, 20, 30, 50]
-      }
+        return [10, 20, 30, 50];
+      },
     },
     layout: {
       type: String,
-      default: 'total, sizes, prev, pager, next, jumper'
+      default: "total, sizes, prev, pager, next, jumper",
     },
     background: {
       type: Boolean,
-      default: true
+      default: true,
     },
     autoScroll: {
       type: Boolean,
-      default: true
+      default: true,
     },
     hidden: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   computed: {
     currentPage: {
       get() {
-        return this.page
+        return this.page;
       },
       set(val) {
-        this.$emit('update:page', val)
-      }
+        $emit(this, "update:page", val);
+      },
     },
     pageSize: {
       get() {
-        return this.limit
+        return this.limit;
       },
       set(val) {
-        this.$emit('update:limit', val)
-      }
-    }
+        $emit(this, "update:limit", val);
+      },
+    },
   },
   methods: {
     handleSizeChange(val) {
-      this.$emit('pagination', { page: this.currentPage, limit: val })
+      $emit(this, "pagination", { page: this.currentPage, limit: val });
       if (this.autoScroll) {
-        scrollTo(0, 800)
+        scrollTo(0, 800);
       }
     },
     handleCurrentChange(val) {
-      this.$emit('pagination', { page: val, limit: this.pageSize })
+      $emit(this, "pagination", { page: val, limit: this.pageSize });
       if (this.autoScroll) {
-        scrollTo(0, 800)
+        scrollTo(0, 800);
       }
-    }
-  }
-}
+    },
+  },
+  emits: ["update:page", "update:limit", "pagination"],
+};
 </script>
 
 <style scoped>

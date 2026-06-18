@@ -23,6 +23,7 @@ package com.ares.system.provider;
 import com.ares.api.client.ISysDeptService;
 import com.ares.core.model.system.SysDept;
 import com.ares.system.service.SysDeptService;
+import com.github.pagehelper.PageInfo;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -32,13 +33,19 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @date: 2023/5/19
  * @see: com.ares.system.provider.SysDeptProvider.java
  **/
-@DubboService(version = "1.0.0",interfaceClass = com.ares.api.client.ISysDeptService.class)
+@DubboService(version = "1.0.0", interfaceClass = com.ares.api.client.ISysDeptService.class)
 public class SysDeptProvider implements ISysDeptService {
 
     @Autowired
     SysDeptService deptService;
+
     @Override
     public SysDept getByDeptId(Long id) {
         return deptService.getByDeptId(id);
+    }
+
+    @Override
+    public PageInfo<SysDept> deptList() {
+        return new PageInfo<>(deptService.list(null));
     }
 }

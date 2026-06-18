@@ -5,7 +5,7 @@
     <parent>
         <artifactId>ares-cloud</artifactId>
         <groupId>com.ares</groupId>
-        <version>2.0.0</version>
+        <version>3.0.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -16,6 +16,7 @@
         <module>ares-system</module>
         <module>ares-gen</module>
         <module>ares-flowable</module>
+        <module>ares-flow</module>
     </modules>
 
     <properties>

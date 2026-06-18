@@ -9,19 +9,20 @@
         <result column="PARAMS_" jdbcType="VARCHAR" property="operParams"/>
         <result column="REQUEST_METHOD_" jdbcType="VARCHAR" property="requestMethod"/>
         <result column="NOTES_" jdbcType="VARCHAR" property="notes"/>
+        <result column="CREATOR_" jdbcType="BIGINT" property="creator"/>
         <result column="CREATE_TIME_" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="MODIFY_TIME_" jdbcType="TIMESTAMP" property="modifyTime"/>
     </resultMap>
     <sql id="Base_Column_List">
         `ID_`
-        , `HOST_IP_`, `USERNAME_`, `URL_`,`PARAMS_`,`REQUEST_METHOD_`,`NOTES_`, `CREATE_TIME_`, `MODIFY_TIME_`
+        , `HOST_IP_`, `USERNAME_`, `URL_`,`PARAMS_`,`REQUEST_METHOD_`,`NOTES_`, `CREATE_TIME_`, `MODIFY_TIME_`,`CREATOR_`
     </sql>
     <insert id="insert" parameterType="com.ares.core.model.system.SysLog">
         insert into `sys_log` (`ID_`, `HOST_IP_`, `USERNAME_`, `URL_`, `PARAMS_`, `REQUEST_METHOD_`, `NOTES_`, `CREATE_TIME_`,
-        `MODIFY_TIME_`)
+        `MODIFY_TIME_`,`CREATOR_`)
         values (#{id,jdbcType=BIGINT}, #{hostIp,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR},
         #{url,jdbcType=VARCHAR}, #{operParams,jdbcType=VARCHAR}, #{requestMethod,jdbcType=VARCHAR},
-        #{notes,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{modifyTime,jdbcType=TIMESTAMP})
+        #{notes,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{modifyTime,jdbcType=TIMESTAMP},#{creator,jdbcType=BIGINT})
     </insert>
 
     <select id="list" parameterType="com.ares.core.model.query.SysLogQuery" resultMap="SysLog">

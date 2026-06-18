@@ -111,7 +111,8 @@ public class LogAspect {
                     return;
                 }
                 sysLog.setUrl(method.getDeclaringClass().getName() + "." + method.getName())
-                        .setOperParams(setMethodParameters(joinPoint, method));
+                        .setOperParams(setMethodParameters(joinPoint, method))
+                        .setCreator(SecurityUtils.getUser().getId());
                 if (null != e) {
                     sysLog.setNotes(StringUtils.substring(e.getMessage(), 0, 2000));
                 }
@@ -124,7 +125,8 @@ public class LogAspect {
                     sysLog.setHostIp(ip)
                             .setUrl(url)
                             .setUserName(currentUser.getUserName())
-                            .setRequestMethod(ServletUtils.getRequest().getMethod());
+                            .setRequestMethod(ServletUtils.getRequest().getMethod())
+                            .setCreator(currentUser.getId());
                     if (null != e) {
                         sysLog.setNotes(StringUtils.substring(e.getMessage(), 0, 2000));
                     } else {

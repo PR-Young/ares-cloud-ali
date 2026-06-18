@@ -1,43 +1,46 @@
-import store from '@/store'
+import store from "@/store";
+import useAppStore from "@/store/modules/app";
+import { useWindowSize } from "@vueuse/core";
 
-const {body} = document
-const WIDTH = 992 // refer to Bootstrap's responsive design
+const app = useAppStore(store);
+
+const { width, height } = useWindowSize();
+const WIDTH = 992; // refer to Bootstrap's responsive design
 
 export default {
   watch: {
     $route(route) {
-      if (this.device === 'mobile' && this.sidebar.opened) {
-        store.dispatch('app/closeSideBar', {withoutAnimation: false})
+      if (this.device === "mobile" && this.sidebar.opened) {
+        app.closeSideBar(false);
       }
     }
   },
   beforeMount() {
-    window.addEventListener('resize', this.$_resizeHandler)
+    window.addEventListener("resize", this.resizeHandler);
   },
-  beforeDestroy() {
-    window.removeEventListener('resize', this.$_resizeHandler)
+  beforeUnmount() {
+    window.removeEventListener("resize", this.resizeHandler);
   },
   mounted() {
     const isMobile = this.$_isMobile()
     if (isMobile) {
-      store.dispatch('app/toggleDevice', 'mobile')
-      store.dispatch('app/closeSideBar', {withoutAnimation: true})
+      app.toggleDevice("mobile");
+      app.closeSideBar(true);
     }
   },
   methods: {
     // use $_ for mixins properties
     // https://vuejs.org/v2/style-guide/index.html#Private-property-names-essential
     $_isMobile() {
-      const rect = body.getBoundingClientRect()
-      return rect.width - 1 < WIDTH
+      return width.value - 1 < WIDTH;
     },
-    $_resizeHandler() {
+    resizeHandler() {
       if (!document.hidden) {
-        const isMobile = this.$_isMobile()
-        store.dispatch('app/toggleDevice', isMobile ? 'mobile' : 'desktop')
+        const isMobile = this.$_isMobile();
+        app.toggleDevice(isMobile ? "mobile" : "desktop");
 
         if (isMobile) {
-          store.dispatch('app/closeSideBar', {withoutAnimation: true})
+          app.closeSideBar(true);
         }
       }
     }

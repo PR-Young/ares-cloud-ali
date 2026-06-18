@@ -4,14 +4,14 @@
     <parent>
         <artifactId>ares-modules</artifactId>
         <groupId>com.ares</groupId>
-        <version>2.0.0</version>
+        <version>3.0.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>ares-system</artifactId>
     <packaging>jar</packaging>
 
     <properties>
-        <ares.version>2.0.0</ares.version>
+        <ares.version>3.0.0</ares.version>
         <jwt.version>0.11.5</jwt.version>
     </properties>
 

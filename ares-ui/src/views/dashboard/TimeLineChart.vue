@@ -1,14 +1,14 @@
-
-
 <template>
   <div :class="className" :style="{ height: height, width: width }" />
 </template>
 
 <script>
 import * as echarts from "echarts";
-require("echarts/theme/macarons"); // echarts theme
+import "echarts/theme/macarons";
+// require("echarts/theme/macarons"); // echarts theme
 import resize from "./mixins/resize";
 import { getLineChart } from "@/api/home";
+import { nextTick } from "vue";
 
 export default {
   name: "timeLineChart",
@@ -49,11 +49,11 @@ export default {
     },
   },
   mounted() {
-    this.$nextTick(() => {
+    nextTick(() => {
       this.initChart();
     });
   },
-  beforeDestroy() {
+  beforeUnmount() {
     if (!this.chart) {
       return;
     }

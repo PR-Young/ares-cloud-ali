@@ -1,18 +1,25 @@
-/*!******************************************************************************
- * Copyright (c) 2021 - 9999, ARES
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *        http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- ******************************************************************************/
+// base color
+$blue: #324157;
+$light-blue: #3A71A8;
+$red: #C03639;
+$pink: #E65D6E;
+$green: #30B08F;
+$tiffany: #4AB7BD;
+$yellow: #FEC171;
+$panGreen: #30B08F;
+
+// sidebar
+$menuText: #bfcbd9;
+$menuActiveText: #409EFF;
+$subMenuActiveText: #f4f4f5; // https://github.com/ElemeFE/element/issues/12951
+
+$menuBg: #304156;
+$menuHover: #263445;
+
+$subMenuBg: #1f2d3d;
+$subMenuHover: #001528;
+
+$sideBarWidth: 200px;
 
 #app {
 
@@ -24,6 +31,7 @@
   }
 
   .sidebar-container {
+    -webkit-transition: width .28s;
     transition: width 0.28s;
     width: $sideBarWidth !important;
     background-color: $menuBg;
@@ -35,6 +43,8 @@
     left: 0;
     z-index: 1001;
     overflow: hidden;
+    -webkit-box-shadow: 2px 0 6px rgba(0, 21, 41, .35);
+    box-shadow: 2px 0 6px rgba(0, 21, 41, .35);
 
     // reset element-ui css
     .horizontal-collapse-transition {
@@ -79,21 +89,40 @@
       width: 100% !important;
     }
 
+    .el-menu-item,
+    .menu-title {
+      overflow: hidden !important;
+      text-overflow: ellipsis !important;
+      white-space: nowrap !important;
+    }
+
+    .el-menu-item .el-menu-tooltip__trigger {
+      display: inline-block !important;
+    }
+
     // menu hover
-    .submenu-title-noDropdown,
-    .el-submenu__title {
+    .sub-menu-title-noDropdown,
+    .el-sub-menu__title {
       &:hover {
         background-color: $menuHover !important;
       }
     }
 
-    .is-active>.el-submenu__title {
+    .is-active>.el-sub-menu__title {
       color: $subMenuActiveText !important;
     }
 
-    & .nest-menu .el-submenu>.el-submenu__title,
-    & .el-submenu .el-menu-item {
+    & .nest-menu .el-sub-menu>.el-sub-menu__title,
+    & .el-sub-menu .el-menu-item {
       min-width: $sideBarWidth !important;
+
+      &:hover {
+        background-color: rgba(0, 0, 0, 0.06) !important;
+      }
+    }
+
+    & .theme-dark .nest-menu .el-sub-menu>.el-sub-menu__title,
+    & .theme-dark .el-sub-menu .el-menu-item {
       background-color: $subMenuBg !important;
 
       &:hover {
@@ -111,7 +140,7 @@
       margin-left: 54px;
     }
 
-    .submenu-title-noDropdown {
+    .sub-menu-title-noDropdown {
       padding: 0 !important;
       position: relative;
 
@@ -124,10 +153,10 @@
       }
     }
 
-    .el-submenu {
+    .el-sub-menu {
       overflow: hidden;
 
-      &>.el-submenu__title {
+      &>.el-sub-menu__title {
         padding: 0 !important;
 
         .svg-icon {
@@ -141,9 +170,17 @@
     }
 
     .el-menu--collapse {
-      .el-submenu {
-        &>.el-submenu__title {
+      .el-sub-menu {
+        &>.el-sub-menu__title {
           &>span {
+            height: 0;
+            width: 0;
+            overflow: hidden;
+            visibility: hidden;
+            display: inline-block;
+          }
+
+          &>i {
             height: 0;
             width: 0;
             overflow: hidden;
@@ -155,7 +192,7 @@
     }
   }
 
-  .el-menu--collapse .el-menu .el-submenu {
+  .el-menu--collapse .el-menu .el-sub-menu {
     min-width: $sideBarWidth !important;
   }
 
@@ -196,7 +233,7 @@
     }
   }
 
-  .nest-menu .el-submenu>.el-submenu__title,
+  .nest-menu .el-sub-menu>.el-sub-menu__title,
   .el-menu-item {
     &:hover {
       // you can use $subMenuHover

@@ -20,6 +20,7 @@
 
 package com.ares.security.common;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import org.springframework.security.core.GrantedAuthority;
 
 /**
@@ -28,10 +29,15 @@ import org.springframework.security.core.GrantedAuthority;
  * @date: 2020/10/19
  * @see: com.ares.security.security GrantedAuthorityImpl.java
  **/
+@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class GrantedAuthorityImpl implements GrantedAuthority {
     private static final long serialVersionUID = 1L;
 
     private String authority;
+
+    public GrantedAuthorityImpl() {
+    }
+
 
     public GrantedAuthorityImpl(String authority) {
         this.authority = authority;

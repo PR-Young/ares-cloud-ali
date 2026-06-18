@@ -16,6 +16,7 @@
 </template>
 
 <script>
+import { $on, $off, $once, $emit } from '../../utils/gogocodeTransfer'
 export default {
   name: 'Hamburger',
   props: {
@@ -26,9 +27,10 @@ export default {
   },
   methods: {
     toggleClick() {
-      this.$emit('toggleClick')
-    }
-  }
+      $emit(this, 'toggleClick')
+    },
+  },
+  emits: ['toggleClick'],
 }
 </script>
 

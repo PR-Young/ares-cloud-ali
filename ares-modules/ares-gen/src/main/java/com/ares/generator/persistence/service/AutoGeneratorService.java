@@ -23,7 +23,7 @@ package com.ares.generator.persistence.service;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.StrUtil;
-import com.ares.core.config.gen.GeneratorConfig;
+import com.ares.generator.config.GeneratorConfig;
 import com.ares.core.utils.DateUtils;
 import com.ares.generator.persistence.model.*;
 import freemarker.template.Configuration;

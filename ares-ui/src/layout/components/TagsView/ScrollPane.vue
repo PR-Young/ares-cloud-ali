@@ -1,7 +1,12 @@
 
 
 <template>
-  <el-scrollbar ref="scrollContainer" :vertical="false" class="scroll-container" @wheel.native.prevent="handleScroll">
+  <el-scrollbar
+    ref="scrollContainer"
+    :vertical="false"
+    class="scroll-container"
+    @wheel.prevent="handleScroll"
+  >
     <slot />
   </el-scrollbar>
 </template>
@@ -18,8 +23,8 @@ export default {
   },
   computed: {
     scrollWrapper() {
-      return this.$refs.scrollContainer.$refs.wrap
-    }
+      return this.$refs.scrollContainer.$refs.wrapRef
+    },
   },
   methods: {
     handleScroll(e) {
@@ -31,7 +36,7 @@ export default {
       const $container = this.$refs.scrollContainer.$el
       const $containerWidth = $container.offsetWidth
       const $scrollWrapper = this.scrollWrapper
-      const tagList = this.$parent.$refs.tag
+      const tagList = this.$parent.$arrRefs.tag
 
       let firstTag = null
       let lastTag = null
@@ -48,17 +53,22 @@ export default {
         $scrollWrapper.scrollLeft = $scrollWrapper.scrollWidth - $containerWidth
       } else {
         // find preTag and nextTag
-        const currentIndex = tagList.findIndex(item => item === currentTag)
+        const currentIndex = tagList.findIndex((item) => item === currentTag)
         const prevTag = tagList[currentIndex - 1]
         const nextTag = tagList[currentIndex + 1]
 
         // the tag's offsetLeft after of nextTag
-        const afterNextTagOffsetLeft = nextTag.$el.offsetLeft + nextTag.$el.offsetWidth + tagAndTagSpacing
+        const afterNextTagOffsetLeft =
+          nextTag.$el.offsetLeft + nextTag.$el.offsetWidth + tagAndTagSpacing
 
         // the tag's offsetLeft before of prevTag
-        const beforePrevTagOffsetLeft = prevTag.$el.offsetLeft - tagAndTagSpacing
+        const beforePrevTagOffsetLeft =
+          prevTag.$el.offsetLeft - tagAndTagSpacing
 
-        if (afterNextTagOffsetLeft > $scrollWrapper.scrollLeft + $containerWidth) {
+        if (
+          afterNextTagOffsetLeft >
+          $scrollWrapper.scrollLeft + $containerWidth
+        ) {
           $scrollWrapper.scrollLeft = afterNextTagOffsetLeft - $containerWidth
         } else if (beforePrevTagOffsetLeft < $scrollWrapper.scrollLeft) {
           $scrollWrapper.scrollLeft = beforePrevTagOffsetLeft
@@ -75,13 +85,13 @@ export default {
   position: relative;
   overflow: hidden;
   width: 100%;
-  ::v-deep {
-    .el-scrollbar__bar {
+  :deep(.el-scrollbar__bar) {
+
       bottom: 0px;
-    }
-    .el-scrollbar__wrap {
+  }
+  :deep(.el-scrollbar__wrap) {
       height: 49px;
     }
   }
-}
+
 </style>

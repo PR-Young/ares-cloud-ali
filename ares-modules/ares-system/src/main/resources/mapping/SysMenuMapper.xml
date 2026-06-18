@@ -108,7 +108,7 @@
         menu.*, (SELECT count(1)FROM sys_menu WHERE PID_ = menu.ID_ and `TYPE_` != 2) as childCount
         from sys_menu menu
         <if test="userId != 1 and userId != null">
-            left join sys_permission permission on menu.ID_ = permission.MenuId
+            left join sys_permission permission on menu.ID_ = permission.MENU_ID_
             LEFT JOIN sys_role role on permission.ROLE_ID_ = role.ID_
             LEFT JOIN sys_role_user roleuser on role.ID_ = roleuser.ROLE_ID_
             left join sys_user user on roleuser.USER_ID_ = user.ID_
@@ -167,7 +167,7 @@
         select
         <include refid="Base_Column_List"/>
         from `sys_menu` menu
-        left join sys_permission permission on menu.ID_ = permission.MenuId
+        left join sys_permission permission on menu.ID_ = permission.MENU_ID_
         LEFT JOIN sys_role role on permission.ROLE_ID_ = role.ID_
         LEFT JOIN sys_role_user roleuser on role.ID_ = roleuser.ROLE_ID_
         left join sys_user user on roleuser.USER_ID_ = user.ID_

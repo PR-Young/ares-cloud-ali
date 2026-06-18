@@ -9,13 +9,19 @@
       clearable
       placeholder="请输入图标名称"
       @clear="filterIcons"
-      @input.native="filterIcons"
+      @input="filterIcons"
     >
-      <i slot="suffix" class="el-icon-search el-input__icon" />
+      <template v-slot:suffix>
+        <el-icon class="el-input__icon"><el-icon-search /></el-icon>
+      </template>
     </el-input>
     <div class="icon-list">
-      <div v-for="(item, index) in iconList" :key="index" @click="selectedIcon(item)">
-        <svg-icon :icon-class="item" style="height: 30px;width: 16px;" />
+      <div
+        v-for="(item, index) in iconList"
+        :key="index"
+        @click="selectedIcon(item)"
+      >
+        <svg-icon :icon-class="item" style="height: 30px; width: 16px" />
         <span>{{ item }}</span>
       </div>
     </div>
@@ -23,9 +29,14 @@
 </template>
 
 <script>
-import icons from "./requireIcons";
+import { Search as ElIconSearch } from '@element-plus/icons'
+import { $on, $off, $once, $emit } from '../../utils/gogocodeTransfer'
+import icons from './requireIcons'
 export default {
-  name: "IconSelect",
+  components: {
+    ElIconSearch,
+  },
+  name: 'IconSelect',
   data() {
     return {
       name: "",
@@ -43,18 +54,19 @@ export default {
       }
     },
     selectedIcon(name) {
-      this.$emit("selected", name);
-      document.body.click();
+      $emit(this, 'selected', name)
+      document.body.click()
     },
     reset() {
       this.name = "";
       this.iconList = icons;
     },
   },
-};
+  emits: ['selected'],
+}
 </script>
 
-<style rel="stylesheet/scss" lang="scss" scoped>
+<style lang="scss" rel="stylesheet/scss" scoped>
 .icon-body {
   width: 100%;
   padding: 10px;

@@ -12,14 +12,15 @@
       :on-success="quillImgSuccess"
       :on-error="uploadError"
       :before-upload="quillImgBefore"
-      accept='.jpg,.jpeg,.png,.gif'
+      accept=".jpg,.jpeg,.png,.gif"
     ></el-upload>
 
     <!-- 富文本组件 -->
     <quill-editor
       class="editor"
-      v-model="content"
+      v-model:content="content"
       ref="quillEditor"
+      content-type="html"
       :options="editorOption"
       @blur="onEditorBlur($event)"
       @focus="onEditorFocus($event)"
@@ -29,40 +30,41 @@
 </template>
 
 <script>
-import { getToken } from '@/utils/auth'
+import { $emit } from "../../utils/gogocodeTransfer";
+import { getToken } from "@/utils/auth";
 
 // 工具栏配置
 const toolbarOptions = [
-  ["bold", "italic", "underline", "strike"],       // 加粗 斜体 下划线 删除线
-  ["blockquote", "code-block"],                    // 引用  代码块
-  [{ list: "ordered" }, { list: "bullet" }],       // 有序、无序列表
-  [{ indent: "-1" }, { indent: "+1" }],            // 缩进
-  [{ size: ["small", false, "large", "huge"] }],   // 字体大小
-  [{ header: [1, 2, 3, 4, 5, 6, false] }],         // 标题
-  [{ color: [] }, { background: [] }],             // 字体颜色、字体背景颜色
-  [{ align: [] }],                                 // 对齐方式
-  ["clean"],                                       // 清除文本格式
-  ["link", "image", "video"]                       // 链接、图片、视频
+  ["bold", "italic", "underline", "strike"], // 加粗 斜体 下划线 删除线
+  ["blockquote", "code-block"], // 引用  代码块
+  [{ list: "ordered" }, { list: "bullet" }], // 有序、无序列表
+  [{ indent: "-1" }, { indent: "+1" }], // 缩进
+  [{ size: ["small", false, "large", "huge"] }], // 字体大小
+  [{ header: [1, 2, 3, 4, 5, 6, false] }], // 标题
+  [{ color: [] }, { background: [] }], // 字体颜色、字体背景颜色
+  [{ align: [] }], // 对齐方式
+  ["clean"], // 清除文本格式
+  ["link", "image", "video"], // 链接、图片、视频
 ];
 
-import { quillEditor } from "vue-quill-editor";
-import "quill/dist/quill.core.css";
-import "quill/dist/quill.snow.css";
-import "quill/dist/quill.bubble.css";
+import { QuillEditor, Quill } from "@vueup/vue-quill";
+import "@vueup/vue-quill/dist/vue-quill.core.css";
+import "@vueup/vue-quill/dist/vue-quill.snow.css";
+import "@vueup/vue-quill/dist/vue-quill.bubble.css";
 
 export default {
   props: {
     /* 编辑器的内容 */
     value: {
-      type: String
+      type: String,
     },
     /* 图片大小 */
     maxSize: {
       type: Number,
-      default: 4000 //kb
-    }
+      default: 4000, //kb
+    },
   },
-  components: { quillEditor },
+  components: { QuillEditor },
   data() {
     return {
       content: this.value,
@@ -75,28 +77,28 @@ export default {
           toolbar: {
             container: toolbarOptions,
             handlers: {
-              image: function(value) {
+              image: function (value) {
                 if (value) {
                   // 触发input框选择图片文件
                   document.querySelector(".quill-img input").click();
                 } else {
                   this.quill.format("image", false);
                 }
-              }
-            }
-          }
-        }
+              },
+            },
+          },
+        },
       },
-      uploadImgUrl: process.env.VUE_APP_BASE_API + "/common/upload", // 上传的图片服务器地址
+      uploadImgUrl: import.meta.env.VITE_APP_BASE_API + "/common/upload", // 上传的图片服务器地址
       headers: {
-        Authorization: 'Bearer ' + getToken()
-      }
+        Authorization: "Bearer " + getToken(),
+      },
     };
   },
   watch: {
-    value: function() {
+    value: function () {
       this.content = this.value;
-    }
+    },
   },
   methods: {
     onEditorBlur() {
@@ -107,24 +109,24 @@ export default {
     },
     onEditorChange() {
       //内容改变事件
-      this.$emit("input", this.content);
+      $emit(this, "update:value", this.content);
     },
 
     // 富文本图片上传前
     quillImgBefore(file) {
       let fileType = file.type;
-			if(fileType === 'image/jpeg' || fileType === 'image/png'){
-				return true;
-			}else {
-				this.$message.error('请插入图片类型文件(jpg/jpeg/png)');
-				return false;
-			}
+      if (fileType === "image/jpeg" || fileType === "image/png") {
+        return true;
+      } else {
+        this.$message.error("请插入图片类型文件(jpg/jpeg/png)");
+        return false;
+      }
     },
 
     quillImgSuccess(res, file) {
       // res为图片服务器返回的数据
       // 获取富文本组件实例
-      let quill = this.$refs.quillEditor.quill;
+      let quill = Quill;
       // 如果上传成功
       if (res.code == 200) {
         // 获取光标所在位置
@@ -141,8 +143,9 @@ export default {
     uploadError() {
       // loading动画消失
       this.$message.error("图片插入失败");
-    }
-  }
+    },
+  },
+  emits: ["update:value"],
 };
 </script>
 
