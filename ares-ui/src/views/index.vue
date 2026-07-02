@@ -1,5 +1,3 @@
-
-
 <template>
   <div class="dashboard-editor-container">
     <el-row>
@@ -11,7 +9,7 @@
               v-model="queryParams.searchValue"
               placeholder="请输入"
               clearable
-              size="default"
+              :size="size"
               @keyup.enter="handleQuery"
             />
           </el-form-item>
@@ -19,7 +17,7 @@
             <el-button
               type="primary"
               :icon="Search"
-              size="default"
+              :size="size"
               @click="handleQuery"
             ></el-button>
           </el-form-item>
@@ -70,9 +68,16 @@ import PieChart from "./dashboard/PieChart.vue";
 import BarChart from "./dashboard/BarChart.vue";
 import TimeLineChart from "./dashboard/TimeLineChart.vue";
 import { getLineChartData, getLineChart, queryByKey } from "@/api/home";
-import { getCurrentInstance, onMounted, reactive, ref } from "vue";
+import { computed, getCurrentInstance, onMounted, reactive, ref } from "vue";
 import { useRouter } from "vue-router";
+import store from "@/store";
+import useAppStore from "@/store/modules/app";
 
+const app = useAppStore(store);
+
+const size = computed(() => {
+  return app.size;
+});
 const router = useRouter();
 
 const today = new Date();

@@ -16,22 +16,16 @@
   </section>
 </template>
 
-<script>
+<script setup name="AppMain">
 import useTagsViewStore from "@/store/modules/tagsView";
 import store from "@/store";
+import { computed } from "vue";
 const tagsViewStore = useTagsViewStore(store);
-export default {
-  name: "AppMain",
-  computed: {
-    cachedViews() {
-      const cachedViews = tagsViewStore.cachedViews;
-      return [cachedViews];
-    },
-    key() {
-      return this.$route.fullPath;
-    },
-  },
-};
+
+const cachedViews = computed(() => {
+  const cachedViews = tagsViewStore.cachedViews;
+  return [cachedViews];
+});
 </script>
 
 <style lang="scss" scoped>

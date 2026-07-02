@@ -1,10 +1,14 @@
 
 
 <template>
-  <div :class="{'show':show}" class="header-search">
-    <svg-icon class-name="search-icon" icon-class="search" @click.stop="click" />
+  <div :class="{ show: show }" class="header-search">
+    <svg-icon
+      class-name="search-icon"
+      icon-class="search"
+      @click.stop="click"
+    />
     <el-select
-      ref="headerSearchSelect"
+      ref="headerSearchSelectRef"
       v-model="search"
       :remote-method="querySearch"
       filterable
@@ -14,135 +18,145 @@
       class="header-search-select"
       @change="change"
     >
-      <el-option v-for="item in options" :key="item.path" :value="item" :label="item.title.join(' > ')" />
+      <el-option
+        v-for="option in options"
+        :key="option.item.path"
+        :value="option.item"
+        :label="option.item.title.join(' > ')"
+      />
     </el-select>
   </div>
 </template>
 
-<script>
+<script setup name="HeaderSearch">
 // fuse is a lightweight fuzzy-search module
 // make search results more in line with expectations
 import Fuse from "fuse.js";
 import path from "path-browserify";
 import store from "@/store";
 import usePermissionStore from "@/store/modules/permission";
-import { nextTick } from "vue";
+import { computed, nextTick, onMounted, ref, watch } from "vue";
+import { useRouter } from "vue-router";
 const permission = usePermissionStore(store);
 
-export default {
-  name: 'HeaderSearch',
-  data() {
-    return {
-      search: '',
-      options: [],
-      searchPool: [],
-      show: false,
-      fuse: undefined
+const router = useRouter();
+const headerSearchSelectRef = ref();
+const search = ref("");
+const options = ref([]);
+const searchPool = ref([]);
+const show = ref(false);
+const fuse = ref(undefined);
+const routes = computed(() => {
+  return permission.permissionRoutes;
+});
+watch(
+  () => routes.value,
+  () => {
+    searchPool.value = generateRoutes(routes.value);
+  },
+);
+watch(
+  () => searchPool.value,
+  (list) => {
+    initFuse(list);
+  },
+);
+watch(
+  () => show.value,
+  (value) => {
+    if (value) {
+      document.body.addEventListener("click", close);
+    } else {
+      document.body.removeEventListener("click", close);
     }
   },
-  computed: {
-    routes() {
-      return permission.permissionRoutes;
-    },
-  },
-  watch: {
-    routes() {
-      this.searchPool = this.generateRoutes(this.routes);
-    },
-    searchPool(list) {
-      this.initFuse(list)
-    },
-    show(value) {
-      if (value) {
-        document.body.addEventListener('click', this.close)
-      } else {
-        document.body.removeEventListener('click', this.close)
+);
+onMounted(() => {
+  searchPool.value = generateRoutes(routes.value);
+});
+
+const click = () => {
+  show.value = !show.value;
+  if (show.value) {
+    headerSearchSelectRef.value && headerSearchSelectRef.value.focus();
+  }
+};
+const close = () => {
+  headerSearchSelectRef.value && headerSearchSelectRef.value.blur();
+  options.value = [];
+  show.value = false;
+};
+const change = async (val) => {
+  router.push(val.path);
+  search.value = "";
+  options.value = [];
+  await nextTick(() => {
+    show.value = false;
+  });
+};
+const initFuse = (list) => {
+  fuse.value = new Fuse(list, {
+    shouldSort: true,
+    threshold: 0.4,
+    location: 0,
+    distance: 100,
+    maxPatternLength: 32,
+    minMatchCharLength: 1,
+    keys: [
+      {
+        name: "title",
+        weight: 0.7,
+      },
+      {
+        name: "path",
+        weight: 0.3,
+      },
+    ],
+  });
+};
+// Filter out the routes that can be displayed in the sidebar
+// And generate the internationalized title
+const generateRoutes = (routes, basePath = "/", prefixTitle = []) => {
+  let res = [];
+
+  for (const router of routes) {
+    // skip hidden router
+    if (router.hidden) {
+      continue;
+    }
+
+    const data = {
+      path: path.resolve(basePath, router.path),
+      title: [...prefixTitle],
+    };
+
+    if (router.meta && router.meta.title) {
+      data.title = [...data.title, router.meta.title];
+
+      if (router.redirect !== "noRedirect") {
+        // only push the routes with title
+        // special case: need to exclude parent router without redirect
+        res.push(data);
       }
     }
-  },
-  mounted() {
-    this.searchPool = this.generateRoutes(this.routes)
-  },
-  methods: {
-    click() {
-      this.show = !this.show
-      if (this.show) {
-        this.$refs.headerSearchSelect && this.$refs.headerSearchSelect.focus()
-      }
-    },
-    close() {
-      this.$refs.headerSearchSelect && this.$refs.headerSearchSelect.blur()
-      this.options = []
-      this.show = false
-    },
-    async change(val) {
-      this.$router.push(val.path);
-      this.search = "";
-      this.options = [];
-      await nextTick(() => {
-        this.show = false;
-      });
-    },
-    initFuse(list) {
-      this.fuse = new Fuse(list, {
-        shouldSort: true,
-        threshold: 0.4,
-        location: 0,
-        distance: 100,
-        maxPatternLength: 32,
-        minMatchCharLength: 1,
-        keys: [{
-          name: 'title',
-          weight: 0.7
-        }, {
-          name: 'path',
-          weight: 0.3
-        }]
-      })
-    },
-    // Filter out the routes that can be displayed in the sidebar
-    // And generate the internationalized title
-    generateRoutes(routes, basePath = '/', prefixTitle = []) {
-      let res = []
 
-      for (const router of routes) {
-        // skip hidden router
-        if (router.hidden) { continue }
-
-        const data = {
-          path: path.resolve(basePath, router.path),
-          title: [...prefixTitle]
-        }
-
-        if (router.meta && router.meta.title) {
-          data.title = [...data.title, router.meta.title]
-
-          if (router.redirect !== 'noRedirect') {
-            // only push the routes with title
-            // special case: need to exclude parent router without redirect
-            res.push(data)
-          }
-        }
-
-        // recursive child routes
-        if (router.children) {
-          const tempRoutes = this.generateRoutes(router.children, data.path, data.title)
-          if (tempRoutes.length >= 1) {
-            res = [...res, ...tempRoutes]
-          }
-        }
-      }
-      return res
-    },
-    querySearch(query) {
-      if (query !== '') {
-        this.options = this.fuse.search(query)
-      } else {
-        this.options = []
+    // recursive child routes
+    if (router.children) {
+      const tempRoutes = generateRoutes(router.children, data.path, data.title);
+      if (tempRoutes.length >= 1) {
+        res = [...res, ...tempRoutes];
       }
     }
   }
-}
+  return res;
+};
+const querySearch = (query) => {
+  if (query !== "") {
+    options.value = fuse.value.search(query);
+  } else {
+    options.value = [];
+  }
+};
 </script>
 
 <style lang="scss" scoped>

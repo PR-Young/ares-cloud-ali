@@ -1,44 +1,19 @@
 <!-- eslint-disable prettier/prettier -->
 <template>
   <div class="app-container">
-    <el-form
-      :model="queryParams"
-      ref="queryForm"
-      :inline="true"
-      v-show="showSearch"
-      label-width="68px"
-    >
+    <el-form :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px">
       <el-form-item label="名称" prop="flowName">
-        <el-input
-          v-model="queryParams.flowName"
-          placeholder="请输入名称"
-          clearable
-          size="default"
-          @keyup.enter="handleQuery"
-        />
+        <el-input v-model="queryParams.flowName" placeholder="请输入名称" clearable :size="size"
+          @keyup.enter="handleQuery" />
       </el-form-item>
       <el-form-item label="开始时间" prop="createTime">
-        <el-date-picker
-          clearable
-          size="default"
-          v-model="queryParams.createTime"
-          type="date"
-          value-format="YYYY-MM-DD"
-          placeholder="选择时间"
-        >
+        <el-date-picker clearable :size="size" v-model="queryParams.createTime" type="date" value-format="YYYY-MM-DD"
+          placeholder="选择时间">
         </el-date-picker>
       </el-form-item>
       <el-form-item>
-        <el-button
-          type="primary"
-          :icon="Search"
-          size="default"
-          @click="handleQuery"
-          >搜索</el-button
-        >
-        <el-button :icon="Refresh" size="default" @click="resetQuery"
-          >重置</el-button
-        >
+        <el-button type="primary" :icon="Search" :size="size" @click="handleQuery">搜索</el-button>
+        <el-button :icon="Refresh" :size="size" @click="resetQuery">重置</el-button>
       </el-form-item>
     </el-form>
 
@@ -48,71 +23,29 @@
           type="primary"
           plain
           :icon="Upload"
-          size="default"
+          :size="size"
           @click="handleImport"
           >导入</el-button
         >
       </el-col> -->
       <el-col :span="1.5">
-        <el-button
-          type="success"
-          plain
-          :icon="Plus"
-          size="default"
-          @click="handleAdd"
-          >新增</el-button
-        >
+        <el-button type="success" plain :icon="Plus" :size="size" @click="handleAdd">新增</el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button
-          type="danger"
-          plain
-          :icon="Delete"
-          size="default"
-          :disabled="multiple"
-          @click="handleDelete"
-          v-hasPermi="['system:deployment:remove']"
-          >删除</el-button
-        >
+        <el-button type="danger" plain :icon="Delete" :size="size" :disabled="multiple" @click="handleDelete"
+          v-hasPermi="['system:deployment:remove']">删除</el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button
-          type="warning"
-          plain
-          :icon="Download"
-          size="default"
-          @click="handleExport"
-          v-hasPermi="['system:deployment:export']"
-          >导出</el-button
-        >
+        <el-button type="warning" plain :icon="Download" :size="size" @click="handleExport"
+          v-hasPermi="['system:deployment:export']">导出</el-button>
       </el-col>
     </el-row>
 
-    <el-table
-      v-loading="loading"
-      fit
-      :data="definitionList"
-      border
-      @selection-change="handleSelectionChange"
-    >
+    <el-table v-loading="loading" fit :data="definitionList" border @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column
-        label="流程编码"
-        align="center"
-        prop="flowCode"
-        :show-overflow-tooltip="true"
-      />
-      <el-table-column
-        label="流程类别"
-        align="center"
-        prop="category"
-        :formatter="categoryFormat"
-      />
-      <el-table-column
-        label="流程名称"
-        align="center"
-        :show-overflow-tooltip="true"
-      >
+      <el-table-column label="流程编码" align="center" prop="flowCode" :show-overflow-tooltip="true" />
+      <el-table-column label="流程类别" align="center" prop="category" :formatter="categoryFormat" />
+      <el-table-column label="流程名称" align="center" :show-overflow-tooltip="true">
         <template v-slot="scope">
           <el-button type="primary" link @click="handleReadImage(scope.row.id)">
             <span>{{ scope.row.flowName }}</span>
@@ -132,7 +65,7 @@
       </el-table-column>
       <el-table-column label="流程版本" align="center" width="90">
         <template v-slot="scope">
-          <el-tag size="default">v{{ scope.row.version }}</el-tag>
+          <el-tag :size="size">v{{ scope.row.version }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="状态" align="center" width="90">
@@ -161,23 +94,9 @@
         class-name="small-padding fixed-width"
       >
         <template v-slot="scope">
-          <el-button
-            size="default"
-            type="primary"
-            link
-            :icon="Edit"
-            @click="handleLoadXml(scope.row)"
-            >设计流程</el-button
-          >
-          <el-button
-            size="default"
-            type="primary"
-            link
-            :icon="Connection"
-            @click="handleAddForm(scope.row)"
-            v-if="scope.row.formId == null"
-            >配置表单</el-button
-          >
+          <el-button :size="size" type="primary" link :icon="Edit" @click="handleLoadXml(scope.row)">设计流程</el-button>
+          <el-button :size="size" type="primary" link :icon="Connection" @click="handleAddForm(scope.row)"
+            v-if="scope.row.formId == null">配置表单</el-button>
           <el-dropdown>
             <span class="el-dropdown-link">
               更多操作<el-icon class="el-icon--right"><ArrowDown /></el-icon>
@@ -253,19 +172,15 @@
           <el-input v-model="form.flowName" placeholder="请输入流程名称" />
         </el-form-item>
         <el-form-item label="流程类别" required prop="category">
-          <el-select v-model="form.category" size="default">
-            <el-option
-              v-for="item in categorys"
-              :key="item.dictValue"
-              :label="item.dictLabel"
-              :value="item.dictValue"
-            />
+          <el-select v-model="form.category" :size="size">
+            <el-option v-for="item in categorys" :key="item.dictValue" :label="item.dictLabel"
+              :value="item.dictValue" />
           </el-select>
         </el-form-item>
         <!-- <el-form-item label="是否自定义表单" prop="formCustom">
           <el-select
             v-model="form.formCustom"
-            size="default"
+            :size="size"
             @change="isCustom"
           >
             <el-option label="是" value="Y" />
@@ -388,13 +303,7 @@
           class-name="small-padding fixed-width"
         >
           <template v-slot="scope">
-            <el-button
-              size="default"
-              type="primary"
-              link
-              @click="submitFormDeploy(scope.row)"
-              >确定</el-button
-            >
+            <el-button :size="size" type="primary" link @click="submitFormDeploy(scope.row)">确定</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -443,9 +352,17 @@ import {
   listForm,
   getBindForm,
 } from "@/api/aresflow/form";
-import { getCurrentInstance, onMounted, reactive, ref } from "vue";
+import { computed, getCurrentInstance, onMounted, reactive, ref } from "vue";
 import FormParser from "@/views/aiform/AiFormParser/index.vue";
 import { useRouter } from "vue-router";
+import store from "@/store";
+import useAppStore from "@/store/modules/app";
+
+const app = useAppStore(store);
+
+const size = computed(() => {
+  return app.size;
+});
 const { proxy } = getCurrentInstance();
 const router = useRouter();
 // 遮罩层

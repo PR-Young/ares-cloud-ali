@@ -7,73 +7,78 @@
       class="drawer-bg"
       @click="handleClickOutside"
     />
-    <sidebar class="sidebar-container" />
-    <div :class="{hasTagsView:needTagsView}" class="main-container">
-      <div :class="{'fixed-header':fixedHeader}">
+    <!-- <sidebar class="sidebar-container" /> -->
+    <component :is="sidebarCom" class="sidebar-container" />
+    <div :class="{ hasTagsView: needTagsView }" class="main-container">
+      <div :class="{ 'fixed-header': fixedHeader }">
         <navbar />
         <tags-view v-if="needTagsView" />
       </div>
       <app-main />
-      <right-panel v-if="showSettings">
+      <!-- <right-panel v-if="showSettings">
         <settings />
-      </right-panel>
+      </right-panel> -->
+      <el-drawer
+        v-model="showSettings"
+        title="系统布局配置"
+        :show-close="false"
+      >
+        <!-- <settings /> -->
+        <component :is="settingsCom" />
+      </el-drawer>
     </div>
   </div>
 </template>
 
-<script>
+<script setup name="Layout">
 import RightPanel from "@/components/RightPanel/index.vue";
 import { AppMain, Navbar, Settings, Sidebar, TagsView } from "./components";
 import ResizeMixin from "./mixin/ResizeHandler";
 import store from "@/store";
 import useAppStore from "@/store/modules/app";
 import useSettingsStore from "@/store/modules/settings";
-import { markRaw } from "vue";
+import { markRaw, computed, defineAsyncComponent } from "vue";
+
+const sidebarCom = markRaw(Sidebar);
+const settingsCom = markRaw(Settings);
 
 const app = useAppStore(store);
 const settings = useSettingsStore(store);
 
-export default {
-  name: "Layout",
-  components: {
-    AppMain: markRaw(AppMain),
-    Navbar: markRaw(Navbar),
-    RightPanel: markRaw(RightPanel),
-    Settings: markRaw(Settings),
-    Sidebar: markRaw(Sidebar),
-    TagsView: markRaw(TagsView),
+const sidebar = computed(() => {
+  return app.sidebar;
+});
+const device = computed(() => {
+  return app.device;
+});
+const showSettings = computed({
+  get() {
+    return settings.showSettings;
   },
-  mixins: [ResizeMixin],
-  computed: {
-    sidebar() {
-      return app.sidebar;
-    },
-    device() {
-      return app.device;
-    },
-    showSettings() {
-      return settings.showSettings;
-    },
-    needTagsView() {
-      return settings.tagsView;
-    },
-    fixedHeader() {
-      return settings.fixedHeader;
-    },
-    classObj() {
-      return {
-        hideSidebar: !this.sidebar.opened,
-        openSidebar: this.sidebar.opened,
-        withoutAnimation: this.sidebar.withoutAnimation,
-        mobile: this.device === 'mobile'
-      }
-    }
+  set(val) {
+    settings.changeSetting({
+      key: "showSettings",
+      value: val,
+    });
   },
-  methods: {
-    handleClickOutside() {
-      app.closeSideBar(false);
-    },
-  },
+});
+const needTagsView = computed(() => {
+  return settings.tagsView;
+});
+const fixedHeader = computed(() => {
+  return settings.fixedHeader;
+});
+const classObj = computed(() => {
+  return {
+    hideSidebar: !sidebar.value.opened,
+    openSidebar: sidebar.value.opened,
+    withoutAnimation: sidebar.value.withoutAnimation,
+    mobile: device.value === "mobile",
+  };
+});
+
+const handleClickOutside = () => {
+  app.closeSideBar(false);
 };
 </script>
 

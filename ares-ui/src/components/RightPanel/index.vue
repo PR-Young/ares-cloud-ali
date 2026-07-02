@@ -1,7 +1,7 @@
 
 
 <template>
-  <div ref="rightPanel" :class="{show:show}" class="rightPanel-container">
+  <div ref="rightPanelRef" :class="{ show: show }" class="rightPanel-container">
     <div class="rightPanel-background" />
     <div class="rightPanel">
       <div class="rightPanel-items">
@@ -11,77 +11,80 @@
   </div>
 </template>
 
-<script>
+<script setup name="RightPanel">
 import { addClass, removeClass } from "@/utils";
 import store from "@/store";
 import useSettingsStore from "@/store/modules/settings";
+import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
 const settings = useSettingsStore(store);
-export default {
-  name: 'RightPanel',
-  props: {
-    clickNotClose: {
-      default: false,
-      type: Boolean
-    },
-    buttonTop: {
-      default: 250,
-      type: Number
+
+const rightPanelRef = ref();
+
+const props = defineProps({
+  clickNotClose: {
+    default: false,
+    type: Boolean,
+  },
+  buttonTop: {
+    default: 250,
+    type: Number,
+  },
+});
+
+const show = computed({
+  get() {
+    return settings.showSettings;
+  },
+  set(val) {
+    settings.changeSetting({
+      key: "showSettings",
+      value: val,
+    });
+  },
+});
+
+const theme = computed(() => {
+  return settings.theme;
+});
+
+watch(
+  () => show.value,
+  (value) => {
+    if (value && !props.clickNotClose) {
+      addEventClick();
+    }
+    if (value) {
+      addClass(document.body, "showRightPanel");
+    } else {
+      removeClass(document.body, "showRightPanel");
     }
   },
-  computed: {
-    show: {
-      get() {
-        return settings.showSettings;
-      },
-      set(val) {
-        settings.changeSetting({
-          key: "showSettings",
-          value: val,
-        });
-      },
-    },
-    theme() {
-      return settings.theme;
-    },
-  },
-  watch: {
-    show(value) {
-      if (value && !this.clickNotClose) {
-        this.addEventClick()
-      }
-      if (value) {
-        addClass(document.body, 'showRightPanel')
-      } else {
-        removeClass(document.body, 'showRightPanel')
-      }
-    }
-  },
-  mounted() {
-    this.insertToBody()
-    this.addEventClick()
-  },
-  beforeUnmount() {
-    const elx = this.$refs.rightPanel;
-    elx.remove();
-  },
-  methods: {
-    addEventClick() {
-      window.addEventListener('click', this.closeSidebar)
-    },
-    closeSidebar(evt) {
-      const parent = evt.target.closest('.rightPanel')
-      if (!parent) {
-        this.show = false
-        window.removeEventListener('click', this.closeSidebar)
-      }
-    },
-    insertToBody() {
-      const elx = this.$refs.rightPanel
-      const body = document.querySelector('body')
-      body.insertBefore(elx, body.firstChild)
-    }
+);
+onMounted(() => {
+  insertToBody();
+  addEventClick();
+});
+
+onBeforeUnmount(() => {
+  const elx = rightPanelRef.value;
+  elx.remove();
+});
+
+const addEventClick = () => {
+  window.addEventListener("click", closeSidebar);
+};
+const closeSidebar = (evt) => {
+  const parent = evt.target.closest(".rightPanel");
+  if (!parent) {
+    show.value = false;
+    window.removeEventListener("click", closeSidebar);
   }
-}
+};
+const insertToBody = () => {
+  const elx = rightPanelRef.value;
+  const body = document.querySelector("body");
+  body.insertBefore(elx, body.firstChild);
+};
 </script>
 
 <style>

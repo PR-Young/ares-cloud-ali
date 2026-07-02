@@ -5,7 +5,7 @@
   <div class="icon-body">
     <el-input
       v-model="name"
-      style="position: relative;"
+      style="position: relative"
       clearable
       placeholder="请输入图标名称"
       @clear="filterIcons"
@@ -28,42 +28,30 @@
   </div>
 </template>
 
-<script>
-import { Search as ElIconSearch } from '@element-plus/icons'
-import { $on, $off, $once, $emit } from '../../utils/gogocodeTransfer'
-import icons from './requireIcons'
-export default {
-  components: {
-    ElIconSearch,
-  },
-  name: 'IconSelect',
-  data() {
-    return {
-      name: "",
-      iconList: icons,
-    };
-  },
-  methods: {
-    filterIcons() {
-      if (this.name) {
-        this.iconList = this.iconList.filter((item) =>
-          item.includes(this.name)
-        );
-      } else {
-        this.iconList = icons;
-      }
-    },
-    selectedIcon(name) {
-      $emit(this, 'selected', name)
-      document.body.click()
-    },
-    reset() {
-      this.name = "";
-      this.iconList = icons;
-    },
-  },
-  emits: ['selected'],
-}
+<script setup name="IconSelect">
+import { Search as ElIconSearch } from "@element-plus/icons";
+import icons from "./requireIcons";
+import { ref } from "vue";
+
+const name = ref("");
+const iconList = ref(icons);
+
+const emit = defineEmits(["selected"]);
+const filterIcons = () => {
+  if (name.value) {
+    iconList.value = iconList.value.filter((item) => item.includes(name));
+  } else {
+    iconList.value = icons;
+  }
+};
+const selectedIcon = (name) => {
+  emit("selected", name);
+  document.body.click();
+};
+const reset = () => {
+  name.value = "";
+  iconList.value = icons;
+};
 </script>
 
 <style lang="scss" rel="stylesheet/scss" scoped>
